@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
+import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import { BiLogInCircle } from "react-icons/bi";
 import { containers } from "../../styles/containers";
 import { elements, variants } from "../../styles/elements";
+import { BsArrowDownCircleFill } from "react-icons/bs";
 import UserNavigation from "./UserNavigation";
 
 const Nav = () => {
@@ -14,7 +16,11 @@ const Nav = () => {
       {profile ? (
         <UserNavigation />
       ) : (
-        <nav className={`${containers.nav}`}>
+        <motion.nav
+          initial={{ y: "-75%" }}
+          whileHover={{ y: 0 }}
+          className={`${containers.nav}`}
+        >
           <ul className="flex w-full">
             <li>
               <NavLink
@@ -37,7 +43,10 @@ const Nav = () => {
               </NavLink>
             </li>
           </ul>
-        </nav>
+          <div className="absolute bottom-[-25%] left-[50%] translate-x-[-50%] bg-white px-10 py-3 hover:cursor-pointer rounded-md">
+            <BsArrowDownCircleFill />
+          </div>
+        </motion.nav>
       )}
     </>
   );

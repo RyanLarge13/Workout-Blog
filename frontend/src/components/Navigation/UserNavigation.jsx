@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import { ProfileContext } from "../../context/profileContext";
 import { googleLogout } from "@react-oauth/google";
@@ -9,6 +9,10 @@ import { elements, variants } from "../../styles/elements";
 const UserNavigation = () => {
   const { user, setUser } = useContext(UserContext);
   const { profile, setProfile } = useContext(ProfileContext);
+
+  useEffect(() => {
+    console.log(profile);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("authToken");
@@ -35,8 +39,9 @@ const UserNavigation = () => {
           </Link>
         </li>
       </ul>
+      <p>{profile.name}</p>
       <img
-        src={profile.imageURL}
+        src={profile.picture}
         alt="user"
         className="w-[50px] h-[50px] rounded-full"
       />
