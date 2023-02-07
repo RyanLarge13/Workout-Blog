@@ -1,22 +1,26 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { form, formItem, heading } from "../../varients/variants.js";
-import { elements, variants } from "../../styles/elements.js";
+import { motion } from "framer-motion";
 import { BiLogInCircle } from "react-icons/bi";
-import { AiFillGoogleCircle } from "react-icons/ai";
+//======Imports for styled components and Framer Motion Variants======
+import { form, formItem, heading } from "../../variants/variants.js";
+import { elements, variants } from "../../styles/elements.js";
 import Signup from "./Components/Signup";
+import GoogleLoginBtn from "../../components/GoogleLoginBtn.jsx";
 
 const LoginSignup = () => {
+  //======Component state=====
   const [login, setLogin] = useState(true);
+  //======Email password login state======
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  //======Node.js Login with MongoDB to be implimented later======
   const handleLogin = (e) => {
     e.preventDefault();
   };
 
   return (
-    <section className="flex flex-col align-center justify-center h-screen bg-gradient-to-r from-violet-500 to-fuchsia-500">
+    <section className="flex flex-col align-center justify-center h-screen bg-gradient-to-r from-violet-500 to-fuchsia-500 overflow-x-hidden">
       {login ? (
         <div>
           <motion.h1
@@ -66,9 +70,7 @@ const LoginSignup = () => {
           <p className="text-center">or</p>
           <hr className="mb-10 w-[80%] mx-auto" />
           <div className="flex flex-col align-center justify-center">
-            <button className={`${elements.button} google-login`}>
-              <AiFillGoogleCircle className="mx-auto" />
-            </button>
+            {<GoogleLoginBtn />}
           </div>
           <button
             onClick={() => setLogin(false)}

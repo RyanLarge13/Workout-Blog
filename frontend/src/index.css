@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -10,9 +10,14 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Roboto Slab", serif;
+  font-family: "Noto Serif", serif;
 }
 
 .google-login {
-  background-image: linear-gradient(45deg, #4285f4 0% 33%, #34a853 33% 66%, #fbbc05 66% 100%);
+  background-image: linear-gradient(
+    45deg,
+    #4285f4 0% 33%,
+    #34a853 33% 66%,
+    #fbbc05 66% 100%
+  );
 }

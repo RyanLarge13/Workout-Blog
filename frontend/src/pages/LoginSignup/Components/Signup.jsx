@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { form, formItem, heading } from "../../../varients/variants.js";
+import { form, formItem, heading } from "../../../variants/variants.js";
 import { elements, variants } from "../../../styles/elements.js";
 import { BiLogInCircle } from "react-icons/bi";
-import { AiFillGoogleCircle } from "react-icons/ai";
+import GoogleLoginBtn from "../../../components/GoogleLoginBtn.jsx";
 
 const Signup = ({ login }) => {
   const [username, setUsername] = useState("");
@@ -75,11 +75,7 @@ const Signup = ({ login }) => {
         </motion.form>
         <p className="text-center">or</p>
         <hr className="mb-10 w-[80%] mx-auto" />
-        <div className="flex flex-col align-center justify-center">
-          <button className={`${elements.button} google-login`}>
-            <AiFillGoogleCircle className="mx-auto" />
-          </button>
-        </div>
+        <GoogleLoginBtn />
         <button
           onClick={() => login(true)}
           className="block mx-auto mt-[100px] underline"
