@@ -40,3 +40,12 @@ export const heading = {
     },
   },
 };
+
+export const navAni = {
+  hidden: {
+    y: "-97%",
+  },
+  show: {
+    y: 0,
+  },
+};

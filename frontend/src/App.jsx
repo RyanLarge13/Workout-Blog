@@ -5,6 +5,9 @@ import Axios from "axios";
 import { UserContext } from "./context/userContext";
 import LoginSignup from "./pages/LoginSignup/LoginSignup";
 import Home from "./pages/Home/Home";
+import Blog from "./pages/Blog/Blog";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Profile from "./pages/Profile/Profile";
 import { ProfileContext } from "./context/profileContext";
 
 const App = () => {
@@ -56,11 +59,18 @@ const App = () => {
         <ProfileContext.Provider value={{ profile, setProfile }}>
           <Nav />
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginSignup />} />
-            <Route path="/logout" element={<LoginSignup />} />
-          </Routes>
+          {profile || user ? (
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginSignup />} />
+            </Routes>
+          ) : (
+            <Routes>
+              <Route path="/profile" element={Profile} />
+              <Route path="/dashboard" element={Dashboard} />
+              <Route path="/blogs" element={Blog} />
+            </Routes>
+          )}
         </ProfileContext.Provider>
       </UserContext.Provider>
     </Router>

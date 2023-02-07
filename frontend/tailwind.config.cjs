@@ -1,18 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-  	screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    }, 
+    screens: {
+      smallPhones: "640px",
+      normalPhones: "768px",
+      smallTablets: "1024px",
+      LargeTablets: "1280px",
+      deskTop: "1536px",
+    },
     extend: {},
   },
   plugins: [],
-}
+};
