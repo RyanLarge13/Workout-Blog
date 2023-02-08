@@ -24,7 +24,7 @@ const Nav = () => {
           variants={navAni}
           className={`${containers.nav}`}
         >
-          <ul className="flex w-full">
+          <ul className="flex justify-center aling-center flex-col w-full">
             <li>
               <NavLink
                 onClick={() => setNav(false)}
@@ -38,16 +38,20 @@ const Nav = () => {
                 Home
               </NavLink>
             </li>
-            <li className="absolute right-5">
-              <NavLink
-                onClick={() => setNav(false)}
-                to="/login"
-                className={`${elements.navBtn} ${variants.mainBtnBg}`}
-              >
-                <BiLogInCircle />
-              </NavLink>
-            </li>
           </ul>
+          <li className="absolute right-5 list-none">
+            <NavLink
+              onClick={() => setNav(false)}
+              to="/login"
+              className={({ isActive }) =>
+                isActive
+                  ? `${variants.navBtnActive}`
+                  : `${elements.navBtn} ${variants.mainBtnBg}`
+              }
+            >
+              <BiLogInCircle />
+            </NavLink>
+          </li>
           <div
             onClick={() => {
               nav ? setNav(false) : setNav(true);

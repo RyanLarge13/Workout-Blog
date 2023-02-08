@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Nav from "./components/Navigation/Nav";
 import Axios from "axios";
 import { UserContext } from "./context/userContext";
@@ -29,7 +34,10 @@ const App = () => {
         .then((res) => {
           setProfile(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setProfile(false);
+          setUser(false);
+        });
     }
   }, []);
 
@@ -61,14 +69,28 @@ const App = () => {
 
           {profile || user ? (
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LoginSignup />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/blogs" element={<Blog />} />
+              <Route
+                path="/login"
+                element={<Navigate replace to="/profile" />}
+              />
             </Routes>
           ) : (
             <Routes>
-              <Route path="/profile" element={Profile} />
-              <Route path="/dashboard" element={Dashboard} />
-              <Route path="/blogs" element={Blog} />
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginSignup />} />
+              <Route
+                path="/profile"
+                element={<Navigate to="/login" replace />}
+              />
+              <Route
+                path="/dashboard"
+                element={<Navigate to="/login" replace />}
+              />
+              <Route path="/blogs" element={<Navigate to="/login" replace />} />
             </Routes>
           )}
         </ProfileContext.Provider>

@@ -3,11 +3,12 @@ import { UserContext } from "../../context/userContext";
 import { ProfileContext } from "../../context/profileContext";
 import { googleLogout } from "@react-oauth/google";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { containers } from "../../styles/containers";
 import { elements, variants } from "../../styles/elements";
 import { navAni } from "../../variants/variants.js";
 import { BsArrowDownCircleFill } from "react-icons/bs";
+import { BiLogOutCircle } from "react-icons/bi";
 
 const UserNavigation = () => {
   const { user, setUser } = useContext(UserContext);
@@ -28,28 +29,64 @@ const UserNavigation = () => {
       variants={navAni}
       className={`${containers.nav}`}
     >
-      <ul>
+      <ul className="flex justify-center aling-center flex-col w-full">
         <li>
-          <Link to="/dashboard">DashBoard</Link>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? `${variants.navBtnActive}`
+                : `${elements.navBtn} ${variants.mainBtnBg}`
+            }
+          >
+            DashBoard
+          </NavLink>
         </li>
         <li>
-          <Link to="/blogs">Blogs</Link>
+          <NavLink
+            to="/blogs"
+            className={({ isActive }) =>
+              isActive
+                ? `${variants.navBtnActive}`
+                : `${elements.navBtn} ${variants.mainBtnBg}`
+            }
+          >
+            Blogs
+          </NavLink>
         </li>
         <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <li>
-          <Link to="/logout" onClick={() => logout()}>
-            Logout
-          </Link>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive
+                ? `${variants.navBtnActive}`
+                : `${elements.navBtn} ${variants.mainBtnBg}`
+            }
+          >
+            Profile
+          </NavLink>
         </li>
       </ul>
-      <p>{profile.name}</p>
-      <img
-        src={profile.picture}
-        alt="user"
-        className="w-[100px] h-[100px] rounded-full"
-      />
+      <li className="absolute left-5 list-none">
+        <NavLink
+          onClick={() => logout()}
+          className={({ isActive }) =>
+            isActive
+              ? `${variants.navBtnActive}`
+              : `${elements.navBtn} ${variants.mainBtnBg}`
+          }
+        >
+          <BiLogOutCircle />
+        </NavLink>
+      </li>
+      <div className="absolute flex flex-col items-center justify-center top-0 right-0 bg-black rounded-md text-white p-3 shadow-lg">
+        <img
+          src={profile.picture}
+          alt="user"
+          className="w-[50px] h-[50px] rounded-full mb-2"
+        />
+        <p>{profile.name}</p>
+      </div>
       <div
         onClick={() => {
           nav ? setNav(false) : setNav(true);

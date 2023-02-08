@@ -6,7 +6,7 @@ module.exports = {
       smallPhones: "640px",
       normalPhones: "768px",
       smallTablets: "1024px",
-      LargeTablets: "1280px",
+      largeTablets: "1280px",
       deskTop: "1536px",
     },
     extend: {},

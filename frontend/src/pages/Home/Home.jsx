@@ -19,7 +19,7 @@ const Home = () => {
         <motion.h1
           initial={{ x: -500 }}
           animate={{ x: 0, transition: { delay: 0.5 } }}
-          className={`${elements.h1} text-start text-6xl mt-[75%]`}
+          className={`${elements.h1} text-start text-6xl mt-[75%] largeTablets:mt-10`}
         >
           Join Our Blog!
         </motion.h1>
@@ -27,7 +27,7 @@ const Home = () => {
           <img
             src={blogTemplates}
             alt="svg blog"
-            className="w-[100px] h-[100px]"
+            className="w-[100px] h-[100px] largeTablets:w-[400px] largeTablets:h-[400px]"
           />
           <motion.a
             whileHover={{ scale: 1.1 }}
@@ -49,7 +49,7 @@ const Home = () => {
         </div>
       </header>
       <section className="bg-gray-100 py-10">
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center largeTablets:flex-row largeTablets:justify-around">
           {dummyPosts.map((post, index) => (
             <motion.div
               initial={{ scale: 0.5 }}
@@ -92,18 +92,20 @@ const Home = () => {
           <strong>Skill</strong> we've all gained.
         </p>
       </section>
-      <div className="w-screen relative">
-        <div className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden">
-          <img src={guy} alt="guy" />
+      <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 py-10 my-[-2px]">
+        <div className="relative flex justify-center align-center">
+          <div className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden largeTablets:left-[30%]">
+            <img src={guy} alt="guy" />
+          </div>
+          <div className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden largeTablets:left-[45%] largeTablets:top-[60%]">
+            <img src={darkWoman} alt="dark woman" />
+          </div>
+          <div className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden largeTablets:top-[40%] largeTablets:right-[35%]">
+            <img src={woman} alt="woman" />
+          </div>
+          <img src={world} alt="world map" />
         </div>
-        <div className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden">
-          <img src={darkWoman} alt="dark woman" />
-        </div>
-        <div className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden">
-          <img src={woman} alt="woman" />
-        </div>
-        <img src={world} alt="world map" />
-      </div>
+      </section>
       <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 p-10 rounded-b-md">
         <motion.h1
           initial={{ x: -300 }}
