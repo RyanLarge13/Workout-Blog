@@ -42,7 +42,7 @@ const MyPosts = () => {
                 Delete
               </button>
               <NavLink
-                to={"/post" + post.slug.current}
+                to={"/post/" + post.slug.current}
                 className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
               >
                 View
