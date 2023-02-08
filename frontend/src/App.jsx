@@ -82,15 +82,6 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<LoginSignup />} />
-              <Route
-                path="/profile"
-                element={<Navigate to="/login" replace />}
-              />
-              <Route
-                path="/dashboard"
-                element={<Navigate to="/login" replace />}
-              />
-              <Route path="/blogs" element={<Navigate to="/login" replace />} />
             </Routes>
           )}
         </ProfileContext.Provider>

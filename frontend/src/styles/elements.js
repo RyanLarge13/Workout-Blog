@@ -6,6 +6,8 @@ export const elements = {
     "mx-auto py-2 px-4 my-4 w-min min-w-[100px] rounded-md bg-white shadow-md",
   navBtn:
     "mx-1 my-2 py-1 px-3 rounded-md shadow-lg flex justify-center align-center shadow-md font-semibold",
+  quickActions:
+    "mx-5 mb-2 p-10 w-10 h-10 rounded-full shadow-lg flex flex-col items-center justify-center text-3xl",
 };
 
 export const variants = {

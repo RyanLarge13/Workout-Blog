@@ -12,6 +12,13 @@ export const getPosts = async () => {
   return posts;
 };
 
+export const getPersonalPosts = async (author) => {
+  const myPosts = await client.fetch(
+    `*[_type == 'post' && author == ${author} ] | order(desc)`
+  );
+  return myPosts;
+};
+
 export const createPost = async (post) => {
   const result = client.create(post);
   return result;

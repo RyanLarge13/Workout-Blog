@@ -1,4 +1,4 @@
-import { client, getPosts } from "../../client.js";
+import { getPosts } from "../../client.js";
 import { useState, useEffect } from "react";
 import { DotLoader } from "react-spinners";
 

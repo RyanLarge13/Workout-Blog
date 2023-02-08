@@ -15,11 +15,12 @@ const UserNavigation = () => {
   const { profile, setProfile } = useContext(ProfileContext);
   const [nav, setNav] = useState(false);
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem("authToken");
-    setUser(false);
-    setProfile(false);
-    googleLogout();
+    await setUser(false);
+    await setProfile(false);
+    await googleLogout();
+    window.location.href = "http://localhost:5173/login";
   };
 
   return (
@@ -32,6 +33,7 @@ const UserNavigation = () => {
       <ul className="flex justify-center aling-center flex-col w-full">
         <li>
           <NavLink
+            onClick={() => setNav(false)}
             to="/dashboard"
             className={({ isActive }) =>
               isActive
@@ -44,6 +46,7 @@ const UserNavigation = () => {
         </li>
         <li>
           <NavLink
+            onClick={() => setNav(false)}
             to="/blogs"
             className={({ isActive }) =>
               isActive
@@ -57,6 +60,7 @@ const UserNavigation = () => {
         <li>
           <NavLink
             to="/profile"
+            onClick={() => setNav(false)}
             className={({ isActive }) =>
               isActive
                 ? `${variants.navBtnActive}`
@@ -80,11 +84,13 @@ const UserNavigation = () => {
         </NavLink>
       </li>
       <div className="absolute flex flex-col items-center justify-center top-0 right-0 bg-black rounded-md text-white p-3 shadow-lg">
-        <img
-          src={profile.picture}
-          alt="user"
-          className="w-[50px] h-[50px] rounded-full mb-2"
-        />
+        <a href="http://localhost:5173/profile">
+          <img
+            src={profile.picture}
+            alt="user"
+            className="w-[50px] h-[50px] rounded-full mb-2"
+          />
+        </a>
         <p>{profile.name}</p>
       </div>
       <div
