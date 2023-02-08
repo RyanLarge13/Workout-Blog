@@ -34,6 +34,19 @@ const UserNavigation = () => {
         <li>
           <NavLink
             onClick={() => setNav(false)}
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? `${variants.navBtnActive}`
+                : `${elements.navBtn} ${variants.mainBtnBg}`
+            }
+          >
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            onClick={() => setNav(false)}
             to="/dashboard"
             className={({ isActive }) =>
               isActive
@@ -86,7 +99,7 @@ const UserNavigation = () => {
       <div className="absolute flex flex-col items-center justify-center top-0 right-0 bg-black rounded-md text-white p-3 shadow-lg">
         <a href="http://localhost:5173/profile">
           <img
-            src={profile.picture}
+            src={profile.image}
             alt="user"
             className="w-[50px] h-[50px] rounded-full mb-2"
           />

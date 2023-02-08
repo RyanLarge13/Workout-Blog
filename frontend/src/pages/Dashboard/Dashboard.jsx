@@ -6,6 +6,7 @@ import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
 import { elements, variants } from "../../styles/elements.js";
 import { containers } from "../../styles/containers.js";
 import MyPosts from "./components/MyPosts";
+import { NavLink } from "react-router-dom";
 
 const Dashboard = () => {
   const { profile, setProfile } = useContext(ProfileContext);
@@ -13,7 +14,7 @@ const Dashboard = () => {
 
   return (
     <section>
-      <FaCog className="absolute bottom-3 right-3 text-2xl" />
+      <FaCog className="fixed bottom-3 right-3 text-2xl" />
       <header className="bg-gradient-to-tr from-violet-500 to-purple-500 py-10 rounded-b-2xl text-white shadow-md">
         <div>
           <h1 className="ml-2">{profile.name}</h1>
@@ -23,25 +24,25 @@ const Dashboard = () => {
           <div className="flex justify-center align-center mt-5">
             <div className={`${containers.quickActionContainer}`}>
               <button className={`${elements.quickActions} bg-pink-400`}>
-                <a>
+                <NavLink>
                   <FaNewspaper />
-                </a>
+                </NavLink>
               </button>
               <p>New Blog!</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
               <button className={`${elements.quickActions} bg-blue-400`}>
-                <a>
+                <NavLink>
                   <BsViewList />
-                </a>
+                </NavLink>
               </button>
               <p>My Blogs</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
               <button className={`${elements.quickActions} bg-orange-400`}>
-                <a href="http://localhost:5173/blogs">
+                <NavLink to="/blogs">
                   <AiFillRead />
-                </a>
+                </NavLink>
               </button>
               <p>Read</p>
             </div>

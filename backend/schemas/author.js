@@ -4,6 +4,11 @@ export default {
   type: "document",
   fields: [
     {
+      name: "email",
+      title: "Email",
+      type: "string",
+    },
+    {
       name: "name",
       title: "Name",
       type: "string",
@@ -20,7 +25,7 @@ export default {
     {
       name: "image",
       title: "Image",
-      type: "image",
+      type: "url",
       options: {
         hotspot: true,
       },

@@ -1,19 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
+import { UserContext } from "./context/userContext";
+import { ProfileContext } from "./context/profileContext";
+import { createUser } from "./client";
 import Nav from "./components/Navigation/Nav";
 import Axios from "axios";
-import { UserContext } from "./context/userContext";
 import LoginSignup from "./pages/LoginSignup/LoginSignup";
 import Home from "./pages/Home/Home";
 import Blog from "./pages/Blog/Blog";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
-import { ProfileContext } from "./context/profileContext";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -32,9 +33,12 @@ const App = () => {
         }
       )
         .then((res) => {
-          setProfile(res.data);
+          createProfile(res.data);
         })
         .catch((err) => {
+          if (err.response.status === 401) {
+            localStorage.removeItem("authToken");
+          }
           setProfile(false);
           setUser(false);
         });
@@ -53,7 +57,7 @@ const App = () => {
         }
       )
         .then((res) => {
-          setProfile(res.data);
+          createProfile(res.data);
           setToken(user.access_token);
           localStorage.setItem("authToken", user.access_token);
         })
@@ -61,29 +65,52 @@ const App = () => {
     }
   }, [user]);
 
+  const createProfile = (data) => {
+    const { name, email, id, picture } = data;
+    const newUser = {
+      _id: id,
+      _type: "author",
+      name: name,
+      email: email,
+      image: picture,
+    };
+    createUser(newUser)
+      .then((user) => {
+        setProfile(user);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Router>
       <UserContext.Provider value={{ user, setUser }}>
         <ProfileContext.Provider value={{ profile, setProfile }}>
           <Nav />
 
-          {profile || user ? (
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/blogs" element={<Blog />} />
-              <Route
-                path="/login"
-                element={<Navigate replace to="/profile" />}
-              />
-            </Routes>
-          ) : (
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LoginSignup />} />
-            </Routes>
-          )}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={
+                profile ? <Navigate to="/dashboard" replace /> : <LoginSignup />
+              }
+            />
+            <Route
+              path="/profile"
+              element={profile ? <Profile /> : <Navigate to="/login" replace />}
+            />
+            <Route
+              path="/dashboard"
+              element={
+                profile ? <Dashboard /> : <Navigate to="/login" replace />
+              }
+            />
+            <Route
+              path="/blogs"
+              element={profile ? <Blog /> : <Navigate to="/login" replace />}
+            />
+            <Route path="/post/:slug" element={null} />
+          </Routes>
         </ProfileContext.Provider>
       </UserContext.Provider>
     </Router>

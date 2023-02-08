@@ -5,7 +5,14 @@ export const client = sanityClient({
   dataset: "production",
   apiVersion: "2023-01-31",
   useCdn: true,
+  token:
+    "skhDz41Qj4K3z9TyUajC92I0QqDpeQh1dBF1DgXiXL8K8VxscuTAWwqjbEkj7LZ8m8hnM7tcrTpeT6Q1EIzjZJTvQgk9zovdkBQYDRmAblWlokNKV7wz1bjti58JbhqjlZChVlsDuNNRjzVgXAcm6DyGCBH8Ekq1aDa5wI2zmzxJSbOo8oIh",
 });
+
+export const createUser = async (user) => {
+  const newUser = await client.createIfNotExists(user);
+  return newUser;
+};
 
 export const getPosts = async () => {
   const posts = await client.fetch("*[_type == 'post']");
@@ -14,7 +21,7 @@ export const getPosts = async () => {
 
 export const getPersonalPosts = async (author) => {
   const myPosts = await client.fetch(
-    `*[_type == 'post' && author == ${author} ] | order(desc)`
+    `*[_type == 'post' && author == '${author}']`
   );
   return myPosts;
 };
