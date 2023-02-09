@@ -1,65 +1,63 @@
 export default {
-  name: 'post',
-  title: 'Post',
-  type: 'document',
+  name: "post",
+  title: "Post",
+  type: "document",
   fields: [
     {
-      name: 'title',
-      title: 'Title',
-      type: 'string',
+      name: "title",
+      title: "Title",
+      type: "string",
     },
     {
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
+      name: "desc",
+      title: "Description",
+      type: "blockContent",
     },
     {
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: {type: 'author'},
+      name: "destination",
+      title: "Destination",
+      type: "url",
     },
     {
-      name: 'mainImage',
-      title: 'Main image',
-      type: 'image',
+      name: "categories",
+      title: "Categories",
+      type: "array",
+      of: [{ type: "reference", to: { type: "category" } }],
+    },
+    {
+      name: "image",
+      title: "Image",
+      type: "image",
       options: {
         hotspot: true,
       },
     },
     {
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
-      of: [{type: 'reference', to: {type: 'category'}}],
+      name: "userId",
+      title: "UserId",
+      type: "string",
     },
     {
-      name: 'publishedAt',
-      title: 'Published at',
-      type: 'datetime',
+      name: "postedBy",
+      title: "PostedBy",
+      type: "postedBy",
     },
     {
-      name: 'body',
-      title: 'Body',
-      type: 'blockContent',
+      name: "save",
+      title: "Save",
+      type: "array",
+      of: [{ type: "save" }],
+    },
+    {
+      name: "comments",
+      title: "Comments",
+      type: "array",
+      of: [{ type: "comment" }],
+    },
+    {
+      name: "publishedAt",
+      title: "Published at",
+      type: "datetime",
     },
   ],
-
-  preview: {
-    select: {
-      title: 'title',
-      author: 'author.name',
-      media: 'mainImage',
-    },
-    prepare(selection) {
-      const {author} = selection
-      return Object.assign({}, selection, {
-        subtitle: author && `by ${author}`,
-      })
-    },
-  },
-}
+};

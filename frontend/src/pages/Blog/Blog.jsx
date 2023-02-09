@@ -4,7 +4,6 @@ import { DotLoader } from "react-spinners";
 import { NavLink } from "react-router-dom";
 import imageUrlBuilder from "@sanity/image-url";
 import { elements, variants } from "../../styles/elements.js";
-import { ProfileContext } from "../../context/profileContext.js";
 
 const builder = imageUrlBuilder(client);
 function urlFor(source) {
@@ -46,7 +45,9 @@ const Blog = () => {
                   View
                 </NavLink>
               </div>
-              <p>{post.author.name}</p>
+              <p className="p-1 mt-2">
+                {new Date(post._createdAt).toLocaleDateString()}
+              </p>
             </div>
           ))}
         </section>

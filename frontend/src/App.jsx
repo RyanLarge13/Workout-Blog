@@ -69,10 +69,11 @@ const App = () => {
     const { name, email, id, picture } = data;
     const newUser = {
       _id: id,
-      _type: "author",
+      _type: "user",
       name: name,
-      email: email,
       image: picture,
+      bio: "",
+      email: email,
     };
     createUser(newUser)
       .then((user) => {
