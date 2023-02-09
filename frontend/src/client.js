@@ -6,7 +6,7 @@ export const client = sanityClient({
   apiVersion: "2023-01-31",
   useCdn: true,
   token:
-    "skhDz41Qj4K3z9TyUajC92I0QqDpeQh1dBF1DgXiXL8K8VxscuTAWwqjbEkj7LZ8m8hnM7tcrTpeT6Q1EIzjZJTvQgk9zovdkBQYDRmAblWlokNKV7wz1bjti58JbhqjlZChVlsDuNNRjzVgXAcm6DyGCBH8Ekq1aDa5wI2zmzxJSbOo8oIh",
+    "skyCyBeSqCgxo4Cz5cwodES6NxBk5rsDS7ykNzBBNJs1C6XQ8AHeCavvxj2IGtAL7iv0fHVUlQYIsHVvCup6ttspsHwof36lI219WkJtiQIVKJyzCqf5ZVgk85BwfFGiduhTBNR1wXESshxwWakhh9b29VTdopkxFhDZOr4YUIVobiE8OeDP",
 });
 
 export const createUser = async (user) => {
@@ -15,13 +15,66 @@ export const createUser = async (user) => {
 };
 
 export const getPosts = async () => {
-  const posts = await client.fetch("*[_type == 'post']");
+  const posts = await client.fetch(
+    `*[_type == 'post'] | order(_createAt desc){
+      image {
+        asset -> {
+          url
+        }
+      },
+      _id,
+      destination,
+      postedBy -> {
+        _id,
+        name, 
+        image
+      },
+      save[] {
+        _key,
+        postedBy -> {
+          _id,
+          name,
+          image
+        },
+      },
+      _createdAt
+    }`
+  );
   return posts;
 };
 
-export const getPersonalPosts = async (author) => {
+export const getCatagoryPosts = async (catagoryId) => {
+  const filteredPosts = client.fetch(
+    `*[_type == "post" && title match '${catagoryId}' || catagory match '${catagoryId}' || about match '${catagoryId}*']{
+      image {
+        asset -> {
+          url
+        }
+      },
+      _id,
+      destination,
+      postedBy -> {
+        _id,
+        name, 
+        image
+      },
+      save[] {
+        _key,
+        postedBy -> {
+          _id,
+          name,
+          image
+        },
+      },
+      _createdAt
+    }`
+  );
+  return filteredPosts;
+};
+
+export const getPersonalPosts = async (id) => {
   const myPosts = await client.fetch(
-    `*[_type == 'post' && author == '${author}']`
+    `*[_type == 'post' && userId match '${id}']`
   );
   return myPosts;
 };

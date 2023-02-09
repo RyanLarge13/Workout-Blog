@@ -16,7 +16,7 @@ const MyPosts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getPersonalPosts(profile.name)
+    getPersonalPosts(profile._id)
       .then((post) => {
         setPosts(post);
       })
@@ -25,12 +25,12 @@ const MyPosts = () => {
 
   return (
     <section className="px-10 flex flex-col items-center justify-center">
-      {posts.length > 1 && <h1 className="text-2xl text-center">Your Posts</h1>}
+      {posts.length > 0 && <h1 className="text-2xl text-center">Your Posts</h1>}
       {posts.length > 0 ? (
         posts.map((post, index) => (
           <div key={index} className="rounded-lg shadow-lg p-5 my-5">
             <img
-              src={urlFor(post.mainImage.asset._ref).width(300).url()}
+              src={urlFor(post.image.asset._ref).width(300).url()}
               alt="blog image"
               className="rounded-md"
             />
@@ -42,7 +42,7 @@ const MyPosts = () => {
                 Delete
               </button>
               <NavLink
-                to={"/post/" + post.slug.current}
+                // to={"/post/" + post.slug.current}
                 className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
               >
                 View

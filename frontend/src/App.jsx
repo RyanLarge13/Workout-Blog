@@ -36,7 +36,7 @@ const App = () => {
           createProfile(res.data);
         })
         .catch((err) => {
-          if (err.response.status === 401) {
+          if (err.code === 401) {
             localStorage.removeItem("authToken");
           }
           setProfile(false);
