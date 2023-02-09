@@ -13,6 +13,7 @@ import Axios from "axios";
 import LoginSignup from "./pages/LoginSignup/LoginSignup";
 import Home from "./pages/Home/Home";
 import Blog from "./pages/Blog/Blog";
+import BlogDetails from "./pages/Blog/components/BlogDetails";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
 
@@ -110,7 +111,12 @@ const App = () => {
               path="/blogs"
               element={profile ? <Blog /> : <Navigate to="/login" replace />}
             />
-            <Route path="/post/:slug" element={null} />
+            <Route
+              path="/posts/:postId"
+              element={
+                profile ? <BlogDetails /> : <Navigate to="/login" replace />
+              }
+            />
           </Routes>
         </ProfileContext.Provider>
       </UserContext.Provider>

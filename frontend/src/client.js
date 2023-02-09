@@ -84,6 +84,34 @@ export const createPost = async (post) => {
   return result;
 };
 
+export const singlePost = async (postId) => {
+  const result = client.fetch(`*[_type == "post" && _id match "${postId}"]{
+      image {
+        asset -> {
+          url
+        }
+      },
+      _id,
+      destination,
+      postedBy -> {
+        _id,
+        name, 
+        image
+      },
+      save[] {
+        _key,
+        postedBy -> {
+          _id,
+          name,
+          image
+        },
+      },
+      _createdAt,
+      desc,
+    }`);
+  return result;
+};
+
 export const updateDocumentTitle = async (_id, title) => {
   const result = client.patch(_id).set({ title });
   return result;

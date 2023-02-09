@@ -12,7 +12,7 @@ function urlFor(source) {
 }
 
 const MyPosts = () => {
-  const { profile, setProfile } = useContext(ProfileContext);
+  const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const MyPosts = () => {
                 Delete
               </button>
               <NavLink
-                // to={"/post/" + post.slug.current}
+                to={`/posts/${post._id}`}
                 className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
               >
                 View

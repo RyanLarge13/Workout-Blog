@@ -63,6 +63,7 @@ const Blog = () => {
               <div className="flex justify-between align-center mt-5">
                 <div className="flex flex-col items-center justify-center">
                   <NavLink
+                    to={`/posts/${post._id}`}
                     className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
                   >
                     View
