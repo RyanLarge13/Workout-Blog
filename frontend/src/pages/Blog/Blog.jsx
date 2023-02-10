@@ -78,7 +78,7 @@ const Blog = () => {
                     alt="user"
                     className="rounded-full w-[40px] h-40px]"
                   />
-                  <p>{post.postedBy.name}</p>
+                  <NavLink to={`/users/${post.postedBy._id}`} >{post.postedBy.name}</NavLink>
                 </div>
               </div>
             </div>

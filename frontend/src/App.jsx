@@ -16,6 +16,7 @@ import Blog from "./pages/Blog/Blog";
 import BlogDetails from "./pages/Blog/components/BlogDetails";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
+import UserProfile from "./pages/UserProfile/UserProfile"
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -115,6 +116,12 @@ const App = () => {
               path="/posts/:postId"
               element={
                 profile ? <BlogDetails /> : <Navigate to="/login" replace />
+              }
+            />
+            <Route
+              path="/users/:userId"
+              element={
+                profile ? <UserProfile /> : <Navigate to="/login" replace />
               }
             />
           </Routes>
