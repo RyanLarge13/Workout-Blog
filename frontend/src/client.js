@@ -116,3 +116,10 @@ export const updateDocumentTitle = async (_id, title) => {
   const result = client.patch(_id).set({ title });
   return result;
 };
+
+export const deleteUser = async (userId) => {
+  const deletedUser = await client.delete(
+    `*[_type == "user" && _id match '${userId}']`
+  );
+  return deletedUser;
+};

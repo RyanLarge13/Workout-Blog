@@ -1,9 +1,23 @@
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
+import { UserContext } from "../../context/userContext";
+import { deleteUser } from "../../client.js";
 import { elements } from "../../styles/elements.js";
+import Conformation from "../../components/Conformation.jsx";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
+  const { setUser } = useContext(UserContext);
+
+  const [confirm, setConfirm] = useState(false);
+
+  const deleteProfile = (userId) => {
+    deleteUser(userId).then((res) => {
+      setProfile(false);
+      setUser(false);
+      console.log(res);
+    });
+  };
 
   return (
     <section className="pt-20">
@@ -37,8 +51,19 @@ const Profile = () => {
       </div>
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
         <h2 className="text-2xl">Delete Your Account</h2>
-        <button className={`${elements.button} bg-gradient-to-r from-red-400 to-red-500`}>Delete</button>
+        <button
+          onClick={() => setConfirm(true)}
+          className={`${elements.button} bg-gradient-to-r from-red-400 to-red-500`}
+        >
+          Delete
+        </button>
       </div>
+      {confirm ? (
+        <Conformation
+          displayToggle={(bool) => setConfirm(bool)}
+          deleteFunc={deleteProfile}
+        />
+      ) : null}
     </section>
   );
 };

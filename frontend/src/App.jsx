@@ -46,6 +46,7 @@ const App = () => {
           }
           setProfile(false);
           setUser(false);
+          setLoading(false);
         });
     }
   }, []);
@@ -67,7 +68,10 @@ const App = () => {
           setToken(user.access_token);
           localStorage.setItem("authToken", user.access_token);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
     }
   }, [user]);
 

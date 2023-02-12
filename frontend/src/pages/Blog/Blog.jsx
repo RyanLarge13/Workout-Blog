@@ -24,7 +24,6 @@ const Blog = () => {
       getPosts()
         .then((post) => {
           setPosts(post);
-          console.log(post);
         })
         .catch((err) => console.log(err));
     }
@@ -78,14 +77,18 @@ const Blog = () => {
                     alt="user"
                     className="rounded-full w-[40px] h-40px]"
                   />
-                  <NavLink to={`/users/${post.postedBy._id}`} >{post.postedBy.name}</NavLink>
+                  <NavLink to={`/users/${post.postedBy._id}`}>
+                    {post.postedBy.name}
+                  </NavLink>
                 </div>
               </div>
             </div>
           ))}
         </section>
       ) : (
-        <DotLoader />
+        <section className="h-screen flex justify-center align-center">
+          <DotLoader />
+        </section>
       )}
     </>
   );

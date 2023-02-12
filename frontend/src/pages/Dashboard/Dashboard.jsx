@@ -50,6 +50,7 @@ const Dashboard = () => {
       </header>
       <div className="my-10 flex flex-col items-center justify-center">
         <button
+          onClick={() => setPicker(<NewPost />)}
           className={`${elements.button} ${variants.mainBtnBg} flex align-center justify-center`}
         >
           <AiFillPlusCircle />
