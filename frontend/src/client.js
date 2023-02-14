@@ -14,6 +14,13 @@ export const createUser = async (user) => {
   return newUser;
 };
 
+export const getUserInfo = async (id) => {
+  const userDetails = await client.fetch(
+    `*[_type == 'user' && _id match '${id}']`
+  );
+  return userDetails;
+};
+
 export const getPosts = async () => {
   const posts = await client.fetch(
     `*[_type == 'post'] | order(_createAt desc){

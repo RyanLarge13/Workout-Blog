@@ -6,9 +6,6 @@ import { client } from "../../../client";
 import imageUrlBuilder from "@sanity/image-url";
 
 const builder = imageUrlBuilder(client);
-function urlFor(source) {
-  return builder.image(source);
-}
 
 const BlogDetails = () => {
   const [post, setPost] = useState(null);
@@ -26,7 +23,7 @@ const BlogDetails = () => {
   return (
     <section>
       {post ? (
-        <>
+        <section>
           <header className="p-5 pt-20 relative flex flex-col justify-center align-center bg-gradient-to-tr from-violet-500 to-purple-500 shadow-md rounded-md">
             <img
               src={post.image.asset.url}
@@ -41,9 +38,11 @@ const BlogDetails = () => {
           <div>
             <p>{post.desc[0].children[0].text}</p>
           </div>
-        </>
+        </section>
       ) : (
-        <DotLoader />
+        <section className="h-screen flex justify-center items-center">
+          <DotLoader />
+        </section>
       )}
     </section>
   );
