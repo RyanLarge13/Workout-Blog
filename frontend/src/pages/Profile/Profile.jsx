@@ -61,7 +61,7 @@ const Profile = () => {
       {confirm ? (
         <Conformation
           displayToggle={(bool) => setConfirm(bool)}
-          deleteFunc={deleteProfile}
+          deleteFunc={(id) => deleteProfile(id)}
         />
       ) : null}
     </section>

@@ -9,9 +9,10 @@ import { elements, variants } from "../../styles/elements";
 import { navAni } from "../../variants/variants.js";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { BiLogOutCircle } from "react-icons/bi";
+import { blankUser } from "../../assets";
 
 const UserNavigation = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const { profile, setProfile } = useContext(ProfileContext);
   const [nav, setNav] = useState(false);
 
@@ -99,7 +100,7 @@ const UserNavigation = () => {
       <div className="absolute flex flex-col items-center justify-center top-0 right-0 bg-black rounded-md text-white p-3 shadow-lg">
         <a href="http://localhost:5173/profile">
           <img
-            src={profile.image}
+            src={profile.image ? profile.image : blankUser}
             alt="user"
             className="w-[50px] h-[50px] rounded-full mb-2"
           />

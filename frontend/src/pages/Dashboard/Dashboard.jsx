@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import { ProfileContext } from "../../context/profileContext";
+import { useState } from "react";
 import { FaCog, FaNewspaper } from "react-icons/fa";
 import { BsViewList } from "react-icons/bs";
 import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
@@ -11,7 +10,6 @@ import NewPost from "./components/NewPost";
 import Blog from "../Blog/Blog";
 
 const Dashboard = () => {
-  const { profile } = useContext(ProfileContext);
   const [picker, setPicker] = useState(<MyPosts />);
 
   return (

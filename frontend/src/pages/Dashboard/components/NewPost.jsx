@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo, useEffect } from "react";
 import JoditEditor from "jodit-react";
 
-const NewPost = () => {
+const NewPost = ({ post }) => {
   const [content, setContent] = useState("");
   const [logs, setLogs] = useState([]);
 

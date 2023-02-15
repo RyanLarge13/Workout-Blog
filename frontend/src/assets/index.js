@@ -7,6 +7,7 @@ import world from "./world.png";
 import guy from "./guy.png";
 import darkWoman from "./darkWoman.jpg";
 import woman from "./woman.jpg";
+import blankUser from "./blankuser.png";
 
 export {
   demoPost,
@@ -18,4 +19,5 @@ export {
   guy,
   darkWoman,
   woman,
+  blankUser,
 };

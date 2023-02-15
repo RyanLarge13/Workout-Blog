@@ -125,8 +125,8 @@ export const updateDocumentTitle = async (_id, title) => {
 };
 
 export const deleteUser = async (userId) => {
-  const deletedUser = await client.delete(
-    `*[_type == "user" && _id match '${userId}']`
-  );
+  const deletedUser = await client
+    .delete(`*[_type == "user" && _id match '${userId}']`)
+    .commit();
   return deletedUser;
 };
