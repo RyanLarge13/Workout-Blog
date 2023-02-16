@@ -124,6 +124,11 @@ export const updateDocumentTitle = async (_id, title) => {
   return result;
 };
 
+export const updateUsername = async (_id, username) => {
+  const updatedDocument = client.patch(_id).set({ name: username }).commit();
+  return updatedDocument;
+};
+
 export const deleteUser = async (userId) => {
   const deletedUser = await client
     .delete(`*[_type == "user" && _id match '${userId}']`)

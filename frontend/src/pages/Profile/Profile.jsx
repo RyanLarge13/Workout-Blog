@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
 import { UserContext } from "../../context/userContext";
-import { deleteUser } from "../../client.js";
+import { updateUsername, deleteUser } from "../../client.js";
 import { elements } from "../../styles/elements.js";
 import Conformation from "../../components/Conformation.jsx";
 
@@ -10,6 +10,7 @@ const Profile = () => {
   const { setUser } = useContext(UserContext);
 
   const [confirm, setConfirm] = useState(false);
+  const [username, setUsername] = useState("");
 
   const deleteProfile = (userId) => {
     deleteUser(userId).then((res) => {
@@ -17,6 +18,12 @@ const Profile = () => {
       setUser(false);
       console.log(res);
     });
+  };
+
+  const newUsername = (userId) => {
+    updateUsername(userId, username)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -42,9 +49,11 @@ const Profile = () => {
           name="username"
           id="username"
           className={`${elements.input}`}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <button
           className={`${elements.button} bg-gradient-to-tr from-green-400 to-blue-500`}
+          onClick={() => newUsername(profile._id)}
         >
           Submit
         </button>
