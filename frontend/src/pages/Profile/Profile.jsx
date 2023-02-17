@@ -9,8 +9,9 @@ const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
   const { setUser } = useContext(UserContext);
 
+  const [picker, setPicker] = useState();
   const [confirm, setConfirm] = useState(false);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(null);
 
   const deleteProfile = (userId) => {
     deleteUser(userId).then((res) => {
@@ -21,9 +22,15 @@ const Profile = () => {
   };
 
   const newUsername = (userId) => {
-    updateUsername(userId, username)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    if (username)
+      return updateUsername(userId, username)
+        .then((res) => {
+          console.log(res);
+          setConfirm(false);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    else console.log("Not an exceptable username");
   };
 
   return (
@@ -53,7 +60,10 @@ const Profile = () => {
         />
         <button
           className={`${elements.button} bg-gradient-to-tr from-green-400 to-blue-500`}
-          onClick={() => newUsername(profile._id)}
+          onClick={() => {
+            setPicker("username");
+            setConfirm(true);
+          }}
         >
           Submit
         </button>
@@ -61,7 +71,10 @@ const Profile = () => {
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
         <h2 className="text-2xl">Delete Your Account</h2>
         <button
-          onClick={() => setConfirm(true)}
+          onClick={() => {
+            setPicker("delete");
+            setConfirm(true);
+          }}
           className={`${elements.button} bg-gradient-to-r from-red-400 to-red-500`}
         >
           Delete
@@ -70,7 +83,9 @@ const Profile = () => {
       {confirm ? (
         <Conformation
           displayToggle={(bool) => setConfirm(bool)}
-          deleteFunc={(id) => deleteProfile(id)}
+          deleteFunc={(id) =>
+            picker === "delete" ? deleteProfile(id) : newUsername(profile._id)
+          }
         />
       ) : null}
     </section>

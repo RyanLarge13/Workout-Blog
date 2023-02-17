@@ -1,7 +1,7 @@
 export const elements = {
   h1: "text-center text-3xl font-bold my-10",
   input:
-    "mx-auto my-4 px-2 py-3 w-min min-w-[80%] lg:min-w-[40%] rounded-md text-center shadow-md outline-0 focus:shadow-inner-md",
+    "mx-auto my-4 px-2 py-3 w-min min-w-[80%] lg:min-w-[40%] rounded-md text-center shadow-md outline-0 focus:shadow-inner-md text-black",
   button:
     "mx-auto py-2 px-4 my-4 w-min min-w-[100px] rounded-md bg-white shadow-md",
   navBtn:

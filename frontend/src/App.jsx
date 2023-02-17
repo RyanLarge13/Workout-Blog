@@ -38,6 +38,11 @@ const App = () => {
         }
       )
         .then((res) => {
+          if (res.error) {
+            setProfile(false);
+            setUser(false);
+            return setLoading(false);
+          }
           createProfile(res.data);
         })
         .catch((err) => {

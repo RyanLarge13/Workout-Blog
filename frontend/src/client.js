@@ -1,4 +1,5 @@
 import sanityClient from "@sanity/client";
+import { v4 as uuidv4 } from "uuid";
 
 export const client = sanityClient({
   projectId: "qvybfss8",
@@ -24,6 +25,7 @@ export const getUserInfo = async (id) => {
 export const getPosts = async () => {
   const posts = await client.fetch(
     `*[_type == 'post'] | order(_createAt desc){
+      title,
       image {
         asset -> {
           url
@@ -50,9 +52,10 @@ export const getPosts = async () => {
   return posts;
 };
 
-export const getCatagoryPosts = async (catagoryId) => {
+export const getSearchedPosts = async (searchTerm) => {
   const filteredPosts = client.fetch(
-    `*[_type == "post" && title match '${catagoryId}' || catagory match '${catagoryId}' || about match '${catagoryId}*']{
+    `*[_type == "post" && title match '${searchTerm}*' || catagory match '${searchTerm}*' || about match '${searchTerm}*']{
+      title,
       image {
         asset -> {
           url
@@ -119,8 +122,31 @@ export const singlePost = async (postId) => {
   return result;
 };
 
+export const savePost = async (postId, userId) => {
+  const saved = client
+    .patch(postId)
+    .setIfMissing({ save: [] })
+    .insert("after", "save[-1]", [
+      {
+        _key: uuidv4(),
+        userId: userId,
+        postedBy: {
+          _type: "postedBy",
+          _ref: userId,
+        },
+      },
+    ])
+    .commit();
+  return saved;
+};
+
 export const updateDocumentTitle = async (_id, title) => {
   const result = client.patch(_id).set({ title });
+  return result;
+};
+
+export const deleteMyPost = async (id) => {
+  const result = client.delete(`*[_type == 'post' && _id match ${id}]`);
   return result;
 };
 

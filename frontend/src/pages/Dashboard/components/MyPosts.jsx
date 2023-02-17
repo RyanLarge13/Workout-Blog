@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { client } from "../../../client.js";
-import { getPersonalPosts } from "../../../client.js";
+import { getPersonalPosts, deleteMyPost } from "../../../client.js";
 import { NavLink } from "react-router-dom";
 import imageUrlBuilder from "@sanity/image-url";
 import { elements, variants } from "../../../styles/elements.js";
 import { ProfileContext } from "../../../context/profileContext.js";
+import Conformation from "../../../components/Conformation";
 
 const builder = imageUrlBuilder(client);
 function urlFor(source) {
@@ -14,14 +15,19 @@ function urlFor(source) {
 const MyPosts = () => {
   const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
+  const [confirm, setConfrim] = useState(false);
 
   useEffect(() => {
     getPersonalPosts(profile._id)
-      .then((post) => {
-        setPosts(post);
+      .then((posts) => {
+        setPosts(posts);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const deletePost = (id) => {
+    console.log(id);
+  };
 
   return (
     <section className="px-10 flex flex-col items-center justify-center">
@@ -38,6 +44,7 @@ const MyPosts = () => {
             <div className="flex justify-between items-end pt-5">
               <button
                 className={`py-1 px-2 h-max rounded-md bg-gradient-to-tr from-red-400 to-red-500`}
+                onClick={() => setConfrim(true)}
               >
                 Delete
               </button>
@@ -54,6 +61,14 @@ const MyPosts = () => {
         <h1 className="text-2xl text-center">
           You have no posts! <br /> Create one!
         </h1>
+      )}
+      {confirm ? (
+        <Conformation
+          displayToggle={(bool) => setConfrim(bool)}
+          deleteFunc={(id) => deletePost(id)}
+        />
+      ) : (
+        ""
       )}
     </section>
   );
