@@ -21,7 +21,6 @@ const Blog = () => {
   useEffect(() => {
     getPosts()
       .then((posts) => {
-        console.log(posts);
         setPosts(posts);
       })
       .catch((err) => console.log(err));
