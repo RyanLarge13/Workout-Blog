@@ -140,6 +140,12 @@ export const savePost = async (postId, userId) => {
   return saved;
 };
 
+export const unsavePost = (postId, key) => {
+  const savedToRemove = [`save[_key == "${key}"]`];
+  const unsaved = client.patch(postId).unset(savedToRemove).commit();
+  return unsaved;
+};
+
 export const updateDocumentTitle = async (_id, title) => {
   const result = client.patch(_id).set({ title });
   return result;

@@ -1,6 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext";
-import { getPosts, client, getSearchedPosts, savePost } from "../../client.js";
+import {
+  getPosts,
+  client,
+  getSearchedPosts,
+  savePost,
+  unsavePost,
+} from "../../client.js";
 import { motion } from "framer-motion";
 import { DotLoader } from "react-spinners";
 import { NavLink } from "react-router-dom";
@@ -17,11 +23,18 @@ const Blog = () => {
   const { profile } = useContext(ProfileContext);
 
   const [posts, setPosts] = useState(null);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     getPosts()
       .then((posts) => {
         setPosts(posts);
+        const isSaved = posts?.map(
+          (post) =>
+            !!post?.save?.filter((item) => item.postedBy._id === profile._id)
+              ?.length
+        );
+        setSaved(isSaved);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -42,7 +55,18 @@ const Blog = () => {
 
   const likePost = (postId) => {
     savePost(postId, profile._id)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const unlikePost = (postId, saved) => {
+    const key = saved[0]._key;
+    unsavePost(postId, key)
+      .then((res) => {
+        console.log(res);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -93,11 +117,9 @@ const Blog = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center justify-center">
-                  <img
-                    src={post.postedBy.image}
-                    alt="user"
-                    className="rounded-full w-[40px] h-40px] shadow-md"
-                  />
+                  <div className="rounded-full w-[40px] h-[40px] shadow-md object-cover overflow-hidden">
+                    <img src={post.postedBy.image} alt="user" />
+                  </div>
                   <NavLink to={`/users/${post.postedBy._id}`}>
                     {post.postedBy.name}
                   </NavLink>
@@ -114,10 +136,33 @@ const Blog = () => {
                   whileTap={{ scale: 0.9 }}
                   className="bg-white rounded-lg shadow-sm"
                 >
-                  {!!post?.save?.filter(
+                  {/* {!!post?.save?.filter(
                     (item) => item.postedBy._id === profile._id
                   )?.length ? (
-                    <AiFillHeart />
+                    <AiFillHeart
+                      onClick={() =>
+                        unlikePost(
+                          post._id,
+                          post.save.filter(
+                            (item) => item.postedBy._id === profile._id
+                          )
+                        )
+                      }
+                    />
+                  ) : (
+                    <AiOutlineHeart onClick={() => likePost(post._id)} />
+                  )} */}
+                  {saved[index] === true ? (
+                    <AiFillHeart
+                      onClick={() =>
+                        unlikePost(
+                          post._id,
+                          post.save.filter(
+                            (item) => item.postedBy._id === profile._id
+                          )
+                        )
+                      }
+                    />
                   ) : (
                     <AiOutlineHeart onClick={() => likePost(post._id)} />
                   )}
