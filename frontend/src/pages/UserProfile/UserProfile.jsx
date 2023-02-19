@@ -32,13 +32,12 @@ const UserProfile = () => {
     <section className="py-20">
       <header className="flex justify-center items-center">
         <div>
-          <div className="w-[200px] h-[200px] overflow-hidden rounded-full shadow-lg">
-            <img src={userView.image} alt="user" className="object-cover" />
+          <div className="w-[200px] h-[200px] overflow-hidden rounded-full shadow-lg object-cover">
+            <img src={userView.image} alt="user" className="w-[200px] h-[200px]" />
           </div>
           <p className="text-center mt-5 text-2xl">{userView.name}</p>
         </div>
       </header>
-      <hr />
       {userPostsView ? (
         <UserPosts posts={posts} />
       ) : (

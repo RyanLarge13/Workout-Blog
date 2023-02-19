@@ -106,7 +106,7 @@ const NewPost = () => {
                   type="file"
                   name="ploadImage"
                   onChange={uploadImage}
-                  className="mt-10"
+                  className="mt-10 h-0 w-0"
                 />
               </>
             )}

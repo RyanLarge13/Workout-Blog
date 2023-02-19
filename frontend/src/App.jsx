@@ -8,6 +8,7 @@ import {
 import { UserContext } from "./context/userContext";
 import { ProfileContext } from "./context/profileContext";
 import { newBlogContext } from "./context/newBlogContext";
+import { PickerContext } from "./context/pickerContext";
 import { createUser } from "./client";
 import { DotLoader } from "react-spinners";
 import Nav from "./components/Navigation/Nav";
@@ -25,6 +26,7 @@ const App = () => {
   const [profile, setProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState("");
+  const [picker, setPicker] = useState("myposts");
   const [token, setToken] = useState(localStorage.getItem("authToken"));
 
   useEffect(() => {
@@ -105,56 +107,66 @@ const App = () => {
       <UserContext.Provider value={{ user, setUser }}>
         <ProfileContext.Provider value={{ profile, setProfile }}>
           <newBlogContext.Provider value={{ content, setContent }}>
-            <Nav />
-            {loading ? (
-              <section className="h-screen flex justify-center items-center">
-                <DotLoader color="#f4f" />
-              </section>
-            ) : (
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route
-                  path="/login"
-                  element={
-                    profile ? (
-                      <Navigate to="/dashboard" replace />
-                    ) : (
-                      <LoginSignup />
-                    )
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    profile ? <Profile /> : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    profile ? <Dashboard /> : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/blogs"
-                  element={
-                    profile ? <Blog /> : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/posts/:postId"
-                  element={
-                    profile ? <BlogDetails /> : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/users/:userId"
-                  element={
-                    profile ? <UserProfile /> : <Navigate to="/login" replace />
-                  }
-                />
-              </Routes>
-            )}
+            <PickerContext.Provider value={{ picker, setPicker }}>
+              <Nav />
+              {loading ? (
+                <section className="h-screen flex justify-center items-center">
+                  <DotLoader color="#f4f" />
+                </section>
+              ) : (
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route
+                    path="/login"
+                    element={
+                      profile ? (
+                        <Navigate to="/dashboard" replace />
+                      ) : (
+                        <LoginSignup />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      profile ? <Profile /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      profile ? <Dashboard /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/blogs"
+                    element={
+                      profile ? <Blog /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/posts/:postId"
+                    element={
+                      profile ? (
+                        <BlogDetails />
+                      ) : (
+                        <Navigate to="/login" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/users/:userId"
+                    element={
+                      profile ? (
+                        <UserProfile />
+                      ) : (
+                        <Navigate to="/login" replace />
+                      )
+                    }
+                  />
+                </Routes>
+              )}
+            </PickerContext.Provider>
           </newBlogContext.Provider>
         </ProfileContext.Provider>
       </UserContext.Provider>

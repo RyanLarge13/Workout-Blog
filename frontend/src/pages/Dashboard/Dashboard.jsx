@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { PickerContext } from "../../context/pickerContext";
 import { FaCog, FaNewspaper } from "react-icons/fa";
 import { BsViewList } from "react-icons/bs";
 import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
@@ -10,7 +11,14 @@ import NewPost from "./components/NewPost";
 import Blog from "../Blog/Blog";
 
 const Dashboard = () => {
-  const [picker, setPicker] = useState(<MyPosts />);
+  const [component, setComponent] = useState(<MyPosts />);
+  const { picker, setPicker } = useContext(PickerContext);
+
+  useEffect(() => {
+    if (picker === "myposts") return setComponent(<MyPosts />);
+    if (picker === "newpost") return setComponent(<NewPost />);
+    if (picker === "blog") return setComponent(<Blog />);
+  }, [picker]);
 
   return (
     <section>
@@ -20,24 +28,36 @@ const Dashboard = () => {
           <h2 className="text-2xl">Quick Actions</h2>
           <div className="flex justify-center align-center mt-5">
             <div className={`${containers.quickActionContainer}`}>
-              <button className={`${elements.quickActions} bg-pink-400`}>
-                <NavLink onClick={() => setPicker(<NewPost />)}>
+              <button
+                className={`${elements.quickActions} bg-pink-400 ${
+                  picker === "newpost" && "outline"
+                }`}
+              >
+                <NavLink onClick={() => setPicker("newpost")}>
                   <FaNewspaper />
                 </NavLink>
               </button>
               <p>New Blog!</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
-              <button className={`${elements.quickActions} bg-blue-400`}>
-                <NavLink onClick={() => setPicker(<MyPosts />)}>
+              <button
+                className={`${elements.quickActions} bg-blue-400 ${
+                  picker === "myposts" && "outline"
+                } `}
+              >
+                <NavLink onClick={() => setPicker("myposts")}>
                   <BsViewList />
                 </NavLink>
               </button>
               <p>My Blogs</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
-              <button className={`${elements.quickActions} bg-orange-400`}>
-                <NavLink onClick={() => setPicker(<Blog />)}>
+              <button
+                className={`${elements.quickActions} bg-orange-400 ${
+                  picker === "blog" && "outline"
+                }`}
+              >
+                <NavLink onClick={() => setPicker("blog")}>
                   <AiFillRead />
                 </NavLink>
               </button>
@@ -48,14 +68,14 @@ const Dashboard = () => {
       </header>
       <div className="my-10 flex flex-col items-center justify-center">
         <button
-          onClick={() => setPicker(<NewPost />)}
+          onClick={() => setPicker("newpost")}
           className={`${elements.button} ${variants.mainBtnBg} flex align-center justify-center`}
         >
           <AiFillPlusCircle />
         </button>
         <p>Create A New Post</p>
       </div>
-      <div className="py-10">{picker}</div>
+      <div className="py-10">{component}</div>
     </section>
   );
 };
