@@ -24,7 +24,7 @@ export const getUserInfo = async (id) => {
 
 export const getPosts = async () => {
   const posts = await client.fetch(
-    `*[_type == 'post'] | order(_createAt desc){
+    `*[_type == "post"] | order(_createdAt desc){
       title,
       image {
         asset -> {

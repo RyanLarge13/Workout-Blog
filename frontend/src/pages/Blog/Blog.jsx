@@ -26,22 +26,23 @@ const Blog = () => {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    getAllPosts();
-  }, []);
-
-  const getAllPosts = () => {
     getPosts()
       .then((posts) => {
+        setPosts(null);
         setPosts(posts);
-        const isSaved = posts?.map(
-          (post) =>
-            !!post?.save?.filter((item) => item.postedBy._id === profile._id)
-              ?.length
-        );
-        setSaved(isSaved);
       })
       .catch((err) => console.log(err));
-  };
+  }, []);
+
+  useEffect(() => {
+    setSaved(false);
+    const isSaved = posts?.map(
+      (post) =>
+        !!post?.save?.filter((item) => item.postedBy._id === profile._id)
+          ?.length
+    );
+    setSaved(isSaved);
+  }, [posts]);
 
   const queryTitle = (searchTerm) => {
     if (searchTerm !== "") {
@@ -60,8 +61,11 @@ const Blog = () => {
   const likePost = (postId) => {
     savePost(postId, profile._id)
       .then((res) => {
-        console.log(res);
-        getAllPosts()
+        getPosts()
+          .then((posts) => {
+            setPosts(posts);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
@@ -70,8 +74,11 @@ const Blog = () => {
     const key = saved[0]._key;
     unsavePost(postId, key)
       .then((res) => {
-        console.log(res);
-        getAllPosts()
+        getPosts()
+          .then((posts) => {
+            setPosts(posts);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
@@ -142,23 +149,7 @@ const Blog = () => {
                   whileTap={{ scale: 0.9 }}
                   className="bg-white rounded-lg shadow-sm"
                 >
-                  {/* {!!post?.save?.filter(
-                    (item) => item.postedBy._id === profile._id
-                  )?.length ? (
-                    <AiFillHeart
-                      onClick={() =>
-                        unlikePost(
-                          post._id,
-                          post.save.filter(
-                            (item) => item.postedBy._id === profile._id
-                          )
-                        )
-                      }
-                    />
-                  ) : (
-                    <AiOutlineHeart onClick={() => likePost(post._id)} />
-                  )} */}
-                  {saved[index] === true ? (
+                  {saved && saved[index] === true ? (
                     <AiFillHeart
                       onClick={() =>
                         unlikePost(
