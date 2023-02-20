@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
 import { UserContext } from "../../context/userContext";
 import { updateUsername, deleteUser } from "../../client.js";
+import { AiFillPlusCircle } from "react-icons/ai";
 import { elements } from "../../styles/elements.js";
 import Conformation from "../../components/Conformation.jsx";
 
@@ -33,15 +34,29 @@ const Profile = () => {
     else console.log("Not an exceptable username");
   };
 
+  const addProfileImage = (e) => {
+    const { type } = e.target.files[0];
+  };
+
   return (
     <section className="pt-20">
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
         <h1 className="text-2xl">{profile.name}</h1>
-        <img
-          src={profile.image}
-          alt="you"
-          className="my-5 rounded-full shadow-md"
-        />
+        <div className="relative my-5">
+          <label>
+            <AiFillPlusCircle className="absolute top-0 right-0 text-2xl" />
+            <input
+              type="file"
+              className="h-0 w-0 absolute"
+              onChange={addProfileImage}
+            />
+          </label>
+          <img
+            src={profile.image}
+            alt="you"
+            className="rounded-full shadow-md"
+          />
+        </div>
         <div>
           <p>{profile.email}</p>
         </div>

@@ -26,6 +26,10 @@ const Blog = () => {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
+    getAllPosts();
+  }, []);
+
+  const getAllPosts = () => {
     getPosts()
       .then((posts) => {
         setPosts(posts);
@@ -37,7 +41,7 @@ const Blog = () => {
         setSaved(isSaved);
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
 
   const queryTitle = (searchTerm) => {
     if (searchTerm !== "") {
@@ -57,6 +61,7 @@ const Blog = () => {
     savePost(postId, profile._id)
       .then((res) => {
         console.log(res);
+        getAllPosts()
       })
       .catch((err) => console.log(err));
   };
@@ -66,6 +71,7 @@ const Blog = () => {
     unsavePost(postId, key)
       .then((res) => {
         console.log(res);
+        getAllPosts()
       })
       .catch((err) => console.log(err));
   };
