@@ -5,7 +5,7 @@ export const client = sanityClient({
   projectId: "qvybfss8",
   dataset: "production",
   apiVersion: "2023-01-31",
-  useCdn: true,
+  useCdn: false,
   token:
     "skyCyBeSqCgxo4Cz5cwodES6NxBk5rsDS7ykNzBBNJs1C6XQ8AHeCavvxj2IGtAL7iv0fHVUlQYIsHVvCup6ttspsHwof36lI219WkJtiQIVKJyzCqf5ZVgk85BwfFGiduhTBNR1wXESshxwWakhh9b29VTdopkxFhDZOr4YUIVobiE8OeDP",
 });

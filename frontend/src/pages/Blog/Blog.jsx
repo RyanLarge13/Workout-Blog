@@ -35,7 +35,6 @@ const Blog = () => {
   }, []);
 
   useEffect(() => {
-    setSaved(false);
     const isSaved = posts?.map(
       (post) =>
         !!post?.save?.filter((item) => item.postedBy._id === profile._id)
@@ -146,8 +145,10 @@ const Blog = () => {
                 </p>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="bg-white rounded-lg shadow-sm"
+                  whileTap={{ scale: [0.2, 1.2, 0.7, 1.1, 1] }}
+                  className={`${
+                    !loadingLikes && "bg-white"
+                  } rounded-lg shadow-sm`}
                 >
                   {saved && saved[index] === true ? (
                     <AiFillHeart
