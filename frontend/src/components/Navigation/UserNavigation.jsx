@@ -98,13 +98,14 @@ const UserNavigation = () => {
         </NavLink>
       </li>
       <div className="absolute flex flex-col items-center justify-center top-0 right-0 bg-black rounded-md text-white p-3 shadow-lg">
-        <a href="http://localhost:5173/profile">
+        <NavLink to={`/profile`} onClick={() => setNav(false)}>
           <img
-            src={profile.image ? profile.image : blankUser}
+            src={profile?.image}
+            // src={profile.image ? profile.image : blankUser}
             alt="user"
             className="w-[50px] h-[50px] rounded-full mb-2"
           />
-        </a>
+        </NavLink>
         <p>{profile.name}</p>
       </div>
       <div

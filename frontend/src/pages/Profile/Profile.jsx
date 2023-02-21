@@ -1,16 +1,21 @@
 import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
 import { UserContext } from "../../context/userContext";
-import {client, updateUsername, deleteUser } from "../../client.js";
+import {
+  client,
+  updateUsername,
+  deleteUser,
+  updateProfileImage,
+} from "../../client.js";
 import { AiFillPlusCircle } from "react-icons/ai";
-import { elements } from "../../styles/elements.js";
+import { elements, variants } from "../../styles/elements.js";
 import Conformation from "../../components/Conformation.jsx";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
   const { setUser } = useContext(UserContext);
 
-  const [picker, setPicker] = useState();
+  const [picker, setPicker] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageload, setImageLoad] = useState(false);
@@ -62,12 +67,22 @@ const Profile = () => {
         .then((doc) => {
           setImageLoad(false);
           setProfileImage(doc);
+          setPicker("keepPhoto");
         })
         .catch((err) => console.log(err));
     } else {
       setImageLoad(false);
       setWrongImageType(true);
     }
+  };
+
+  const addPhoto = (id) => {
+    updateProfileImage(id, profileImage)
+      .then((res) => {
+        setConfirm(false);
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -79,20 +94,26 @@ const Profile = () => {
             <AiFillPlusCircle className="absolute top-0 right-0 text-2xl" />
             <input
               type="file"
+              name="uploadImage"
               className="h-0 w-0 absolute"
               onChange={addProfileImage}
             />
           </label>
-          <div>
-          <img
-            src={profileImage}
-            alt="you"
-            className="rounded-full shadow-md"
-          />
+          <div className="w-[100px] h-[100px] rounded-full shadow-md overflow-hidden">
+            <img src={profile.image} alt="you" className="object-cover" />
           </div>
         </div>
         <div>
-          <p>{profile.email}</p>
+          {picker === "keepPhoto" ? (
+            <button
+              onClick={() => setConfirm(true)}
+              className={`${elements.button} ${variants.mainBtnBg} text-black`}
+            >
+              Keep?
+            </button>
+          ) : (
+            <p>{profile.email}</p>
+          )}
         </div>
       </div>
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
@@ -133,7 +154,11 @@ const Profile = () => {
         <Conformation
           displayToggle={(bool) => setConfirm(bool)}
           deleteFunc={(id) =>
-            picker === "delete" ? deleteProfile(id) : newUsername(profile._id)
+            picker === "delete"
+              ? deleteProfile(id)
+              : picker === "keepPhoto"
+              ? addPhoto(id)
+              : newUsername(id)
           }
         />
       ) : null}

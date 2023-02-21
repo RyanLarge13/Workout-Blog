@@ -151,6 +151,11 @@ export const updateDocumentTitle = async (_id, title) => {
   return result;
 };
 
+export const updateProfileImage = (id, image) => {
+  const result = client.patch(id).set({ image }).commit();
+  return result;
+};
+
 export const deleteMyPost = async (id) => {
   const result = client.delete(`*[_type == 'post' && _id match ${id}]`);
   return result;

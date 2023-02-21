@@ -145,7 +145,7 @@ const Blog = () => {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: [0.2, 1.2, 0.7, 1.1, 1] }}
-                  className="rounded-lg shadow-sm" 
+                  className="rounded-lg shadow-sm"
                 >
                   {saved && saved[index] === true ? (
                     <AiFillHeart
