@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
 import { UserContext } from "../../context/userContext";
-import { updateUsername, deleteUser } from "../../client.js";
+import {client, updateUsername, deleteUser } from "../../client.js";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { elements } from "../../styles/elements.js";
 import Conformation from "../../components/Conformation.jsx";
@@ -11,8 +11,15 @@ const Profile = () => {
   const { setUser } = useContext(UserContext);
 
   const [picker, setPicker] = useState();
+  const [profileImage, setProfileImage] = useState(null);
+  const [wrongImageType, setWrongImageType] = useState(false);
+  const [imageload, setImageLoad] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    setProfileImage(profile.image);
+  }, []);
 
   const deleteProfile = (userId) => {
     deleteUser(userId).then((res) => {
@@ -35,7 +42,32 @@ const Profile = () => {
   };
 
   const addProfileImage = (e) => {
-    const { type } = e.target.files[0];
+    const { type, name } = e.target.files[0];
+
+    setImageLoad(true);
+
+    if (
+      type === "image/png" ||
+      type === "image/svg" ||
+      type === "image/jpeg" ||
+      type === "image/gif" ||
+      type === "image/tiff"
+    ) {
+      setWrongImageType(false);
+      client.assets
+        .upload("image", e.target.files[0], {
+          contentType: type,
+          filenam: name,
+        })
+        .then((doc) => {
+          setImageLoad(false);
+          setProfileImage(doc);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setImageLoad(false);
+      setWrongImageType(true);
+    }
   };
 
   return (
@@ -51,11 +83,13 @@ const Profile = () => {
               onChange={addProfileImage}
             />
           </label>
+          <div>
           <img
-            src={profile.image}
+            src={profileImage}
             alt="you"
             className="rounded-full shadow-md"
           />
+          </div>
         </div>
         <div>
           <p>{profile.email}</p>

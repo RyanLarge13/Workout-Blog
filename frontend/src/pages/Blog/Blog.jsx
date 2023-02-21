@@ -22,13 +22,12 @@ function urlFor(source) {
 const Blog = () => {
   const { profile } = useContext(ProfileContext);
 
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     getPosts()
       .then((posts) => {
-        setPosts(null);
         setPosts(posts);
       })
       .catch((err) => console.log(err));
@@ -37,7 +36,7 @@ const Blog = () => {
   useEffect(() => {
     const isSaved = posts?.map(
       (post) =>
-        !!post?.save?.filter((item) => item.postedBy._id === profile._id)
+        !!post?.save?.filter((item) => item?.postedBy?._id === profile._id)
           ?.length
     );
     setSaved(isSaved);
@@ -70,7 +69,7 @@ const Blog = () => {
   };
 
   const unlikePost = (postId, saved) => {
-    const key = saved[0]._key;
+    const key = saved[0]?._key;
     unsavePost(postId, key)
       .then((res) => {
         getPosts()
@@ -84,7 +83,7 @@ const Blog = () => {
 
   return (
     <>
-      {posts ? (
+      {posts.length > 0 ? (
         <section className="py-10">
           <div className="flex justify-center items-center">
             <label htmlFor="search" className="hidden">
@@ -111,58 +110,56 @@ const Blog = () => {
               className="rounded-lg shadow-lg p-5 my-5 mx-auto w-max relative"
             >
               <img
-                src={urlFor(post.image.asset.url).width(300).url()}
+                src={urlFor(post?.image?.asset?.url).width(300).url()}
                 alt="blog image"
                 className="rounded-md shadow-md"
               />
-              <h2 className="text-xl my-2">{post.title}</h2>
+              <h2 className="text-xl my-2">{post?.title}</h2>
               <div className="flex justify-between align-center mt-5">
                 <div className="flex flex-col items-center justify-center">
                   <NavLink
-                    to={`/posts/${post._id}`}
+                    to={`/posts/${post?._id}`}
                     className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
                   >
                     View
                   </NavLink>
                   <p className="p-1 mt-2">
-                    {new Date(post._createdAt).toLocaleDateString()}
+                    {new Date(post?._createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="flex flex-col items-center justify-center">
                   <div className="rounded-full w-[40px] h-[40px] shadow-md object-cover overflow-hidden">
-                    <img src={post.postedBy.image} alt="user" />
+                    <img src={post?.postedBy?.image} alt="user" />
                   </div>
-                  <NavLink to={`/users/${post.postedBy._id}`}>
-                    {post.postedBy.name}
+                  <NavLink to={`/users/${post?.postedBy?._id}`}>
+                    {post?.postedBy?.name}
                   </NavLink>
                 </div>
               </div>
               <div className="absolute top-[-10px] right-[-10px] p-1 text-2xl text-red-400 cursor-pointer flex items-center justify-center">
                 <p className="text-black text-sm m-1">
-                  {post.save
-                    ? parseInt(post.save.length).toLocaleString()
+                  {post?.save
+                    ? parseInt(post?.save?.length).toLocaleString()
                     : "0"}
                 </p>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: [0.2, 1.2, 0.7, 1.1, 1] }}
-                  className={`${
-                    !loadingLikes && "bg-white"
-                  } rounded-lg shadow-sm`}
+                  className="rounded-lg shadow-sm" 
                 >
                   {saved && saved[index] === true ? (
                     <AiFillHeart
                       onClick={() =>
                         unlikePost(
-                          post._id,
-                          post.save.filter(
-                            (item) => item.postedBy._id === profile._id
+                          post?._id,
+                          post?.save?.filter(
+                            (item) => item?.postedBy?._id === profile._id
                           )
                         )
                       }
                     />
                   ) : (
-                    <AiOutlineHeart onClick={() => likePost(post._id)} />
+                    <AiOutlineHeart onClick={() => likePost(post?._id)} />
                   )}
                 </motion.button>
               </div>
