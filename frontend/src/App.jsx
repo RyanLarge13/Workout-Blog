@@ -24,6 +24,7 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 const App = () => {
   const [user, setUser] = useState(false);
   const [profile, setProfile] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState("");
   const [picker, setPicker] = useState("myposts");
@@ -119,51 +120,14 @@ const App = () => {
                   <Route
                     path="/login"
                     element={
-                      profile ? (
-                        <Navigate to="/dashboard" replace />
-                      ) : (
-                        <LoginSignup />
-                      )
+                      profile ? <Navigate to="/dashboard" /> : <LoginSignup />
                     }
                   />
-                  <Route
-                    path="/profile"
-                    element={
-                      profile ? <Profile /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                      profile ? <Dashboard /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/blogs"
-                    element={
-                      profile ? <Blog /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/posts/:postId"
-                    element={
-                      profile ? (
-                        <BlogDetails />
-                      ) : (
-                        <Navigate to="/login" replace />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/users/:userId"
-                    element={
-                      profile ? (
-                        <UserProfile />
-                      ) : (
-                        <Navigate to="/login" replace />
-                      )
-                    }
-                  />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/blogs" element={<Blog />} />
+                  <Route path="/posts/:postId" element={<BlogDetails />} />
+                  <Route path="/users/:userId" element={<UserProfile />} />
                 </Routes>
               )}
             </PickerContext.Provider>

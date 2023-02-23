@@ -6,10 +6,18 @@ import {
   updateUsername,
   deleteUser,
   updateProfileImage,
+  getPersonalPosts,
+  getAllLikes,
 } from "../../client.js";
-import { AiFillPlusCircle } from "react-icons/ai";
+import {
+  AiFillPlusCircle,
+  AiFillHeart,
+  AiOutlineComment,
+  AiFillEdit,
+} from "react-icons/ai";
 import { elements, variants } from "../../styles/elements.js";
-import Conformation from "../../components/Conformation.jsx";
+import Conformation from "../../components/Conformation";
+import Bio from "./components/Bio";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
@@ -21,16 +29,27 @@ const Profile = () => {
   const [imageload, setImageLoad] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [username, setUsername] = useState(null);
+  const [postsCount, setPostsCount] = useState(0);
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [totalComments, setTotalComments] = useState(0);
+  const [changeBio, setChangeBio] = useState(false);
 
   useEffect(() => {
     setProfileImage(profile.image);
+    getPersonalPosts(profile._id)
+      .then((res) => setPostsCount(res.length))
+      .catch((err) => console.log(err));
+    getAllLikes(profile._id)
+      .then((res) => {
+        res.map((post) => setTotalLikes(post.save.length));
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const deleteProfile = (userId) => {
     deleteUser(userId).then((res) => {
       setProfile(false);
       setUser(false);
-      console.log(res);
     });
   };
 
@@ -66,7 +85,7 @@ const Profile = () => {
         })
         .then((doc) => {
           setImageLoad(false);
-          setProfileImage(doc);
+          setProfileImage(doc.url);
           setPicker("keepPhoto");
         })
         .catch((err) => console.log(err));
@@ -87,8 +106,15 @@ const Profile = () => {
 
   return (
     <section className="pt-20">
-      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
-        <h1 className="text-2xl">{profile.name}</h1>
+      {changeBio && (
+        <Bio bioText={profile.bio} id={profile._id} func={setChangeBio} />
+      )}
+      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative">
+        <AiFillEdit
+          onClick={() => setChangeBio(true)}
+          className="absolute top-4 right-4 text-2xl"
+        />
+        <h1 className="text-2xl text-center">{profile.name}</h1>
         <div className="relative my-5">
           <label>
             <AiFillPlusCircle className="absolute top-0 right-0 text-2xl" />
@@ -100,7 +126,7 @@ const Profile = () => {
             />
           </label>
           <div className="w-[100px] h-[100px] rounded-full shadow-md overflow-hidden">
-            <img src={profile.image} alt="you" className="object-cover" />
+            <img src={profileImage} alt="you" className="object-cover" />
           </div>
         </div>
         <div>
@@ -112,8 +138,26 @@ const Profile = () => {
               Keep?
             </button>
           ) : (
-            <p>{profile.email}</p>
+            <div className="text-center mx-4">
+              <p className="mb-2">{profile.email}</p>
+              <p className="text-xs mt-4">{profile.bio}</p>
+            </div>
           )}
+        </div>
+      </div>
+      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 text-center text-sm">
+        <p>
+          You have been a member since{" "}
+          {new Date(profile._createdAt).toLocaleDateString()}
+        </p>
+        <p>You have contributed {postsCount} posts to Workout Blog</p>
+        <div className="flex justify-around w-full">
+          <p className="flex justify-center items-center">
+            {totalLikes} <AiFillHeart className="ml-1" />
+          </p>
+          <p className="flex justify-center items-center">
+            {totalComments} <AiOutlineComment className="ml-1" />
+          </p>
         </div>
       </div>
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">

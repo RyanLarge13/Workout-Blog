@@ -167,7 +167,7 @@ const Blog = () => {
           ))}
         </section>
       ) : (
-        <section className="h-screen flex justify-center align-center">
+        <section className="h-screen flex justify-center items-center">
           <DotLoader />
         </section>
       )}

@@ -89,6 +89,15 @@ export const getPersonalPosts = async (id) => {
   return myPosts;
 };
 
+export const getAllLikes = (userId) => {
+  const allLikes = client.fetch(
+    `*[_type == 'post' && userId match '${userId}']{save[]}`
+  );
+  return allLikes;
+};
+
+export const getAllComments = () => {};
+
 export const createPost = async (post) => {
   const result = client.create(post);
   return result;
@@ -116,6 +125,15 @@ export const singlePost = async (postId) => {
           image
         },
       },
+      comments[] {
+        comment, 
+      	postedBy -> {
+          _id,
+          name, 
+          image
+        },
+        createdAt,
+      }, 
       _createdAt,
       desc,
     }`);
@@ -156,6 +174,29 @@ export const updateProfileImage = (id, image) => {
   return result;
 };
 
+export const updateBio = (id, bio) => {
+  const newBio = client.patch(id).set({ bio }).commit();
+  return newBio;
+};
+
+export const addComment = (postId, userId, comment) => {
+  const addedComment = client
+    .patch(postId)
+    .setIfMissing({ comments: [] })
+    .insert("after", "comments[-1]", [
+      {
+        _key: uuidv4(),
+        comment,
+        createdAt: new Date(), 
+        postedBy: {
+          _type: "postedBy",
+          _ref: userId,
+        },
+      },
+    ])
+    .commit();
+};
+
 export const deleteMyPost = async (id) => {
   const result = client.delete(`*[_type == 'post' && _id match ${id}]`);
   return result;
@@ -168,7 +209,7 @@ export const updateUsername = async (_id, username) => {
 
 export const deleteUser = async (userId) => {
   const deletedUser = await client
-    .delete(`*[_type == "user" && _id match '${userId}']`)
+    .delete({ query: `*[_type == 'user' && _id match '${userId}']` })
     .commit();
   return deletedUser;
 };
