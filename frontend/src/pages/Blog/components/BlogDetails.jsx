@@ -1,32 +1,39 @@
 import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../../context/profileContext.js";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import { singlePost, getPersonalPosts, client } from "../../../client";
 import { DotLoader } from "react-spinners";
 import imageUrlBuilder from "@sanity/image-url";
 import NewComment from "./NewComment";
 
 const builder = imageUrlBuilder(client);
+function urlFor(source) {
+  return builder.image(source);
+}
 
 const BlogDetails = () => {
   const { profile } = useContext(ProfileContext);
 
   const [post, setPost] = useState(null);
   const [userPosts, setUserPosts] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const { postId } = useParams();
 
   useEffect(() => {
     singlePost(postId)
       .then((post) => {
-        console.log(post);
         setPost(post[0]);
+        window.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     getPersonalPosts(post?.postedBy?._id)
-      .then((res) => setUserPosts(res))
+      .then((res) => {
+        const filter = res.filter((item) => item._id !== post._id);
+        setUserPosts(filter);
+      })
       .catch((err) => console.log(err));
   }, [post]);
 
@@ -54,20 +61,24 @@ const BlogDetails = () => {
           </section>
           <section className="my-5">
             {post.comments?.map((comment, index) => (
-              <>
+              <div className="relative">
+                <div className="absolute border-b border-l rounded-md left-4 top-0 w-[25%] h-[90%] z-0"></div>
                 <div
                   key={index}
-                  className="flex justify-around items-center py-2 px-5 m-2 rounded-md shadow-md"
+                  className="flex justify-around items-center py-2 px-5 m-2 rounded-md shadow-md bg-white isolate"
                 >
-                  <div className="rounded-full w-[50px] h-[50px] shadow-md overflow-hidden">
+                  <NavLink
+                    to={`/users/${comment?.postedBy?._id}`}
+                    className="rounded-full w-[50px] h-[50px] shadow-md overflow-hidden"
+                  >
                     <img src={comment.postedBy.image} alt="user comment" />
-                  </div>
-                  <p className="max-w-[75%]">{comment.comment}</p>
+                  </NavLink>
+                  <p className="max-w-[75%] min-w-[75%]">{comment.comment}</p>
                 </div>
-                <div className="p-1 mx-2 ml-10 rounded-md shadow-md">
+                <div className="py-1 px-2 mx-2 ml-10 rounded-md shadow-md bg-white isolate">
                   <p>{new Date(comment.createdAt).toLocaleDateString()}</p>
                 </div>
-              </>
+              </div>
             ))}
             <NewComment postId={postId} userId={profile._id} />
           </section>
@@ -92,9 +103,19 @@ const BlogDetails = () => {
               {userPosts.length > 0 ? (
                 <>
                   {userPosts.map((userPost) => (
-                    <div className="p-2 my-2 w-[70%] bg-white rounded-md shadow-md">
-                      <h2>{userPost.title}</h2>
-                    </div>
+                    <NavLink
+                      onClick={() => setRefresh((prev) => !prev)}
+                      to={`/posts/${userPost._id}`}
+                      className="p-2 my-2 w-[70%] bg-white rounded-md shadow-md"
+                    >
+                      <img
+                        src={urlFor(userPost.image?.asset?._ref)
+                          .width(300)
+                          .url()}
+                        alt={userPost.title}
+                        className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
+                      />
+                    </NavLink>
                   ))}
                 </>
               ) : (

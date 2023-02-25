@@ -8,6 +8,7 @@ import postedBy from "./postedBy";
 import save from "./save";
 import catagory from "./category";
 import blockContent from "./blockContent";
+import follow from "./follow"
 
 export default createSchema({
   name: "default",
@@ -19,5 +20,6 @@ export default createSchema({
     postedBy,
     save,
     blockContent,
+    follow
   ]),
 });

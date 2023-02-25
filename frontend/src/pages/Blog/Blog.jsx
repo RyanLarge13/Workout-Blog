@@ -107,12 +107,12 @@ const Blog = () => {
                 transition: { type: "spring", stiffness: 400 },
               }}
               key={index}
-              className="rounded-lg shadow-lg p-5 my-5 mx-auto w-max relative"
+              className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
             >
               <img
                 src={urlFor(post?.image?.asset?.url).width(300).url()}
                 alt="blog image"
-                className="rounded-md shadow-md"
+                className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
               />
               <h2 className="text-xl my-2">{post?.title}</h2>
               <div className="flex justify-between align-center mt-5">
@@ -136,7 +136,7 @@ const Blog = () => {
                   </NavLink>
                 </div>
               </div>
-              <div className="absolute top-[-10px] right-[-10px] p-1 text-2xl text-red-400 cursor-pointer flex items-center justify-center">
+              <div className="absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min">
                 <p className="text-black text-sm m-1">
                   {post?.save
                     ? parseInt(post?.save?.length).toLocaleString()
@@ -145,7 +145,6 @@ const Blog = () => {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: [0.2, 1.2, 0.7, 1.1, 1] }}
-                  className="rounded-lg shadow-sm"
                 >
                   {saved && saved[index] === true ? (
                     <AiFillHeart
@@ -157,9 +156,13 @@ const Blog = () => {
                           )
                         )
                       }
+                      className="min-w-[7px] min-h-[7px]"
                     />
                   ) : (
-                    <AiOutlineHeart onClick={() => likePost(post?._id)} />
+                    <AiOutlineHeart
+                      onClick={() => likePost(post?._id)}
+                      className="min-w-[7px] min-h-[7px]"
+                    />
                   )}
                 </motion.button>
               </div>

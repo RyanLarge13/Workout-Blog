@@ -44,6 +44,8 @@ const App = () => {
       )
         .then((res) => {
           if (res.error) {
+          	localStorage.removeItem("authToken");
+            setToken(false);
             setProfile(false);
             setUser(false);
             return setLoading(false);
@@ -80,6 +82,7 @@ const App = () => {
         })
         .catch((err) => {
           setLoading(false);
+          setProfile(false);
           console.log(err);
         });
     }
@@ -120,14 +123,39 @@ const App = () => {
                   <Route
                     path="/login"
                     element={
-                      profile ? <Navigate to="/dashboard" /> : <LoginSignup />
+                      token ? <Navigate to="/dashboard" /> : <LoginSignup />
                     }
                   />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/blogs" element={<Blog />} />
-                  <Route path="/posts/:postId" element={<BlogDetails />} />
-                  <Route path="/users/:userId" element={<UserProfile />} />
+                  <Route
+                    path="/profile"
+                    element={
+                      token ? <Profile /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      token ? <Dashboard /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/blogs"
+                    element={
+                      token ? <Blog /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/posts/:postId"
+                    element={
+                      token ? <BlogDetails /> : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/users/:userId"
+                    element={
+                      token ? <UserProfile /> : <Navigate to="/login" replace />
+                    }
+                  />
                 </Routes>
               )}
             </PickerContext.Provider>

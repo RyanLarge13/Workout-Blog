@@ -1,15 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { ProfileContext } from "../../context/profileContext.js";
 import { useParams } from "react-router-dom";
-import { getUserInfo, getPersonalPosts } from "../../client";
+import {
+  getUserInfo,
+  getPersonalPosts,
+  followUser,
+  unfollowUser,
+  client,
+} from "../../client";
 import { elements, variants } from "../../styles/elements";
-import UserPosts from "./components/UserPosts";
+import { AiTwotoneMessage } from "react-icons/ai";
+import { RiUserFollowLine, RiUserFollowFill } from "react-icons/ri";
+import imageUrlBuilder from "@sanity/image-url";
 
 const UserProfile = () => {
-  const [userView, setUserView] = useState(false);
-  const [userPostsView, setUserPostsView] = useState(false);
-  const [posts, setPosts] = useState([]);
+  const { profile } = useContext(ProfileContext);
+
+  const [userView, setUserView] = useState({});
+  const [userPosts, setUserPosts] = useState([]);
+  const [following, setFollowing] = useState({});
 
   const { userId } = useParams();
+
+  const builder = imageUrlBuilder(client);
+  function urlFor(source) {
+    return builder.image(source);
+  }
 
   useEffect(() => {
     getUserInfo(userId)
@@ -17,44 +33,80 @@ const UserProfile = () => {
         setUserView(user[0]);
       })
       .catch((err) => console.log(err));
+    getPersonalPosts(userId)
+      .then((res) => {
+        setUserPosts(res);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
-  const getUserBlogs = () => {
-    getPersonalPosts(userView._id)
-      .then((posts) => {
-        setPosts(posts);
-        setUserPostsView(true);
+  useEffect(() => {
+    const filter = profile.follow?.filter(
+      (follower) => follower.userId === userView._id
+    );
+    setFollowing(filter);
+  }, [userView]);
+
+  const newFollow = () => {
+    followUser(profile._id, userView._id)
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const unfollow = () => {
+    unfollowUser(follow._key, profile._id)
+      .then((res) => {
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };
 
   return (
     <section className="py-20">
-      <header className="flex justify-center items-center">
-        <div>
-          <div className="w-[200px] h-[200px] overflow-hidden rounded-full shadow-lg object-cover">
-            <img src={userView.image} alt="user" className="w-[200px] h-[200px]" />
+      <header className="flex justify-center items-center rounded-b-md shadow-md">
+        <div className="absolute top-0 h-[200px] w-full bg-gradient-to-r from-blue-400 to-violet-500 rounded-md shadow-lg">
+          {userView.headerImage && (
+            <img
+              src={urlFor(userView.headerImage).url()}
+              alt="header"
+              className="w-full h-full object-cover object-center rounded-lg"
+            />
+          )}
+        </div>
+        <div className="w-full">
+          <div className="w-[200px] h-[200px] overflow-hidden rounded-full shadow-lg mx-auto isolate">
+            <img
+              src={userView.image}
+              alt="user"
+              className="w-[200px] h-[200px]"
+            />
           </div>
-          <p className="text-center mt-5 text-2xl">{userView.name}</p>
+          <p className="text-center mt-3 text-2xl">{userView.name}</p>
+          <div className="min-h-[100px]">
+            <p className="text-xs text-center mt-5 mx-4">{userView.bio}</p>
+          </div>
+          {userView._id !== profile._id && (
+            <div className="flex justify-around items-center py-3 mt-5">
+              <button
+                className={`${elements.button} ${variants.mainBtnBg} flex justify-center`}
+              >
+                {following?.length > 0 ? (
+                  <RiUserFollowFill onClick={() => unfollow()} />
+                ) : (
+                  <RiUserFollowLine onClick={() => newFollow()} />
+                )}
+              </button>
+              <button
+                className={`${elements.button} ${variants.mainBtnBg} flex justify-center`}
+              >
+                <AiTwotoneMessage />
+              </button>
+            </div>
+          )}
         </div>
       </header>
-      {userPostsView ? (
-        <UserPosts posts={posts} />
-      ) : (
-        <div className="flex flex-col justify-center items-center mt-10">
-          <button
-            onClick={() => getUserBlogs()}
-            className={`${elements.button} ${variants.mainBtnBg} w-[150px]`}
-          >
-            Show Posts
-          </button>
-          <button
-            className={`${elements.button} ${variants.mainBtnBg} w-[150px]`}
-          >
-            Message {userView.name}
-          </button>
-        </div>
-      )}
     </section>
   );
 };

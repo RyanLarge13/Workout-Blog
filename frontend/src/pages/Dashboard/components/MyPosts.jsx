@@ -26,7 +26,12 @@ const MyPosts = () => {
   }, []);
 
   const deletePost = (id) => {
-    console.log(id);
+    deleteMyPost(id)
+      .then((res) => {
+        setConfrim(false);
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -34,11 +39,14 @@ const MyPosts = () => {
       {posts.length > 0 && <h1 className="text-2xl text-center">Your Posts</h1>}
       {posts.length > 0 ? (
         posts.map((post, index) => (
-          <div key={index} className="rounded-lg shadow-lg p-5 my-5">
+          <div
+            key={index}
+            className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
+          >
             <img
               src={urlFor(post.image.asset._ref).width(300).url()}
               alt="blog image"
-              className="rounded-md"
+              className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
             />
             <h2 className="text-xl my-2">{post.title}</h2>
             <div className="flex justify-between items-end pt-5">
@@ -65,7 +73,7 @@ const MyPosts = () => {
       {confirm ? (
         <Conformation
           displayToggle={(bool) => setConfrim(bool)}
-          deleteFunc={(id) => deletePost(id)}
+          deleteFunc={() => deletePost(post._id)}
         />
       ) : (
         ""

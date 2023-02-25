@@ -9,6 +9,11 @@ export default {
       type: "string",
     },
     {
+    	name: "headerImage", 
+    	title: "HeaderImage", 
+    	type: "image"
+    }, 
+    {
       name: "image",
       title: "Image",
       type: "string",
@@ -22,6 +27,12 @@ export default {
       name: "email",
       title: "Email",
       type: "string",
+    },
+      {
+      name: "follow",
+      title: "Follow",
+      type: "array",
+      of: [{ type: "follow" }],
     },
   ],
 };

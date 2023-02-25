@@ -7,7 +7,7 @@ import {
   deleteUser,
   updateProfileImage,
   getPersonalPosts,
-  getAllLikes,
+  getAllLikesAndComments,
 } from "../../client.js";
 import {
   AiFillPlusCircle,
@@ -16,6 +16,7 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 import { elements, variants } from "../../styles/elements.js";
+import Moment from "moment";
 import Conformation from "../../components/Conformation";
 import Bio from "./components/Bio";
 
@@ -37,11 +38,20 @@ const Profile = () => {
   useEffect(() => {
     setProfileImage(profile.image);
     getPersonalPosts(profile._id)
-      .then((res) => setPostsCount(res.length))
-      .catch((err) => console.log(err));
-    getAllLikes(profile._id)
       .then((res) => {
-        res.map((post) => setTotalLikes(post.save.length));
+        const mostPopular = res;
+        setPostsCount(res.length);
+      })
+      .catch((err) => console.log(err));
+
+    getAllLikesAndComments(profile._id)
+      .then((res) => {
+        res.map((item) => {
+          setTotalLikes((prev) => prev + item.save?.length);
+          setTotalComments((prev) =>
+            prev ? prev + item.comments?.length : item.comments?.length
+          );
+        });
       })
       .catch((err) => console.log(err));
   }, []);

@@ -47,7 +47,7 @@ export const getPosts = async () => {
         },
       },
       _createdAt
-    }`
+    }[0..20]`
   );
   return posts;
 };
@@ -89,14 +89,39 @@ export const getPersonalPosts = async (id) => {
   return myPosts;
 };
 
-export const getAllLikes = (userId) => {
+export const getAllLikesAndComments = (userId) => {
   const allLikes = client.fetch(
-    `*[_type == 'post' && userId match '${userId}']{save[]}`
+    `*[_type == 'post' && userId match '${userId}']{
+    	save[], 
+    	comments[],
+    }`
   );
   return allLikes;
 };
 
-export const getAllComments = () => {};
+export const followUser = (userId, followId) => {
+  const follow = client
+    .patch(userId)
+    .setIfMissing({ follow: [] })
+    .insert("after", "follow[-1]", [
+      {
+        _key: uuidv4(),
+        userId: followId,
+        postedBy: {
+          _type: "postedBy",
+          _ref: followId,
+        },
+      },
+    ])
+    .commit();
+  return follow;
+};
+
+export const unfollowUser = (key, userId) => {
+  const unfollowQuery = [`follow[_key == "${key}"]`];
+  const unfollow = client.patch(userId).unset(unfollowQuery).commit();
+  return unfollow;
+};
 
 export const createPost = async (post) => {
   const result = client.create(post);
@@ -187,7 +212,7 @@ export const addComment = (postId, userId, comment) => {
       {
         _key: uuidv4(),
         comment,
-        createdAt: new Date(), 
+        createdAt: new Date(),
         postedBy: {
           _type: "postedBy",
           _ref: userId,
@@ -198,7 +223,7 @@ export const addComment = (postId, userId, comment) => {
 };
 
 export const deleteMyPost = async (id) => {
-  const result = client.delete(`*[_type == 'post' && _id match ${id}]`);
+  const result = client.delete(`*[_type == 'post' && _id match '${id}'`);
   return result;
 };
 
@@ -209,7 +234,7 @@ export const updateUsername = async (_id, username) => {
 
 export const deleteUser = async (userId) => {
   const deletedUser = await client
-    .delete({ query: `*[_type == 'user' && _id match '${userId}']` })
+    .delete(`*[_type == 'user' && _id match '${userId}']`)
     .commit();
   return deletedUser;
 };
