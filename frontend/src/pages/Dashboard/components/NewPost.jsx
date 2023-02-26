@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useMemo, useContext } from "react";
+import { Markup, renderMarkup } from "react-render-markup";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
 import { client } from "../../../client.js";
-import { convert } from "html-to-text";
 import JoditEditor from "jodit-react";
 
 const NewPost = () => {
@@ -11,16 +11,6 @@ const NewPost = () => {
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageLoad, setImageLoad] = useState(false);
   const { content, setContent } = useContext(newBlogContext);
-  const [logs, setLogs] = useState([]);
-
-  const appendLog = useCallback(
-    (message) => {
-      const newLogs = message;
-      setLogs(newLogs);
-      console.log(newLogs);
-    },
-    [logs, setLogs]
-  );
 
   const config = useMemo(
     () => ({
@@ -32,6 +22,13 @@ const NewPost = () => {
     []
   );
 
+  const appendLog = useCallback(
+    (message) => {
+      setContent(message);
+    },
+    [content, setContent]
+  );
+
   const onChange = useCallback(
     (newContent) => {
       appendLog(newContent);
@@ -41,8 +38,7 @@ const NewPost = () => {
 
   const onBlur = useCallback(
     (newContent) => {
-      appendLog(`onBlur triggered with ${newContent}`);
-      setContent(newContent);
+      appendLog(newContent);
     },
     [appendLog, setContent]
   );
@@ -122,8 +118,7 @@ const NewPost = () => {
         onChange={onChange}
       />
       <section>
-        <h1>Display</h1>
-        <div dangerouslySetInnerHTML={{ __html: content }}></div>
+        <Markup markup={content} />
       </section>
     </section>
   );

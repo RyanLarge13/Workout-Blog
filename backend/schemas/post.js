@@ -9,6 +9,11 @@ export default {
       type: "string",
     },
     {
+      name: "excerpt",
+      title: "Excerpt",
+      type: "string",
+    },
+    {
       name: "desc",
       title: "Description",
       type: "blockContent",
