@@ -1,19 +1,26 @@
 import React, { useCallback, useState, useMemo, useContext } from "react";
-import { Markup, renderMarkup } from "react-render-markup";
+import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
-import { client } from "../../../client.js";
+import { createPost, client } from "../../../client.js";
+import { elements, variants } from "../../../styles/elements.js";
+import { v4 as uuidv4 } from "uuid";
 import JoditEditor from "jodit-react";
 
 const NewPost = () => {
+  const { profile } = useContext(ProfileContext);
+  const { content, setContent } = useContext(newBlogContext);
+
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageLoad, setImageLoad] = useState(false);
-  const { content, setContent } = useContext(newBlogContext);
+  const [title, setTitle] = useState("");
+  const [excerpt, setExcerpt] = useState("");
 
   const config = useMemo(
     () => ({
+      height: 600,
       readonly: false,
       uploader: {
         insertImageAsBase64URI: true,
@@ -72,6 +79,27 @@ const NewPost = () => {
     }
   };
 
+  const submitNewPost = () => {
+    const newPost = {
+      _id: uuidv4(),
+      _type: "post",
+      title,
+      excerpt,
+      body: content,
+      image: imageAsset.url,
+      userId: profile._id,
+      postedBy: {
+        userId: profile._id,
+      },
+      publishedAt: new Date(),
+    };
+    createPost(newPost)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <section>
       <div className="w-[90%] h-[500px] bg-gray-200 m-5 mx-auto flex justify-center items-center">
@@ -110,6 +138,34 @@ const NewPost = () => {
           </div>
         )}
       </div>
+      <div className="flex justify-center items-center">
+        <label htmlFor="title" className="hidden">
+          Title
+        </label>
+        <input
+          type="text"
+          className={`${elements.input} my-5`}
+          id="title"
+          name="title"
+          placeholder="Title"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="flex justify-center items-center">
+        <label htmlFor="title" className="hidden">
+          Title
+        </label>
+        <textarea
+          className="w-full text-center p-3 mx-5 my-5 shadow-md rounded-md"
+          name="exceerpt"
+          id="excerpt"
+          cols="30"
+          rows="10"
+          placeholder="Excerpt"
+          maxLength="600"
+          onChange={(e) => setExcerpt(e.target.value)}
+        ></textarea>
+      </div>
       <JoditEditor
         value={content}
         config={config}
@@ -117,9 +173,14 @@ const NewPost = () => {
         onBlur={onBlur}
         onChange={onChange}
       />
-      <section>
-        <Markup markup={content} />
-      </section>
+      <div className="flex justify-center items-center mt-5">
+        <button
+          onClick={() => submitNewPost()}
+          className={`${elements.button} ${variants.mainBtnBg} mt-5`}
+        >
+          Submit
+        </button>
+      </div>
     </section>
   );
 };

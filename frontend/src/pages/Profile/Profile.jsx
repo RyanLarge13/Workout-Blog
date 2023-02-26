@@ -16,7 +16,6 @@ import {
   AiFillEdit,
 } from "react-icons/ai";
 import { elements, variants } from "../../styles/elements.js";
-import Moment from "moment";
 import Conformation from "../../components/Conformation";
 import Bio from "./components/Bio";
 import HeaderImage from "./components/HeaderImage.jsx";

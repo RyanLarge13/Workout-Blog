@@ -124,7 +124,7 @@ export const unfollowUser = (key, userId) => {
 };
 
 export const createPost = async (post) => {
-  const result = client.create(post);
+  const result = client.createIfNotExists(post);
   return result;
 };
 

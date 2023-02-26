@@ -14,9 +14,9 @@ export default {
       type: "string",
     },
     {
-      name: "desc",
-      title: "Description",
-      type: "blockContent",
+      name: "body",
+      title: "Body",
+      type: "string",
     },
     {
       name: "destination",

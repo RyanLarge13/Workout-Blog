@@ -56,7 +56,7 @@ const BlogDetails = () => {
               </div>
             </header>
             <div className="p-2 my-5 border-b">
-              <p>{post.desc[0].children[0].text}</p>
+              <p>{post.title}</p>
             </div>
           </section>
           <section className="my-5">
@@ -87,16 +87,16 @@ const BlogDetails = () => {
               <div className="absolute top-[-50px]">
                 <div className="rounded-full w-[100px] h-[100px] shadow-md  overflow-hidden">
                   <img
-                    src={post.postedBy.image}
+                    src={post?.postedBy?.image}
                     alt="user"
                     className="object-cover object-center"
                   />
                 </div>
-                <p className="text-center">{post.postedBy.name}</p>
+                <p className="text-center">{post?.postedBy?.name}</p>
               </div>
               <div className="mt-[100px] text-center mb-[200px]">
                 <p>View More Posts by</p>
-                <p>{post.postedBy.name}</p>
+                <p>{post?.postedBy?.name}</p>
               </div>
             </div>
             <div className="flex flex-col items-center justify-center translate-y-[-100px]">

@@ -44,7 +44,7 @@ const MyPosts = () => {
             className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
           >
             <img
-              src={urlFor(post.image.asset._ref).width(300).url()}
+              src={urlFor(post?.image?.asset?._ref).width(300).url()}
               alt="blog image"
               className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
             />

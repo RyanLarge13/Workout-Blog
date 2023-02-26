@@ -17,7 +17,6 @@ const UserProfile = () => {
   const { profile } = useContext(ProfileContext);
 
   const [userView, setUserView] = useState({});
-  const [userPosts, setUserPosts] = useState([]);
   const [following, setFollowing] = useState({});
 
   const { userId } = useParams();
