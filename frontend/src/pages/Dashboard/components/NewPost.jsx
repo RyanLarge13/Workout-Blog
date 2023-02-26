@@ -86,10 +86,17 @@ const NewPost = () => {
       title,
       excerpt,
       body: content,
-      image: imageAsset.url,
+      image: {
+        _type: "image",
+        asset: {
+          _type: "reference",
+          _ref: imageAsset._id,
+        },
+      },
       userId: profile._id,
       postedBy: {
-        userId: profile._id,
+        type: "postedBy",
+        _ref: profile._id,
       },
       publishedAt: new Date(),
     };
