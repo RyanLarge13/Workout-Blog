@@ -57,6 +57,10 @@ const BlogDetails = () => {
             </header>
             <div className="p-2 my-5 border-b">
               <p>{post.title}</p>
+              <div
+                dangerouslySetInnerHTML={{ __html: post?.body }}
+                className="list-disc"
+              ></div>
             </div>
           </section>
           <section className="my-5">

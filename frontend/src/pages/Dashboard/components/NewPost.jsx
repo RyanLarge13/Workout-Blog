@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useMemo, useContext } from "react";
 import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
+import { PickerContext } from "../../../context/pickerContext.js";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
 import { createPost, client } from "../../../client.js";
@@ -11,12 +12,15 @@ import JoditEditor from "jodit-react";
 const NewPost = () => {
   const { profile } = useContext(ProfileContext);
   const { content, setContent } = useContext(newBlogContext);
+  const { picker, setPicker } = useContext(PickerContext);
 
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageLoad, setImageLoad] = useState(false);
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
+  const [destination, setDestination] = useState("");
+  const [catagories, setCatatgories] = useState([]);
 
   const config = useMemo(
     () => ({
@@ -36,16 +40,9 @@ const NewPost = () => {
     [content, setContent]
   );
 
-  const onChange = useCallback(
-    (newContent) => {
-      appendLog(newContent);
-    },
-    [appendLog]
-  );
-
   const onBlur = useCallback(
     (newContent) => {
-      appendLog(newContent);
+      setContent(newContent);
     },
     [appendLog, setContent]
   );
@@ -95,14 +92,16 @@ const NewPost = () => {
       },
       userId: profile._id,
       postedBy: {
-        type: "postedBy",
+        _type: "postedBy",
         _ref: profile._id,
       },
       publishedAt: new Date(),
     };
     createPost(newPost)
       .then((res) => {
-        console.log(res);
+        setContent(null);
+        setPicker("myposts");
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };
@@ -178,7 +177,7 @@ const NewPost = () => {
         config={config}
         tabIndex={1}
         onBlur={onBlur}
-        onChange={onChange}
+        // onChange={onChange}
       />
       <div className="flex justify-center items-center mt-5">
         <button

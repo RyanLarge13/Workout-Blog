@@ -137,6 +137,7 @@ export const singlePost = async (postId) => {
       },
       _id,
       destination,
+      body,
       postedBy -> {
         _id,
         name, 
@@ -160,7 +161,7 @@ export const singlePost = async (postId) => {
         createdAt,
       }, 
       _createdAt,
-      desc,
+      publishedAt,
     }`);
   return result;
 };
