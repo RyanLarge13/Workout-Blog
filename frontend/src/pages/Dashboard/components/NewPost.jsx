@@ -1,14 +1,9 @@
-import React, {
-  useCallback,
-  useState,
-  useMemo,
-  useEffect,
-  useContext,
-} from "react";
+import React, { useCallback, useState, useMemo, useContext } from "react";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
 import { client } from "../../../client.js";
+import { convert } from "html-to-text";
 import JoditEditor from "jodit-react";
 
 const NewPost = () => {
@@ -20,9 +15,9 @@ const NewPost = () => {
 
   const appendLog = useCallback(
     (message) => {
-      console.log("logs = ", logs);
-      const newLogs = [...logs, message];
+      const newLogs = message;
       setLogs(newLogs);
+      console.log(newLogs);
     },
     [logs, setLogs]
   );
@@ -39,7 +34,7 @@ const NewPost = () => {
 
   const onChange = useCallback(
     (newContent) => {
-      appendLog(`onChange triggered with ${newContent}`);
+      appendLog(newContent);
     },
     [appendLog]
   );
@@ -51,10 +46,6 @@ const NewPost = () => {
     },
     [appendLog, setContent]
   );
-
-  useEffect(() => {
-    console.log("onChange = ", onChange);
-  }, [onChange]);
 
   const uploadImage = (e) => {
     const { type, name } = e.target.files[0];

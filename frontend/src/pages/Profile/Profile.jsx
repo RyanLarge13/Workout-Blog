@@ -19,6 +19,7 @@ import { elements, variants } from "../../styles/elements.js";
 import Moment from "moment";
 import Conformation from "../../components/Conformation";
 import Bio from "./components/Bio";
+import HeaderImage from "./components/HeaderImage.jsx";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
@@ -131,7 +132,7 @@ const Profile = () => {
             <input
               type="file"
               name="uploadImage"
-              className="h-0 w-0 absolute"
+              className="h-0 w-0"
               onChange={addProfileImage}
             />
           </label>
@@ -155,6 +156,7 @@ const Profile = () => {
           )}
         </div>
       </div>
+      <HeaderImage />
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 text-center text-sm">
         <p>
           You have been a member since{" "}

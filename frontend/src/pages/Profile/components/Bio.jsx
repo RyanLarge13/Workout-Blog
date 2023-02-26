@@ -10,7 +10,7 @@ const Bio = ({ bioText, id, func }) => {
     updateBio(id, bio)
       .then((res) => {
         func(false);
-        window.location.reload()
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };
@@ -29,7 +29,7 @@ const Bio = ({ bioText, id, func }) => {
         <textarea
           type="text"
           value={bio}
-          maxlength="200"
+          maxLength="200"
           onChange={(e) => setBio(e.target.value)}
           className="w-full min-h-[300px] p-2 outline-none shadow-md rounded-md"
         ></textarea>

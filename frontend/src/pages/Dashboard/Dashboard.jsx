@@ -66,17 +66,17 @@ const Dashboard = () => {
           </div>
         </div>
       </header>
-        {picker !== "newpost" && (
-      <div className="my-10 flex flex-col items-center justify-center">
+      {picker !== "newpost" && (
+        <div className="my-10 flex flex-col items-center justify-center">
           <button
             onClick={() => setPicker("newpost")}
             className={`${elements.button} ${variants.mainBtnBg} flex align-center justify-center`}
           >
             <AiFillPlusCircle />
           </button>
-        <p>Create A New Post</p>
-      </div>
-        )}
+          <p>Create A New Post</p>
+        </div>
+      )}
       <div className="py-10">{component}</div>
     </section>
   );

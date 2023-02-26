@@ -199,6 +199,11 @@ export const updateProfileImage = (id, image) => {
   return result;
 };
 
+export const updateHeaderImage = (userId, headerImage) => {
+  const result = client.patch(userId).set({ headerImage }).commit();
+  return result;
+};
+
 export const updateBio = (id, bio) => {
   const newBio = client.patch(id).set({ bio }).commit();
   return newBio;
@@ -220,6 +225,7 @@ export const addComment = (postId, userId, comment) => {
       },
     ])
     .commit();
+  return addedComment;
 };
 
 export const deleteMyPost = async (id) => {

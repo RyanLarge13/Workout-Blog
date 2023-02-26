@@ -56,7 +56,7 @@ const UserProfile = () => {
   };
 
   const unfollow = () => {
-    unfollowUser(follow._key, profile._id)
+    unfollowUser(following[0]._key, profile._id)
       .then((res) => {
         window.location.reload();
       })

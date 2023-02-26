@@ -61,7 +61,7 @@ const BlogDetails = () => {
           </section>
           <section className="my-5">
             {post.comments?.map((comment, index) => (
-              <div className="relative">
+              <div key={index} className="relative">
                 <div className="absolute border-b border-l rounded-md left-4 top-0 w-[25%] h-[90%] z-0"></div>
                 <div
                   key={index}
@@ -102,8 +102,9 @@ const BlogDetails = () => {
             <div className="flex flex-col items-center justify-center translate-y-[-100px]">
               {userPosts.length > 0 ? (
                 <>
-                  {userPosts.map((userPost) => (
+                  {userPosts.map((userPost, index) => (
                     <NavLink
+                      key={index}
                       onClick={() => setRefresh((prev) => !prev)}
                       to={`/posts/${userPost._id}`}
                       className="p-2 my-2 w-[70%] bg-white rounded-md shadow-md"

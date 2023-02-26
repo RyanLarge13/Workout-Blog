@@ -35,7 +35,7 @@ const MyPosts = () => {
   };
 
   return (
-    <section className="px-10 flex flex-col items-center justify-center">
+    <section className="flex flex-col items-center justify-center">
       {posts.length > 0 && <h1 className="text-2xl text-center">Your Posts</h1>}
       {posts.length > 0 ? (
         posts.map((post, index) => (
