@@ -17,6 +17,7 @@ const UserProfile = () => {
   const { profile } = useContext(ProfileContext);
 
   const [userView, setUserView] = useState({});
+  const [userPosts, setUserPosts] = useState(null);
   const [following, setFollowing] = useState({});
 
   const { userId } = useParams();
@@ -63,7 +64,7 @@ const UserProfile = () => {
   };
 
   return (
-    <section className="py-20">
+    <section className="pt-20">
       <header className="flex justify-center items-center rounded-b-md shadow-md">
         <div className="absolute top-0 h-[200px] w-full bg-gradient-to-r from-blue-400 to-violet-500 rounded-md shadow-lg">
           {userView.headerImage && (
@@ -75,13 +76,11 @@ const UserProfile = () => {
           )}
         </div>
         <div className="w-full">
-          <div className="w-[200px] h-[200px] overflow-hidden rounded-full shadow-lg mx-auto isolate">
-            <img
-              src={userView.image}
-              alt="user"
-              className="w-[200px] h-[200px]"
-            />
-          </div>
+          <img
+            src={userView.image}
+            alt="user"
+            className="w-[200px] h-[200px] rounded-full shadow-lg mx-auto isolate object-cover object-center"
+          />
           <p className="text-center mt-3 text-2xl">{userView.name}</p>
           <div className="min-h-[100px]">
             <p className="text-xs text-center mt-5 mx-4">{userView.bio}</p>
@@ -106,6 +105,22 @@ const UserProfile = () => {
           )}
         </div>
       </header>
+      <div>
+        {userPosts &&
+          userPosts.map((post) => {
+            <div
+              key={post?._id}
+              className="w-full mx-5 p-2 rounded-md shadow-md"
+            >
+              <img
+                src={urlFor(post?.image?.asset?._ref).url()}
+                alt="post header image"
+                className="w-full max-h-[150px] rounded-md shadow-md object-cover object-center m-2"
+              />
+              <h2>{post.title}</h2>
+            </div>;
+          })}
+      </div>
     </section>
   );
 };

@@ -15,6 +15,7 @@ function urlFor(source) {
 const MyPosts = () => {
   const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
+  const [postId, setPostId] = useState(null);
   const [confirm, setConfrim] = useState(false);
 
   useEffect(() => {
@@ -25,10 +26,11 @@ const MyPosts = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const deletePost = (id) => {
-    deleteMyPost(id)
+  const deletePost = () => {
+    deleteMyPost(postId)
       .then((res) => {
         setConfrim(false);
+        setPostId(null);
         window.location.reload();
       })
       .catch((err) => console.log(err));
@@ -52,7 +54,10 @@ const MyPosts = () => {
             <div className="flex justify-between items-end pt-5">
               <button
                 className={`py-1 px-2 h-max rounded-md bg-gradient-to-tr from-red-400 to-red-500`}
-                onClick={() => setConfrim(true)}
+                onClick={() => {
+                  setPostId(post?._id);
+                  setConfrim(true);
+                }}
               >
                 Delete
               </button>
@@ -70,13 +75,11 @@ const MyPosts = () => {
           You have no posts! <br /> Create one!
         </h1>
       )}
-      {confirm ? (
+      {confirm && (
         <Conformation
           displayToggle={(bool) => setConfrim(bool)}
-          deleteFunc={() => deletePost(post._id)}
+          deleteFunc={() => deletePost()}
         />
-      ) : (
-        ""
       )}
     </section>
   );

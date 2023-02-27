@@ -230,7 +230,7 @@ export const addComment = (postId, userId, comment) => {
 };
 
 export const deleteMyPost = async (id) => {
-  const result = client.delete(`*[_type == 'post' && _id match '${id}'`);
+  const result = client.delete(id);
   return result;
 };
 
@@ -240,8 +240,6 @@ export const updateUsername = async (_id, username) => {
 };
 
 export const deleteUser = async (userId) => {
-  const deletedUser = await client
-    .delete(`*[_type == 'user' && _id match '${userId}']`)
-    .commit();
+  const deletedUser = client.delete(userId);
   return deletedUser;
 };

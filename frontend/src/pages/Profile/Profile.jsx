@@ -47,8 +47,12 @@ const Profile = () => {
     getAllLikesAndComments(profile._id)
       .then((res) => {
         res.map((item) => {
-          setTotalLikes((prev) => prev + item.save?.length);
-          setTotalComments((prev) => prev + item.comments?.length);
+          setTotalLikes((prev) =>
+            item.save ? prev + item.save?.length : prev
+          );
+          setTotalComments((prev) =>
+            item.comments ? prev + item.comments?.length : prev
+          );
         });
       })
       .catch((err) => console.log(err));
