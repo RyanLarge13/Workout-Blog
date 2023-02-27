@@ -31,7 +31,7 @@ const UserNavigation = () => {
       variants={navAni}
       className={`${containers.nav}`}
     >
-      <ul className="flex justify-center aling-center flex-col w-full">
+      <ul className="flex justify-center aling-center flex-col w-full list-none ml-0">
         <li>
           <NavLink
             onClick={() => setNav(false)}

@@ -43,24 +43,19 @@ const BlogDetails = () => {
         <>
           <section>
             <header className="p-5 pt-20 relative flex flex-col justify-center align-center bg-gradient-to-tr from-violet-500 to-purple-500 shadow-md rounded-md">
+              <h1 className="text-4xl text-white mb-5 mt-3">{post.title}</h1>
               <img
                 src={post.image.asset.url}
                 alt="post header"
                 className="rounded-lg w-screen shadow-md"
               />
-              <h1 className="text-4xl absolute text-white">{post.title}</h1>
-              <div>
-                <p className="p-1 my-1 rounded-md shadow-md bg-white max-w-max">
-                  {new Date(post._createdAt).toLocaleDateString()}
-                </p>
-              </div>
+              <p className="my-5">
+                {new Date(post._createdAt).toLocaleDateString()}
+              </p>
+              <p className="text-center text-white">{post.excerpt}</p>
             </header>
             <div className="p-2 my-5 border-b">
-              <p>{post.title}</p>
-              <div
-                dangerouslySetInnerHTML={{ __html: post?.body }}
-                className="list-disc"
-              ></div>
+              <div dangerouslySetInnerHTML={{ __html: post?.body }}></div>
             </div>
           </section>
           <section className="my-5">
@@ -75,12 +70,12 @@ const BlogDetails = () => {
                     to={`/users/${comment?.postedBy?._id}`}
                     className="rounded-full w-[50px] h-[50px] shadow-md overflow-hidden"
                   >
-                    <img src={comment.postedBy.image} alt="user comment" />
+                    <img src={comment?.postedBy?.image} alt="user comment" />
                   </NavLink>
-                  <p className="max-w-[75%] min-w-[75%]">{comment.comment}</p>
+                  <p className="max-w-[75%] min-w-[75%]">{comment?.comment}</p>
                 </div>
                 <div className="py-1 px-2 mx-2 ml-10 rounded-md shadow-md bg-white isolate">
-                  <p>{new Date(comment.createdAt).toLocaleDateString()}</p>
+                  <p>{new Date(comment?.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>
             ))}

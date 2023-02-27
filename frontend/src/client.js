@@ -138,6 +138,8 @@ export const singlePost = async (postId) => {
       _id,
       destination,
       body,
+      title, 
+      excerpt, 
       postedBy -> {
         _id,
         name, 
