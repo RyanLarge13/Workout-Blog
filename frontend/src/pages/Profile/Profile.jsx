@@ -48,9 +48,7 @@ const Profile = () => {
       .then((res) => {
         res.map((item) => {
           setTotalLikes((prev) => prev + item.save?.length);
-          setTotalComments((prev) =>
-            prev ? prev + item.comments?.length : item.comments?.length
-          );
+          setTotalComments((prev) => prev + item.comments?.length);
         });
       })
       .catch((err) => console.log(err));
@@ -124,10 +122,10 @@ const Profile = () => {
           onClick={() => setChangeBio(true)}
           className="absolute top-4 right-4 text-2xl"
         />
-        <h1 className="text-2xl text-center">{profile.name}</h1>
+        <h1 className="text-2xl text-center w-full">{profile.name}</h1>
         <div className="relative my-5">
           <label>
-            <AiFillPlusCircle className="absolute top-0 right-0 text-2xl" />
+            <AiFillPlusCircle className="absolute top-2 right-2 text-2xl" />
             <input
               type="file"
               name="uploadImage"
@@ -135,9 +133,11 @@ const Profile = () => {
               onChange={addProfileImage}
             />
           </label>
-          <div className="w-[100px] h-[100px] rounded-full shadow-md overflow-hidden">
-            <img src={profileImage} alt="you" className="object-cover" />
-          </div>
+          <img
+            src={profileImage}
+            alt="you"
+            className="object-cover w-[100px] h-[100px] rounded-full shadow-md "
+          />
         </div>
         <div>
           {picker === "keepPhoto" ? (

@@ -97,7 +97,7 @@ const UserNavigation = () => {
           <BiLogOutCircle />
         </NavLink>
       </li>
-      <div className="absolute flex flex-col items-center justify-center top-0 right-0 bg-black rounded-md text-white p-3 shadow-lg">
+      <div className="absolute flex flex-col items-center justify-center top-0 right-0 rounded-md text-white p-3">
         <NavLink to={`/profile`} onClick={() => setNav(false)}>
           <img
             src={profile?.image}

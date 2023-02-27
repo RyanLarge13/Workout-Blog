@@ -31,7 +31,7 @@ const Bio = ({ bioText, id, func }) => {
           value={bio}
           maxLength="200"
           onChange={(e) => setBio(e.target.value)}
-          className="w-full min-h-[300px] p-2 outline-none shadow-md rounded-md"
+          className="w-full min-h-[300px] p-2 outline-none shadow-md rounded-md text-center"
         ></textarea>
         <div className=" flex justify-around mt-5">
           <button
