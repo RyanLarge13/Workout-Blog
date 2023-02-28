@@ -26,6 +26,7 @@ export const getPosts = async () => {
   const posts = await client.fetch(
     `*[_type == "post"] | order(_createdAt desc){
       title,
+      excerpt, 
       image {
         asset -> {
           url
@@ -33,6 +34,7 @@ export const getPosts = async () => {
       },
       _id,
       destination,
+      categories[]->, 
       postedBy -> {
         _id,
         name, 
@@ -47,7 +49,7 @@ export const getPosts = async () => {
         },
       },
       _createdAt
-    }[0..20]`
+    }[0...20]`
   );
   return posts;
 };
@@ -82,11 +84,52 @@ export const getSearchedPosts = async (searchTerm) => {
   return filteredPosts;
 };
 
+export const getPostsByCategory = (id) => {
+  const posts =
+    client.fetch(`*[_type == 'post' && '${id}' in categories[]->_id] | order(_createdAt desc){
+      title,
+      excerpt, 
+      image {
+        asset -> {
+          url
+        }
+      },
+      _id,
+      destination,
+      categories[]->, 
+      postedBy -> {
+        _id,
+        name, 
+        image
+      },
+      save[] {
+        _key,
+        postedBy -> {
+          _id,
+          name,
+          image
+        },
+      },
+      _createdAt
+  }[0...20]`);
+  return posts;
+};
+
+export const getPostsByFollowing = (ids) => {
+  const posts = client.fetch(`*[_type == 'post' && _id in ${ids}]`);
+  return posts;
+};
+
 export const getPersonalPosts = async (id) => {
   const myPosts = await client.fetch(
     `*[_type == 'post' && userId match '${id}']`
   );
   return myPosts;
+};
+
+export const getCategories = () => {
+  const categories = client.fetch(`*[_type == 'category']`);
+  return categories;
 };
 
 export const getAllLikesAndComments = (userId) => {

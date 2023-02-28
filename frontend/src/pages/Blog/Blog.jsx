@@ -4,6 +4,8 @@ import {
   getPosts,
   client,
   getSearchedPosts,
+  getPostsByCategory,
+  getPostsByFollowing,
   savePost,
   unsavePost,
 } from "../../client.js";
@@ -31,6 +33,11 @@ const Blog = () => {
         setPosts(posts);
       })
       .catch((err) => console.log(err));
+    //getPostsByFollowing([profile._id])
+     // .then((res) => {
+        //setPosts(res)
+    //  })
+     // .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -81,6 +88,14 @@ const Blog = () => {
       .catch((err) => console.log(err));
   };
 
+  const filterCategories = (id) => {
+    getPostsByCategory(id)
+      .then((res) => {
+        setPosts(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       {posts.length > 0 ? (
@@ -107,7 +122,7 @@ const Blog = () => {
                 transition: { type: "spring", stiffness: 400 },
               }}
               key={index}
-              className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
+              className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto max-w-[90%] relative"
             >
               <img
                 src={urlFor(post?.image?.asset?.url).width(300).url()}
@@ -115,6 +130,7 @@ const Blog = () => {
                 className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
               />
               <h2 className="text-xl my-2">{post?.title}</h2>
+              <p className="text-center text-xs my-5">{post?.excerpt}</p>
               <div className="flex justify-between align-center mt-5">
                 <div className="flex flex-col items-center justify-center">
                   <NavLink
@@ -128,14 +144,28 @@ const Blog = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center justify-center">
-                  <div className="rounded-full w-[40px] h-[40px] shadow-md object-cover overflow-hidden">
-                    <img src={post?.postedBy?.image} alt="user" />
-                  </div>
+                  <img
+                    src={post?.postedBy?.image}
+                    alt="user"
+                    className="rounded-full w-[40px] h-[40px] shadow-md object-cover object-center"
+                  />
                   <NavLink to={`/users/${post?.postedBy?._id}`}>
                     {post?.postedBy?.name}
                   </NavLink>
                 </div>
               </div>
+              {post?.categories?.length > 0 && (
+                <div className="my-3 py-2 flex flex-wrap">
+                  {post?.categories?.map((category) => (
+                    <div
+                      onClick={() => filterCategories(category._id)}
+                      className="rounded-full px-3 py-1 m-1 shadow-md bg-violet-400"
+                    >
+                      <p className="text-sm select-none">{category.title}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min">
                 <p className="text-black text-sm m-1">
                   {post?.save

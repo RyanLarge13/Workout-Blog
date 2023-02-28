@@ -84,13 +84,11 @@ const BlogDetails = () => {
           <section className="my-10 mt-[100px] p-2">
             <div className="flex flex-col items-center justify-start p-5 mx-2 rounded-md shadow-md relative bg-gradient-to-tr from-purple-400 to-violet-500">
               <div className="absolute top-[-50px]">
-                <div className="rounded-full w-[100px] h-[100px] shadow-md  overflow-hidden">
                   <img
                     src={post?.postedBy?.image}
                     alt="user"
-                    className="object-cover object-center"
+                    className="rounded-full w-[100px] h-[100px] shadow-md object-cover object-center"
                   />
-                </div>
                 <p className="text-center">{post?.postedBy?.name}</p>
               </div>
               <div className="mt-[100px] text-center mb-[200px]">

@@ -1,10 +1,16 @@
-import React, { useCallback, useState, useMemo, useContext } from "react";
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+  useContext,
+} from "react";
 import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { PickerContext } from "../../../context/pickerContext.js";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
-import { createPost, client } from "../../../client.js";
+import { createPost, getCategories, client } from "../../../client.js";
 import { elements, variants } from "../../../styles/elements.js";
 import { v4 as uuidv4 } from "uuid";
 import JoditEditor from "jodit-react";
@@ -20,7 +26,14 @@ const NewPost = () => {
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [destination, setDestination] = useState("");
-  const [catagories, setCatatgories] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [addCatagory, setAddCategory] = useState([]);
+
+  useEffect(() => {
+    getCategories()
+      .then((res) => setCategories(res))
+      .catch((err) => console.log(err));
+  }, []);
 
   const config = useMemo(
     () => ({
@@ -83,6 +96,11 @@ const NewPost = () => {
       title,
       excerpt,
       body: content,
+      categories: addCatagory.map((id) => ({
+        _key: uuidv4(),
+        _type: "category",
+        _ref: id,
+      })),
       image: {
         _type: "image",
         asset: {
@@ -104,6 +122,15 @@ const NewPost = () => {
         window.location.reload();
       })
       .catch((err) => console.log(err));
+  };
+
+  const addCategoryToList = (id) => {
+    if (addCatagory.includes(id)) {
+      const filter = addCatagory.filter((item) => item !== id);
+      setAddCategory(filter);
+    } else {
+      setAddCategory((prev) => [...prev, id]);
+    }
   };
 
   return (
@@ -172,12 +199,28 @@ const NewPost = () => {
           onChange={(e) => setExcerpt(e.target.value)}
         ></textarea>
       </div>
+      {categories.length > 0 && (
+        <div className="p-2 my-5 flex justify-center items-center flex-wrap max-w-[95%]">
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className={`max-w-min rounded-full shadow-md px-3 py-1 m-1 ${
+                addCatagory.includes(category._id)
+                  ? "bg-violet-400"
+                  : "bg-white"
+              }`}
+              onClick={() => addCategoryToList(category._id)}
+            >
+              <p>{category.title}</p>
+            </div>
+          ))}
+        </div>
+      )}
       <JoditEditor
         value={content}
         config={config}
         tabIndex={1}
         onBlur={onBlur}
-        // onChange={onChange}
       />
       <div className="flex justify-center items-center mt-5">
         <button
