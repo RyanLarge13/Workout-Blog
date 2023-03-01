@@ -18,7 +18,8 @@ import {
 import { elements, variants } from "../../styles/elements.js";
 import Conformation from "../../components/Conformation";
 import Bio from "./components/Bio";
-import HeaderImage from "./components/HeaderImage.jsx";
+import HeaderImage from "./components/HeaderImage";
+import FollowersFollowing from "./components/FollowersFollowing";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
@@ -175,6 +176,7 @@ const Profile = () => {
           </p>
         </div>
       </div>
+      <FollowersFollowing  userId={profile._id} />
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
         <h2 className="text-2xl">Change Your Username</h2>
         <label htmlFor="username" className="hidden">

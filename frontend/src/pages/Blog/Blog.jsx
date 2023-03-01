@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext";
 import {
   getPosts,
+  getCategories,
   client,
   getSearchedPosts,
   getPostsByCategory,
@@ -26,6 +27,8 @@ const Blog = () => {
 
   const [posts, setPosts] = useState([]);
   const [saved, setSaved] = useState(false);
+  const [pickerCategories, setPickerCategories] = useState([]);
+  const [pickedCategory, setPickedCategory] = useState("");
 
   useEffect(() => {
     getPosts()
@@ -33,11 +36,15 @@ const Blog = () => {
         setPosts(posts);
       })
       .catch((err) => console.log(err));
+
+    getCategories()
+      .then((res) => setPickerCategories(res))
+      .catch((err) => console.log(err));
     //getPostsByFollowing([profile._id])
-     // .then((res) => {
-        //setPosts(res)
+    // .then((res) => {
+    //setPosts(res)
     //  })
-     // .catch((err) => console.log(err));
+    // .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -88,9 +95,22 @@ const Blog = () => {
       .catch((err) => console.log(err));
   };
 
+  const filterPostsByCategory = (id) => {
+    if (pickedCategory === id) {
+      setPickedCategory("");
+      return getPosts()
+        .then((res) => setPosts(res))
+        .catch((err) => console.log(err));
+    } else {
+      setPickedCategory(id);
+      filterCategories(id);
+    }
+  };
+
   const filterCategories = (id) => {
     getPostsByCategory(id)
       .then((res) => {
+      	setPickedCategory(id)
         setPosts(res);
       })
       .catch((err) => console.log(err));
@@ -113,6 +133,23 @@ const Blog = () => {
               onChange={(e) => queryTitle(e.target.value)}
             />
           </div>
+          {pickerCategories.length > 0 && (
+            <div className="my-5 py-5 px-2 flex flex-wrap max-w-full justify-center items-center">
+              {pickerCategories.map((category, index) => (
+                <div
+                  key={index}
+                  onClick={() => filterPostsByCategory(category._id)}
+                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center ${
+                    pickedCategory === category._id
+                      ? "bg-violet-400"
+                      : "bg-white"
+                  }`}
+                >
+                  <p className="text-xs">{category.title}</p>
+                </div>
+              ))}
+            </div>
+          )}
           {posts.map((post, index) => (
             <motion.div
               initial={{ opacity: 0, y: -100 }}
@@ -132,7 +169,7 @@ const Blog = () => {
               <h2 className="text-xl my-2">{post?.title}</h2>
               <p className="text-center text-xs my-5">{post?.excerpt}</p>
               <div className="flex justify-between align-center mt-5">
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-start">
                   <NavLink
                     to={`/posts/${post?._id}`}
                     className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
@@ -143,7 +180,7 @@ const Blog = () => {
                     {new Date(post?._createdAt).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-start">
                   <img
                     src={post?.postedBy?.image}
                     alt="user"

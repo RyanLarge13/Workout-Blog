@@ -3,6 +3,8 @@ import { ProfileContext } from "../../../context/profileContext.js";
 import { useParams, NavLink } from "react-router-dom";
 import { singlePost, getPersonalPosts, client } from "../../../client";
 import { DotLoader } from "react-spinners";
+import { AiFillEdit } from "react-icons/ai";
+import DOMPurify from "dompurify";
 import imageUrlBuilder from "@sanity/image-url";
 import NewComment from "./NewComment";
 
@@ -37,13 +39,23 @@ const BlogDetails = () => {
       .catch((err) => console.log(err));
   }, [post]);
 
+  const editPost = () => {};
+
   return (
     <section>
       {post ? (
         <>
           <section>
             <header className="p-5 pt-20 relative flex flex-col justify-center align-center bg-gradient-to-tr from-violet-500 to-purple-500 shadow-md rounded-md">
-              <h1 className="text-4xl text-white mb-5 mt-3">{post.title}</h1>
+              <div className="flex justify-between items-center">
+                <h1 className="text-4xl text-white mb-5 mt-3">{post.title}</h1>
+                {post?.postedBy?._id === profile._id && (
+                  <AiFillEdit
+                    onClick={() => editPost()}
+                    className="text-white text-2xl"
+                  />
+                )}
+              </div>
               <img
                 src={post.image.asset.url}
                 alt="post header"
@@ -55,7 +67,7 @@ const BlogDetails = () => {
               <p className="text-center text-white">{post.excerpt}</p>
             </header>
             <div className="p-2 my-5 border-b">
-              <div dangerouslySetInnerHTML={{ __html: post?.body }}></div>
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post?.body) }}></div>
             </div>
           </section>
           <section className="my-5">
@@ -84,11 +96,11 @@ const BlogDetails = () => {
           <section className="my-10 mt-[100px] p-2">
             <div className="flex flex-col items-center justify-start p-5 mx-2 rounded-md shadow-md relative bg-gradient-to-tr from-purple-400 to-violet-500">
               <div className="absolute top-[-50px]">
-                  <img
-                    src={post?.postedBy?.image}
-                    alt="user"
-                    className="rounded-full w-[100px] h-[100px] shadow-md object-cover object-center"
-                  />
+                <img
+                  src={post?.postedBy?.image}
+                  alt="user"
+                  className="rounded-full w-[100px] h-[100px] shadow-md object-cover object-center"
+                />
                 <p className="text-center">{post?.postedBy?.name}</p>
               </div>
               <div className="mt-[100px] text-center mb-[200px]">

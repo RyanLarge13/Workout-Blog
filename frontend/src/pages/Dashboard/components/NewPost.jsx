@@ -13,6 +13,7 @@ import { BounceLoader } from "react-spinners";
 import { createPost, getCategories, client } from "../../../client.js";
 import { elements, variants } from "../../../styles/elements.js";
 import { v4 as uuidv4 } from "uuid";
+import DOMPurify from "dompurify";
 import JoditEditor from "jodit-react";
 
 const NewPost = () => {
@@ -48,14 +49,16 @@ const NewPost = () => {
 
   const appendLog = useCallback(
     (message) => {
-      setContent(message);
+      const purifiedMessage = DOMPurify.sanitize(message);
+      setContent(purifiedMessage);
     },
     [content, setContent]
   );
 
   const onBlur = useCallback(
     (newContent) => {
-      setContent(newContent);
+      const purifiedMessage = DOMPurify.sanitize(newContent);
+      setContent(purifiedMessage);
     },
     [appendLog, setContent]
   );
@@ -95,7 +98,7 @@ const NewPost = () => {
       _type: "post",
       title,
       excerpt,
-      body: content,
+      body: DOMPurify.sanitize(content),
       categories: addCatagory.map((id) => ({
         _key: uuidv4(),
         _type: "category",
@@ -204,20 +207,20 @@ const NewPost = () => {
           {categories.map((category, index) => (
             <div
               key={index}
-              className={`max-w-min rounded-full shadow-md px-3 py-1 m-1 ${
+              className={`max-w-max rounded-full shadow-md px-3 py-1 m-1 ${
                 addCatagory.includes(category._id)
                   ? "bg-violet-400"
                   : "bg-white"
               }`}
               onClick={() => addCategoryToList(category._id)}
             >
-              <p>{category.title}</p>
+              <p className="text-xs">{category.title}</p>
             </div>
           ))}
         </div>
       )}
       <JoditEditor
-        value={content}
+        value={DOMPurify.sanitize(content)}
         config={config}
         tabIndex={1}
         onBlur={onBlur}

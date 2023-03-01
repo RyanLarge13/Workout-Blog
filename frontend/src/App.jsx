@@ -44,11 +44,12 @@ const App = () => {
       )
         .then((res) => {
           if (res.error) {
-          	localStorage.removeItem("authToken");
+            localStorage.removeItem("authToken");
             setToken(false);
             setProfile(false);
             setUser(false);
-            return setLoading(false);
+            setLoading(false);
+            return (window.location = "/");
           }
           createProfile(res.data);
         })
@@ -56,9 +57,11 @@ const App = () => {
           if (err.response?.status === 401) {
             localStorage.removeItem("authToken");
           }
+          setToken(false);
           setProfile(false);
           setUser(false);
           setLoading(false);
+          //return (window.location = "/");
         });
     }
   }, []);
@@ -76,14 +79,24 @@ const App = () => {
         }
       )
         .then((res) => {
+          if (res.error) {
+            localStorage.removeItem("authToken");
+            setToken(false);
+            setProfile(false);
+            setUser(false);
+            setLoading(false);
+            return (window.location = "/");
+          }
           createProfile(res.data);
           setToken(user.access_token);
           localStorage.setItem("authToken", user.access_token);
         })
         .catch((err) => {
           setLoading(false);
+          setToken(false);
+          setUser(false);
           setProfile(false);
-          console.log(err);
+          //return (window.location = "/");
         });
     }
   }, [user]);

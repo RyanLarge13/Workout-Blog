@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import {
   getUserInfo,
   getPersonalPosts,
@@ -17,7 +17,7 @@ const UserProfile = () => {
   const { profile } = useContext(ProfileContext);
 
   const [userView, setUserView] = useState({});
-  const [userPosts, setUserPosts] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
   const [following, setFollowing] = useState({});
 
   const { userId } = useParams();
@@ -88,38 +88,47 @@ const UserProfile = () => {
           {userView._id !== profile._id && (
             <div className="flex justify-around items-center py-3 mt-5">
               <button
-                className={`${elements.button} ${variants.mainBtnBg} flex justify-center`}
+                className={`${elements.button} ${variants.mainBtnBg} flex flex-col items-center justify-center`}
               >
                 {following?.length > 0 ? (
-                  <RiUserFollowFill onClick={() => unfollow()} />
+                  <>
+                    <RiUserFollowFill onClick={() => unfollow()} />
+                    <p>Following</p>
+                  </>
                 ) : (
-                  <RiUserFollowLine onClick={() => newFollow()} />
+                  <>
+                    <RiUserFollowLine onClick={() => newFollow()} />
+                    <p>Follow</p>
+                  </>
                 )}
               </button>
               <button
-                className={`${elements.button} ${variants.mainBtnBg} flex justify-center`}
+                className={`${elements.button} ${variants.mainBtnBg} flex flex-col items-center justify-center`}
               >
                 <AiTwotoneMessage />
+                <p>Message</p>
               </button>
             </div>
           )}
         </div>
       </header>
-      <div>
+      <div className="my-5 py-5">
         {userPosts &&
-          userPosts.map((post) => {
+          userPosts.map((post) => (
             <div
               key={post?._id}
-              className="w-full mx-5 p-2 rounded-md shadow-md"
+              className="max-w-full my-5 mx-5 p-2 rounded-md shadow-md"
             >
               <img
                 src={urlFor(post?.image?.asset?._ref).url()}
                 alt="post header image"
-                className="w-full max-h-[150px] rounded-md shadow-md object-cover object-center m-2"
+                className="w-full max-h-[150px] rounded-md shadow-md object-cover object-center"
               />
-              <h2>{post.title}</h2>
-            </div>;
-          })}
+              <NavLink to={`/posts/${post?._id}`}>
+                <h2 className="text-center m-3">{post.title}</h2>
+              </NavLink>
+            </div>
+          ))}
       </div>
     </section>
   );

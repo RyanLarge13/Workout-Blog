@@ -26,7 +26,7 @@ const Dashboard = () => {
       <header className="bg-gradient-to-tr from-violet-500 to-purple-500 py-10 rounded-b-2xl text-white shadow-md">
         <div className="mt-10 flex flex-col items-center justify-center">
           <h2 className="text-2xl">Quick Actions</h2>
-          <div className="flex justify-center align-center mt-5">
+          <div className="flex flex-wrap justify-center align-center mt-5">
             <div className={`${containers.quickActionContainer}`}>
               <button
                 className={`${elements.quickActions} bg-pink-400 ${
@@ -63,11 +63,23 @@ const Dashboard = () => {
               </button>
               <p>Read</p>
             </div>
+            <div className={`${containers.quickActionContainer}`}>
+              <button
+                className={`${elements.quickActions} bg-orange-400 ${
+                  picker === "blog" && "outline"
+                }`}
+              >
+                <NavLink onClick={() => setPicker("blog")}>
+                  <AiFillRead />
+                </NavLink>
+              </button>
+              <p>Following</p>
+            </div>
           </div>
         </div>
       </header>
       {picker !== "newpost" && (
-        <div className="my-10 flex flex-col items-center justify-center">
+        <div className="mt-10 flex flex-col items-center justify-center">
           <button
             onClick={() => setPicker("newpost")}
             className={`${elements.button} ${variants.mainBtnBg} flex align-center justify-center`}

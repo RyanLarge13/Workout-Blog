@@ -34,7 +34,7 @@ export const getPosts = async () => {
       },
       _id,
       destination,
-      categories[]->, 
+      categories[]-> | order(title asc), 
       postedBy -> {
         _id,
         name, 
@@ -65,6 +65,7 @@ export const getSearchedPosts = async (searchTerm) => {
       },
       _id,
       destination,
+      categories[]-> | order(title asc), 
       postedBy -> {
         _id,
         name, 
@@ -96,7 +97,7 @@ export const getPostsByCategory = (id) => {
       },
       _id,
       destination,
-      categories[]->, 
+      categories[]-> | order(title asc), 
       postedBy -> {
         _id,
         name, 
@@ -122,24 +123,49 @@ export const getPostsByFollowing = (ids) => {
 
 export const getPersonalPosts = async (id) => {
   const myPosts = await client.fetch(
-    `*[_type == 'post' && userId match '${id}']`
+    `*[_type == "post" && userId match '${id}'] | order(_createdAt desc)`
   );
   return myPosts;
 };
 
 export const getCategories = () => {
-  const categories = client.fetch(`*[_type == 'category']`);
+  const categories = client.fetch(`*[_type == 'category'] | order(title asc)`);
   return categories;
 };
 
 export const getAllLikesAndComments = (userId) => {
   const allLikes = client.fetch(
     `*[_type == 'post' && userId match '${userId}']{
-    	save[], 
-    	comments[],
+    	save[]->, 
+    	comments[]->,
     }`
   );
   return allLikes;
+};
+
+export const getAllFollowing = (id) => {
+  const result = client.fetch(`*[_type == 'user' && _id match '${id}']{
+  	follow[] {
+  	  userId, 
+      postedBy->{
+        _id, 
+        name, 
+        image
+      } 
+  	},
+  }`);
+  return result;
+};
+
+export const getAllFollowers = (id) => {
+  const result = client.fetch(
+    `*[_type == 'user' && '${id}' in follow[]->userId]{
+    	name, 
+    	_id, 
+    	image, 
+    }`
+  );
+  return result;
 };
 
 export const followUser = (userId, followId) => {
@@ -204,7 +230,7 @@ export const singlePost = async (postId) => {
           image
         },
         createdAt,
-      }, 
+      } | order(createdAt asc), 
       _createdAt,
       publishedAt,
     }`);
