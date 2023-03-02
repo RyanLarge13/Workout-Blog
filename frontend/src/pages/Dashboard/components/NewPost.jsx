@@ -8,9 +8,15 @@ import React, {
 import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { PickerContext } from "../../../context/pickerContext.js";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
-import { createPost, getCategories, client } from "../../../client.js";
+import {
+  createPost,
+  getCategories,
+  updatePost,
+  client,
+} from "../../../client.js";
 import { elements, variants } from "../../../styles/elements.js";
 import { v4 as uuidv4 } from "uuid";
 import DOMPurify from "dompurify";
@@ -19,8 +25,9 @@ import JoditEditor from "jodit-react";
 const NewPost = () => {
   const { profile } = useContext(ProfileContext);
   const { content, setContent } = useContext(newBlogContext);
-  const { picker, setPicker } = useContext(PickerContext);
+  const { setPicker } = useContext(PickerContext);
 
+  const [editing, setEditing] = useState(false);
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageLoad, setImageLoad] = useState(false);
@@ -30,7 +37,23 @@ const NewPost = () => {
   const [categories, setCategories] = useState([]);
   const [addCatagory, setAddCategory] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const tryingToEdit = localStorage.getItem("editPost");
+
+    if (tryingToEdit) {
+      setEditing(true);
+      const post = JSON.parse(localStorage.getItem("editPost"));
+      const { title, image, excerpt, categories } = post;
+      setTitle(title);
+      setImageAsset(image.asset);
+      setExcerpt(excerpt);
+      categories?.map((category) => addCategoryToList(category._id));
+    }
+    if (!tryingToEdit) {
+      setContent("");
+    }
     getCategories()
       .then((res) => setCategories(res))
       .catch((err) => console.log(err));
@@ -127,6 +150,30 @@ const NewPost = () => {
       .catch((err) => console.log(err));
   };
 
+  const editPost = () => {
+    const post = JSON.parse(localStorage.getItem("editPost"));
+    const { _id, image } = post;
+    const updatedPost = {
+      title,
+      excerpt,
+      body: DOMPurify.sanitize(content),
+      categories: addCatagory.map((id) => ({
+        _key: uuidv4(),
+        _ref: id,
+      })),
+      image: image,
+      publishedAt: new Date(),
+    };
+    updatePost(_id, updatedPost)
+      .then((res) => {
+        console.log(res);
+        localStorage.removeItem("editPost");
+        setPicker("myposts");
+        navigate("/dashboard");
+      })
+      .catch((err) => console.log(err));
+  };
+
   const addCategoryToList = (id) => {
     if (addCatagory.includes(id)) {
       const filter = addCatagory.filter((item) => item !== id);
@@ -182,8 +229,8 @@ const NewPost = () => {
           type="text"
           className={`${elements.input} my-5`}
           id="title"
-          name="title"
           placeholder="Title"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
@@ -193,12 +240,12 @@ const NewPost = () => {
         </label>
         <textarea
           className="w-full text-center p-3 mx-5 my-5 shadow-md rounded-md"
-          name="exceerpt"
           id="excerpt"
           cols="30"
           rows="10"
           placeholder="Excerpt"
           maxLength="600"
+          value={excerpt}
           onChange={(e) => setExcerpt(e.target.value)}
         ></textarea>
       </div>
@@ -226,12 +273,21 @@ const NewPost = () => {
         onBlur={onBlur}
       />
       <div className="flex justify-center items-center mt-5">
-        <button
-          onClick={() => submitNewPost()}
-          className={`${elements.button} ${variants.mainBtnBg} mt-5`}
-        >
-          Submit
-        </button>
+        {editing ? (
+          <button
+            onClick={() => editPost()}
+            className={`${elements.button} ${variants.mainBtnBg} mt-5`}
+          >
+            Edit Post
+          </button>
+        ) : (
+          <button
+            onClick={() => submitNewPost()}
+            className={`${elements.button} ${variants.mainBtnBg} mt-5`}
+          >
+            Submit
+          </button>
+        )}
       </div>
     </section>
   );

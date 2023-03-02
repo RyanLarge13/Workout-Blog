@@ -120,7 +120,7 @@ const UserProfile = () => {
               className="max-w-full my-5 mx-5 p-2 rounded-md shadow-md"
             >
               <img
-                src={urlFor(post?.image?.asset?._ref).url()}
+                src={urlFor(post?.image?.asset?.url).url()}
                 alt="post header image"
                 className="w-full max-h-[150px] rounded-md shadow-md object-cover object-center"
               />

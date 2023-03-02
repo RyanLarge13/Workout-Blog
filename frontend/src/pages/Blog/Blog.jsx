@@ -2,7 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext";
 import {
   getPosts,
+  getPersonalPosts,
   getCategories,
+  getAllFollowing,
   client,
   getSearchedPosts,
   getPostsByCategory,
@@ -22,30 +24,44 @@ function urlFor(source) {
   return builder.image(source);
 }
 
-const Blog = () => {
+const Blog = ({ following }) => {
   const { profile } = useContext(ProfileContext);
 
   const [posts, setPosts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [pickerCategories, setPickerCategories] = useState([]);
   const [pickedCategory, setPickedCategory] = useState("");
+  const [peopleIFollow, setPeopleIFollow] = useState([]);
+  const [noPostsToShow, setNoPostsToShow] = useState(false);
 
   useEffect(() => {
-    getPosts()
-      .then((posts) => {
-        setPosts(posts);
-      })
-      .catch((err) => console.log(err));
+    setPosts([]);
+    if (following) {
+      getAllFollowing(profile._id)
+        .then((res) => {
+          setPeopleIFollow(res[0].follow);
+        })
+        .catch((err) => console.log(err));
+      profile.follow.map((user) =>
+        getPostsByFollowing(user.userId)
+          .then((res) => {
+            setPosts((prev) => [...prev, res[0]]);
+          })
+          .catch((err) => console.log(err))
+      );
+    }
+    if (!following) {
+      getPosts()
+        .then((posts) => {
+          setPosts(posts);
+        })
+        .catch((err) => console.log(err));
+    }
 
     getCategories()
       .then((res) => setPickerCategories(res))
       .catch((err) => console.log(err));
-    //getPostsByFollowing([profile._id])
-    // .then((res) => {
-    //setPosts(res)
-    //  })
-    // .catch((err) => console.log(err));
-  }, []);
+  }, [following]);
 
   useEffect(() => {
     const isSaved = posts?.map(
@@ -110,7 +126,31 @@ const Blog = () => {
   const filterCategories = (id) => {
     getPostsByCategory(id)
       .then((res) => {
-      	setPickedCategory(id)
+        setPickedCategory(id);
+        if (res.length < 1) {
+          setPosts([]);
+          setNoPostsToShow(true);
+          setTimeout(() => {
+            setNoPostsToShow(false);
+          }, 2000);
+          setTimeout(() => {
+            getPosts()
+              .then((res) => {
+                setPickedCategory("");
+                setPosts(res);
+              })
+              .catch((err) => console.log(err));
+          }, 3000);
+        }
+        setPosts(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getUserPosts = (userId) => {
+    setPosts([]);
+    getPersonalPosts(userId)
+      .then((res) => {
         setPosts(res);
       })
       .catch((err) => console.log(err));
@@ -146,6 +186,24 @@ const Blog = () => {
                   }`}
                 >
                   <p className="text-xs">{category.title}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          {following && peopleIFollow.length > 0 && (
+            <div className="m-5 max-w-full flex flex-wrap justify-center items-center">
+              {peopleIFollow.map((user) => (
+                <div
+                  key={user.userId}
+                  onClick={() => getUserPosts(user.userId)}
+                  className="m-2 p-1"
+                >
+                  <img
+                    src={user?.postedBy?.image}
+                    alt="user"
+                    className="rounded-full w-[50px] h-[50px] shadow-md mx-auto p-1 object-cover object-center"
+                  />
+                  <p className="text-center">{user?.postedBy?.name}</p>
                 </div>
               ))}
             </div>
@@ -196,6 +254,7 @@ const Blog = () => {
                   {post?.categories?.map((category) => (
                     <div
                       onClick={() => filterCategories(category._id)}
+                      key={category._id}
                       className="rounded-full px-3 py-1 m-1 shadow-md bg-violet-400"
                     >
                       <p className="text-sm select-none">{category.title}</p>
@@ -238,7 +297,11 @@ const Blog = () => {
         </section>
       ) : (
         <section className="h-screen flex justify-center items-center">
-          <DotLoader />
+          {noPostsToShow ? (
+            <p>No Posts To Show From This Category</p>
+          ) : (
+            <DotLoader />
+          )}
         </section>
       )}
     </>

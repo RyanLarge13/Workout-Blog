@@ -3,6 +3,7 @@ import { PickerContext } from "../../context/pickerContext";
 import { FaCog, FaNewspaper } from "react-icons/fa";
 import { BsViewList } from "react-icons/bs";
 import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
+import { GiShadowFollower } from "react-icons/gi";
 import { elements, variants } from "../../styles/elements.js";
 import { containers } from "../../styles/containers.js";
 import { NavLink } from "react-router-dom";
@@ -17,7 +18,8 @@ const Dashboard = () => {
   useEffect(() => {
     if (picker === "myposts") return setComponent(<MyPosts />);
     if (picker === "newpost") return setComponent(<NewPost />);
-    if (picker === "blog") return setComponent(<Blog />);
+    if (picker === "blog") return setComponent(<Blog following={false} />);
+    if (picker === "follow") return setComponent(<Blog following={true} />);
   }, [picker]);
 
   return (
@@ -66,11 +68,11 @@ const Dashboard = () => {
             <div className={`${containers.quickActionContainer}`}>
               <button
                 className={`${elements.quickActions} bg-orange-400 ${
-                  picker === "blog" && "outline"
+                  picker === "follow" && "outline"
                 }`}
               >
-                <NavLink onClick={() => setPicker("blog")}>
-                  <AiFillRead />
+                <NavLink onClick={() => setPicker("follow")}>
+                  <GiShadowFollower />
                 </NavLink>
               </button>
               <p>Following</p>

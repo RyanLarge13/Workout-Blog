@@ -116,14 +116,65 @@ export const getPostsByCategory = (id) => {
   return posts;
 };
 
-export const getPostsByFollowing = (ids) => {
-  const posts = client.fetch(`*[_type == 'post' && _id in ${ids}]`);
+export const getPostsByFollowing = (userId) => {
+  const posts =
+    client.fetch(`*[_type == "post" && userId match '${userId}'] | order(_createdAt desc){
+      title,
+      excerpt, 
+      image {
+        asset -> {
+          url
+        }
+      },
+      _id,
+      destination,
+      categories[]-> | order(title asc), 
+      postedBy -> {
+        _id,
+        name, 
+        image
+      },
+      save[] {
+        _key,
+        postedBy -> {
+          _id,
+          name,
+          image
+        },
+      },
+      _createdAt
+    }[0...20]`);
   return posts;
 };
 
 export const getPersonalPosts = async (id) => {
   const myPosts = await client.fetch(
-    `*[_type == "post" && userId match '${id}'] | order(_createdAt desc)`
+    `*[_type == "post" && userId match '${id}'] | order(_createdAt desc){
+      title,
+      excerpt, 
+      image {
+        asset -> {
+          url
+        }
+      },
+      _id,
+      destination,
+      categories[]-> | order(title asc), 
+      postedBy -> {
+        _id,
+        name, 
+        image
+      },
+      save[] {
+        _key,
+        postedBy -> {
+          _id,
+          name,
+          image
+        },
+      },
+      _createdAt
+    }[0...20]`
   );
   return myPosts;
 };
@@ -159,7 +210,7 @@ export const getAllFollowing = (id) => {
 
 export const getAllFollowers = (id) => {
   const result = client.fetch(
-    `*[_type == 'user' && '${id}' in follow[]->userId]{
+    `*[_type == 'user' && '${id}' in follow[].userId]{
     	name, 
     	_id, 
     	image, 
@@ -206,6 +257,7 @@ export const singlePost = async (postId) => {
       },
       _id,
       destination,
+      categories[]-> | order(title asc),
       body,
       title, 
       excerpt, 
@@ -272,13 +324,25 @@ export const updateProfileImage = (id, image) => {
 };
 
 export const updateHeaderImage = (userId, headerImage) => {
-  const result = client.patch(userId).set({ headerImage }).commit();
+  const result = client
+    .patch(userId)
+    .set({ headerImage: { asset: { _ref: headerImage._id } } })
+    .commit();
   return result;
 };
 
 export const updateBio = (id, bio) => {
   const newBio = client.patch(id).set({ bio }).commit();
   return newBio;
+};
+
+export const updatePost = (postId, updatedPost) => {
+  const { title, excerpt, body, categories, image, publishedAt } = updatedPost;
+  const update = client
+    .patch(postId)
+    .set({ title, excerpt, body, categories, image, publishedAt })
+    .commit();
+  return update;
 };
 
 export const addComment = (postId, userId, comment) => {

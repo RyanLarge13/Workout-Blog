@@ -21,6 +21,7 @@ const MyPosts = () => {
   useEffect(() => {
     getPersonalPosts(profile._id)
       .then((posts) => {
+        console.log(posts);
         setPosts(posts);
       })
       .catch((err) => console.log(err));
@@ -46,7 +47,10 @@ const MyPosts = () => {
             className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
           >
             <img
-              src={urlFor(post?.image?.asset?._ref).width(300).url()}
+              src={
+                post?.image?.asset?.url &&
+                urlFor(post?.image?.asset?.url).width(300).url()
+              }
               alt="blog image"
               className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
             />

@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../../context/profileContext.js";
-import { useParams, NavLink } from "react-router-dom";
+import { newBlogContext } from "../../../context/newBlogContext.js";
+import { PickerContext } from "../../../context/pickerContext.js";
+import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { singlePost, getPersonalPosts, client } from "../../../client";
 import { DotLoader } from "react-spinners";
 import { AiFillEdit } from "react-icons/ai";
@@ -15,11 +17,14 @@ function urlFor(source) {
 
 const BlogDetails = () => {
   const { profile } = useContext(ProfileContext);
+  const { setContent } = useContext(newBlogContext);
+  const { setPicker } = useContext(PickerContext);
 
   const [post, setPost] = useState(null);
-  const [userPosts, setUserPosts] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const { postId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     singlePost(postId)
@@ -39,7 +44,20 @@ const BlogDetails = () => {
       .catch((err) => console.log(err));
   }, [post]);
 
-  const editPost = () => {};
+  const editPost = () => {
+    const { title, image, excerpt, categories, _id } = post;
+    const postToEdit = {
+      _id,
+      image,
+      title,
+      excerpt,
+      categories,
+    };
+    localStorage.setItem("editPost", JSON.stringify(postToEdit));
+    setPicker("newpost");
+    setContent(post?.body);
+    navigate("/dashboard");
+  };
 
   return (
     <section>
@@ -57,7 +75,7 @@ const BlogDetails = () => {
                 )}
               </div>
               <img
-                src={post.image.asset.url}
+                src={post?.image?.asset?.url}
                 alt="post header"
                 className="rounded-lg w-screen shadow-md"
               />
@@ -67,7 +85,11 @@ const BlogDetails = () => {
               <p className="text-center text-white">{post.excerpt}</p>
             </header>
             <div className="p-2 my-5 border-b">
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post?.body) }}></div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(post?.body),
+                }}
+              ></div>
             </div>
           </section>
           <section className="my-5">
@@ -119,7 +141,7 @@ const BlogDetails = () => {
                       className="p-2 my-2 w-[70%] bg-white rounded-md shadow-md"
                     >
                       <img
-                        src={urlFor(userPost.image?.asset?._ref)
+                        src={urlFor(userPost.image?.asset?.url)
                           .width(300)
                           .url()}
                         alt={userPost.title}
