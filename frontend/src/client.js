@@ -337,12 +337,38 @@ export const updateBio = (id, bio) => {
 };
 
 export const updatePost = (postId, updatedPost) => {
-  const { title, excerpt, body, categories, image, publishedAt } = updatedPost;
-  const update = client
-    .patch(postId)
-    .set({ title, excerpt, body, categories, image, publishedAt })
-    .commit();
-  return update;
+  const { title, excerpt, body, categories, publishedAt } = updatedPost;
+  if (updatedPost.image) {
+    const update = client
+      .patch(postId)
+      .set({
+        title,
+        excerpt,
+        body,
+        categories: categories.map((id) => ({
+          _ref: id,
+        })),
+        image: { asset: { _ref: updatedPost.image._id } },
+        publishedAt,
+      })
+      .commit();
+    return update;
+  }
+  if (!updatedPost.image) {
+    const update = client
+      .patch(postId)
+      .set({
+        title,
+        excerpt,
+        body,
+        categories: categories.map((id) => ({
+          _ref: id,
+        })),
+        publishedAt,
+      })
+      .commit({ autoGenerateArrayKeys: true });
+    return update;
+  }
 };
 
 export const addComment = (postId, userId, comment) => {

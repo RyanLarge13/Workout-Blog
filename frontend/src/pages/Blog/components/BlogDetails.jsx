@@ -45,10 +45,9 @@ const BlogDetails = () => {
   }, [post]);
 
   const editPost = () => {
-    const { title, image, excerpt, categories, _id } = post;
+    const { title, excerpt, categories, _id } = post;
     const postToEdit = {
       _id,
-      image,
       title,
       excerpt,
       categories,

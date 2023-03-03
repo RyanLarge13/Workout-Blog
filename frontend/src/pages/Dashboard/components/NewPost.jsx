@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-  useContext,
-} from "react";
+import { useCallback, useState, useEffect, useMemo, useContext } from "react";
 import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { PickerContext } from "../../../context/pickerContext.js";
@@ -45,9 +39,8 @@ const NewPost = () => {
     if (tryingToEdit) {
       setEditing(true);
       const post = JSON.parse(localStorage.getItem("editPost"));
-      const { title, image, excerpt, categories } = post;
+      const { title, excerpt, categories } = post;
       setTitle(title);
-      setImageAsset(image.asset);
       setExcerpt(excerpt);
       categories?.map((category) => addCategoryToList(category._id));
     }
@@ -102,7 +95,7 @@ const NewPost = () => {
       client.assets
         .upload("image", e.target.files[0], {
           contentType: type,
-          filenam: name,
+          filename: name,
         })
         .then((doc) => {
           setImageLoad(false);
@@ -152,16 +145,13 @@ const NewPost = () => {
 
   const editPost = () => {
     const post = JSON.parse(localStorage.getItem("editPost"));
-    const { _id, image } = post;
+    const { _id } = post;
     const updatedPost = {
       title,
       excerpt,
       body: DOMPurify.sanitize(content),
-      categories: addCatagory.map((id) => ({
-        _key: uuidv4(),
-        _ref: id,
-      })),
-      image: image,
+      categories: addCatagory,
+      image: imageAsset,
       publishedAt: new Date(),
     };
     updatePost(_id, updatedPost)
@@ -195,7 +185,11 @@ const NewPost = () => {
               <>
                 <div className="flex justify-center items-center flex-col">
                   <AiOutlineCloudUpload className="text-2xl mb-2" />
-                  <p>Upload Header Image</p>
+                  <p className="text-center">
+                    {editing
+                      ? "Add New Header Image Or Leave Blank To Keep Original"
+                      : "Upload Header Image"}
+                  </p>
                   <p className="text-gray-400 mt-2">
                     JPG, PNG, SVG, GIF, TIFF less then 20MB
                   </p>
