@@ -21,7 +21,6 @@ const MyPosts = () => {
   useEffect(() => {
     getPersonalPosts(profile._id)
       .then((posts) => {
-        console.log(posts);
         setPosts(posts);
       })
       .catch((err) => console.log(err));

@@ -27,7 +27,6 @@ const NewPost = () => {
   const [imageLoad, setImageLoad] = useState(false);
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
-  const [destination, setDestination] = useState("");
   const [categories, setCategories] = useState([]);
   const [addCatagory, setAddCategory] = useState([]);
 
@@ -109,6 +108,7 @@ const NewPost = () => {
   };
 
   const submitNewPost = () => {
+    if (!imageAsset) return addImagePlease();
     const newPost = {
       _id: uuidv4(),
       _type: "post",
@@ -156,9 +156,9 @@ const NewPost = () => {
     };
     updatePost(_id, updatedPost)
       .then((res) => {
-        console.log(res);
         localStorage.removeItem("editPost");
         setPicker("myposts");
+        setEditing(false);
         navigate("/dashboard");
       })
       .catch((err) => console.log(err));
@@ -173,10 +173,14 @@ const NewPost = () => {
     }
   };
 
+  const addImagePlease = () => {
+    setWrongImageType(true);
+    return window.scrollTo(0, 0);
+  };
+
   return (
     <section>
       <div className="w-[90%] h-[500px] bg-gray-200 m-5 mx-auto flex justify-center items-center">
-        {wrongImageType && <p>Wrong Image Type, please select a new image</p>}
         {!imageAsset ? (
           <label>
             {imageLoad ? (
@@ -188,6 +192,8 @@ const NewPost = () => {
                   <p className="text-center">
                     {editing
                       ? "Add New Header Image Or Leave Blank To Keep Original"
+                      : wrongImageType
+                      ? "Wrong Image Type, please select a new image"
                       : "Upload Header Image"}
                   </p>
                   <p className="text-gray-400 mt-2">

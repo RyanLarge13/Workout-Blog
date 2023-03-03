@@ -24,10 +24,9 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 const App = () => {
   const [user, setUser] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [loadingProfile, setLoadingProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState("");
-  const [picker, setPicker] = useState("myposts");
+  const [picker, setPicker] = useState("blog");
   const [token, setToken] = useState(localStorage.getItem("authToken"));
 
   useEffect(() => {
@@ -61,7 +60,6 @@ const App = () => {
           setProfile(false);
           setUser(false);
           setLoading(false);
-          //return (window.location = "/");
         });
     }
   }, []);
@@ -96,7 +94,6 @@ const App = () => {
           setToken(false);
           setUser(false);
           setProfile(false);
-          //return (window.location = "/");
         });
     }
   }, [user]);

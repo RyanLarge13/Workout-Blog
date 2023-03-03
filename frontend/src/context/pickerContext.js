@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const PickerContext = createContext("myposts");
+export const PickerContext = createContext("blog");

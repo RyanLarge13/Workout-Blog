@@ -3,7 +3,12 @@ import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { PickerContext } from "../../../context/pickerContext.js";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
-import { singlePost, getPersonalPosts, client } from "../../../client";
+import {
+  singlePost,
+  getPersonalPosts,
+  getPostsByCategory,
+  client,
+} from "../../../client";
 import { DotLoader } from "react-spinners";
 import { AiFillEdit } from "react-icons/ai";
 import DOMPurify from "dompurify";
@@ -22,6 +27,7 @@ const BlogDetails = () => {
 
   const [post, setPost] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
+  const [categoryPosts, setCategoryPosts] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const { postId } = useParams();
   const navigate = useNavigate();
@@ -42,6 +48,13 @@ const BlogDetails = () => {
         setUserPosts(filter);
       })
       .catch((err) => console.log(err));
+    post?.categories?.map((category) =>
+      getPostsByCategory(category._id)
+        .then((res) => {
+          setCategoryPosts(res);
+        })
+        .catch((err) => console.log(err))
+    );
   }, [post]);
 
   const editPost = () => {
@@ -83,7 +96,7 @@ const BlogDetails = () => {
               </p>
               <p className="text-center text-white">{post.excerpt}</p>
             </header>
-            <div className="p-2 my-5 border-b">
+            <div className="py-2 px-3 my-5 border-b">
               <div
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(post?.body),
@@ -132,9 +145,9 @@ const BlogDetails = () => {
             <div className="flex flex-col items-center justify-center translate-y-[-100px]">
               {userPosts.length > 0 ? (
                 <>
-                  {userPosts.map((userPost, index) => (
+                  {userPosts.map((userPost) => (
                     <NavLink
-                      key={index}
+                      key={userPost._id}
                       onClick={() => setRefresh((prev) => !prev)}
                       to={`/posts/${userPost._id}`}
                       className="p-2 my-2 w-[70%] bg-white rounded-md shadow-md"
@@ -151,6 +164,41 @@ const BlogDetails = () => {
                 </>
               ) : (
                 <p>No Posts To Show</p>
+              )}
+            </div>
+            <div className="mt-5 py-5 w-full flex overflow-x-auto">
+              {categoryPosts.length > 0 ? (
+                <>
+                  {categoryPosts.map((post) => (
+                    <div
+                      key={post?._id}
+                      className="min-w-[70%] mx-[15%] rounded-md shadow-md p-3 relative"
+                    >
+                      <div>
+                        <p>Related To</p>
+                        {post?.categories?.map((category) => (
+                          <p>{category?.title}</p>
+                        ))}
+                      </div>
+                      <img
+                        src={post?.image?.asset?.url}
+                        alt="category post header"
+                        className="rounded-md shadow-md object-cover object-center max-h-[150px] w-full"
+                      />
+                      <p className="text-center">{post?.title}</p>
+                      <div className="absolute bottom-[-25px] left-[50%] translate-x-[-50%]">
+                        <img
+                          src={post?.postedBy?.image}
+                          alt="user"
+                          className="w-[50px] h-[50px] object-cover object-center rounded-full shadow-md mx-auto"
+                        />
+                        <p className="text-center">{post?.postedBy?.name}</p>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p>No Related Posts In These Categories</p>
               )}
             </div>
           </section>
