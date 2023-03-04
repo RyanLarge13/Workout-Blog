@@ -189,7 +189,7 @@ const Blog = ({ following }) => {
                       : "bg-white"
                   }`}
                 >
-                  <p className="break-keep text-xs">{category.title}</p>
+                  <p className="break-keep text-xs inline">{category.title}</p>
                 </div>
               ))}
             </div>
