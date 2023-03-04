@@ -166,7 +166,8 @@ const BlogDetails = () => {
                 <p>No Posts To Show</p>
               )}
             </div>
-            <div className="mt-5 py-10 w-full flex overflow-x-auto">
+            <h2 className="mb-5 mt-10 text-center">Related Posts</h2>
+            <div className="py-10 w-full flex overflow-x-auto">
               {categoryPosts.length > 0 ? (
                 <>
                   {categoryPosts.map((post) => (
@@ -176,25 +177,19 @@ const BlogDetails = () => {
                           key={post?._id}
                           className="min-w-[70%] mx-[15%] rounded-md shadow-md p-3 relative"
                         >
-                          <div>
-                            <p>Related To</p>
-                            {post?.categories?.map((category) => (
-                              <p>{category?.title}</p>
-                            ))}
-                          </div>
                           <img
                             src={post?.image?.asset?.url}
                             alt="category post header"
-                            className="rounded-md shadow-md object-cover object-center max-h-[150px] w-full"
+                            className="rounded-md shadow-md object-cover object-center max-h-[150px] min-h-[150px] w-full"
                           />
-                          <p className="text-center mb-[50px]">{post?.title}</p>
-                          <div className="absolute bottom-[-25px] left-[50%] translate-x-[-50%] bg-white rounded-md p-2 shadow-md min-w-[100px]">
+                          <p className="text-center m-3">{post?.title}</p>
+                          <div className="flex justify-between items-center">
                             <img
                               src={post?.postedBy?.image}
                               alt="user"
-                              className="w-[50px] h-[50px] object-cover object-center rounded-full shadow-md mx-auto"
+                              className="w-[25px] h-[25px] object-cover object-center rounded-full shadow-md"
                             />
-                            <p className="text-center">
+                            <p className="text-center text-xs">
                               {post?.postedBy?.name}
                             </p>
                           </div>

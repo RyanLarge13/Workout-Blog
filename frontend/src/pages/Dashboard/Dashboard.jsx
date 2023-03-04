@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { PickerContext } from "../../context/pickerContext";
-import { FaCog, FaNewspaper } from "react-icons/fa";
+import { FaNewspaper } from "react-icons/fa";
 import { BsViewList } from "react-icons/bs";
 import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
 import { GiShadowFollower } from "react-icons/gi";
@@ -24,7 +24,6 @@ const Dashboard = () => {
 
   return (
     <section>
-      <FaCog className="fixed bottom-3 right-3 text-2xl" />
       <header className="bg-gradient-to-tr from-violet-500 to-purple-500 py-10 rounded-b-2xl text-white shadow-md">
         <div className="mt-10 flex flex-col items-center justify-center">
           <h2 className="text-2xl">Quick Actions</h2>

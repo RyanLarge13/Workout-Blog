@@ -178,6 +178,16 @@ const NewPost = () => {
     return window.scrollTo(0, 0);
   };
 
+  const clearPost = () => {
+    localStorage.clear();
+    setEditing(false);
+    setImageAsset(null);
+    setTitle("");
+    setExcerpt("");
+    setAddCategory([])
+    setContent("");
+  };
+
   return (
     <section>
       <div className="w-[90%] h-[500px] bg-gray-200 m-5 mx-auto flex justify-center items-center">
@@ -274,12 +284,20 @@ const NewPost = () => {
       />
       <div className="flex justify-center items-center mt-5">
         {editing ? (
-          <button
-            onClick={() => editPost()}
-            className={`${elements.button} ${variants.mainBtnBg} mt-5`}
-          >
-            Edit Post
-          </button>
+          <div className="flex justify-around items-center w-full">
+            <button
+              onClick={() => editPost()}
+              className={`${elements.button} ${variants.mainBtnBg} mt-5`}
+            >
+              Edit Post
+            </button>
+            <button
+              onClick={() => clearPost()}
+              className={`${elements.button} ${variants.mainBtnBg}`}
+            >
+              Clear
+            </button>
+          </div>
         ) : (
           <button
             onClick={() => submitNewPost()}
