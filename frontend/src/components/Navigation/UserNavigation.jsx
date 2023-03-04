@@ -21,7 +21,7 @@ const UserNavigation = () => {
     await setUser(false);
     await setProfile(false);
     await googleLogout();
-    window.location.href = "http://localhost:5173/login";
+    window.location = "/";
   };
 
   return (

@@ -31,7 +31,7 @@ const Home = () => {
           />
           <motion.a
             whileHover={{ scale: 1.1 }}
-            href="http://localhost:5173/login"
+            href="https://workout-blog.vercel.app/login"
             className={`${variants.mainBtnBg} px-3 py-1 m-5 ml-10 bg-white rounded-md h-max relative shadow-md`}
           >
             <button>
@@ -116,7 +116,7 @@ const Home = () => {
         </motion.h1>
         <motion.a
           whileHover={{ scale: 1.1 }}
-          href="http://localhost:5173/login"
+          href="https://workout-blog.vercel.app/login"
           className={`${variants.mainBtnBg} px-4 py-2 rounded-md h-max relative shadow-md`}
         >
           <button>Join Today!!</button>
