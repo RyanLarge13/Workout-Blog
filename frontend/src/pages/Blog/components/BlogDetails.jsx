@@ -72,7 +72,7 @@ const BlogDetails = () => {
   };
 
   return (
-    <section>
+    <section className="max-w-full">
       {post ? (
         <>
           <section>
@@ -163,7 +163,7 @@ const BlogDetails = () => {
                   ))}
                 </>
               ) : (
-                <p>No Posts To Show</p>
+                <p>No Post To Show</p>
               )}
             </div>
             <h2 className="mb-5 mt-10 text-center">Related Posts</h2>
