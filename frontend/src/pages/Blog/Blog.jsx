@@ -9,6 +9,7 @@ import {
   getSearchedPosts,
   getPostsByCategory,
   getPostsByFollowing,
+  getFollowerCategoryPosts,
   savePost,
   unsavePost,
 } from "../../client.js";
@@ -33,6 +34,7 @@ const Blog = ({ following }) => {
   const [pickedCategory, setPickedCategory] = useState("");
   const [peopleIFollow, setPeopleIFollow] = useState([]);
   const [noPostsToShow, setNoPostsToShow] = useState(false);
+  const [followerId, setFollowerId] = useState("");
 
   useEffect(() => {
     setPosts([]);
@@ -57,7 +59,6 @@ const Blog = ({ following }) => {
         })
         .catch((err) => console.log(err));
     }
-
     getCategories()
       .then((res) => setPickerCategories(res))
       .catch((err) => console.log(err));
@@ -124,6 +125,7 @@ const Blog = ({ following }) => {
   };
 
   const filterCategories = (id) => {
+    if (followerId !== "") return getPostByFollowerAndCategory(id);
     getPostsByCategory(id)
       .then((res) => {
         setPickedCategory(id);
@@ -147,8 +149,15 @@ const Blog = ({ following }) => {
       .catch((err) => console.log(err));
   };
 
+  const getPostByFollowerAndCategory = (categoryId) => {
+    getFollowerCategoryPosts(categoryId, followerId)
+      .then((res) => setPosts(res))
+      .catch((err) => console.log(err));
+  };
+
   const getUserPosts = (userId) => {
     setPosts([]);
+    setFollowerId(userId);
     getPersonalPosts(userId)
       .then((res) => {
         setPosts(res);
@@ -196,12 +205,14 @@ const Blog = ({ following }) => {
                 <div
                   key={user.userId}
                   onClick={() => getUserPosts(user.userId)}
-                  className="m-2 p-1"
+                  className={`m-2 p-1`}
                 >
                   <img
                     src={user?.postedBy?.image}
                     alt="user"
-                    className="rounded-full w-[50px] h-[50px] shadow-md mx-auto p-1 object-cover object-center"
+                    className={`rounded-full w-[50px] h-[50px] shadow-md mx-auto p-1 object-cover object-center ${
+                      followerId === user.userId && "bg-violet-400"
+                    }`}
                   />
                   <p className="text-center">{user?.postedBy?.name}</p>
                 </div>

@@ -54,6 +54,13 @@ export const getPosts = async () => {
   return posts;
 };
 
+export const getFollowerCategoryPosts = (categoryId, followerId) => {
+  const posts = client.fetch(
+    `*[_type == 'post' && '${categoryId}' in categories[]->_id && userId match '${followerId}']`
+  );
+  return posts;
+};
+
 export const getSearchedPosts = async (searchTerm) => {
   const filteredPosts = client.fetch(
     `*[_type == "post" && title match '${searchTerm}*' || catagory match '${searchTerm}*' || about match '${searchTerm}*']{

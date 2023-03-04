@@ -166,35 +166,41 @@ const BlogDetails = () => {
                 <p>No Posts To Show</p>
               )}
             </div>
-            <div className="mt-5 py-5 w-full flex overflow-x-auto">
+            <div className="mt-5 py-10 w-full flex overflow-x-auto">
               {categoryPosts.length > 0 ? (
                 <>
                   {categoryPosts.map((post) => (
-                    <div
-                      key={post?._id}
-                      className="min-w-[70%] mx-[15%] rounded-md shadow-md p-3 relative"
-                    >
-                      <div>
-                        <p>Related To</p>
-                        {post?.categories?.map((category) => (
-                          <p>{category?.title}</p>
-                        ))}
-                      </div>
-                      <img
-                        src={post?.image?.asset?.url}
-                        alt="category post header"
-                        className="rounded-md shadow-md object-cover object-center max-h-[150px] w-full"
-                      />
-                      <p className="text-center">{post?.title}</p>
-                      <div className="absolute bottom-[-25px] left-[50%] translate-x-[-50%]">
-                        <img
-                          src={post?.postedBy?.image}
-                          alt="user"
-                          className="w-[50px] h-[50px] object-cover object-center rounded-full shadow-md mx-auto"
-                        />
-                        <p className="text-center">{post?.postedBy?.name}</p>
-                      </div>
-                    </div>
+                    <>
+                      {post._id !== postId && (
+                        <div
+                          key={post?._id}
+                          className="min-w-[70%] mx-[15%] rounded-md shadow-md p-3 relative"
+                        >
+                          <div>
+                            <p>Related To</p>
+                            {post?.categories?.map((category) => (
+                              <p>{category?.title}</p>
+                            ))}
+                          </div>
+                          <img
+                            src={post?.image?.asset?.url}
+                            alt="category post header"
+                            className="rounded-md shadow-md object-cover object-center max-h-[150px] w-full"
+                          />
+                          <p className="text-center mb-[50px]">{post?.title}</p>
+                          <div className="absolute bottom-[-25px] left-[50%] translate-x-[-50%] bg-white rounded-md p-2 shadow-md min-w-[100px]">
+                            <img
+                              src={post?.postedBy?.image}
+                              alt="user"
+                              className="w-[50px] h-[50px] object-cover object-center rounded-full shadow-md mx-auto"
+                            />
+                            <p className="text-center">
+                              {post?.postedBy?.name}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </>
                   ))}
                 </>
               ) : (
