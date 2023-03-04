@@ -72,7 +72,7 @@ const BlogDetails = () => {
   };
 
   return (
-    <section className="max-w-full">
+    <section>
       {post ? (
         <>
           <section>
@@ -96,7 +96,7 @@ const BlogDetails = () => {
               </p>
               <p className="text-center text-white">{post.excerpt}</p>
             </header>
-            <div className="py-2 px-3 my-5 border-b">
+            <div className="py-2 px-3 my-5 border-b max-w-full">
               <div
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(post?.body),
