@@ -53,6 +53,7 @@ const Blog = ({ following }) => {
       );
     }
     if (!following) {
+      console.log("Not following");
       getPosts()
         .then((posts) => {
           setPosts(posts);
@@ -125,7 +126,6 @@ const Blog = ({ following }) => {
   };
 
   const filterCategories = (id) => {
-    if (followerId !== "") return getPostByFollowerAndCategory(id);
     getPostsByCategory(id)
       .then((res) => {
         setPickedCategory(id);
@@ -149,14 +149,9 @@ const Blog = ({ following }) => {
       .catch((err) => console.log(err));
   };
 
-  const getPostByFollowerAndCategory = (categoryId) => {
-    getFollowerCategoryPosts(categoryId, followerId)
-      .then((res) => setPosts(res))
-      .catch((err) => console.log(err));
-  };
-
   const getUserPosts = (userId) => {
     setPosts([]);
+    setPickedCategory("");
     setFollowerId(userId);
     getPersonalPosts(userId)
       .then((res) => {
