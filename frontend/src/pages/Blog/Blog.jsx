@@ -183,13 +183,13 @@ const Blog = ({ following }) => {
                 <div
                   key={index}
                   onClick={() => filterPostsByCategory(category._id)}
-                  className={`px-3 py-1 m-1 rounded-full shadow-md min-w-max ${
+                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center ${
                     pickedCategory === category._id
                       ? "bg-violet-400"
                       : "bg-white"
                   }`}
                 >
-                  <p className="text-xs">{category.title}</p>
+                  <p className="break-keep text-xs">{category.title}</p>
                 </div>
               ))}
             </div>

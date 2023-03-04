@@ -271,7 +271,7 @@ const NewPost = () => {
               }`}
               onClick={() => addCategoryToList(category._id)}
             >
-              <p className="text-xs">{category.title}</p>
+              <p className="text-xs break-keep">{category.title}</p>
             </div>
           ))}
         </div>
