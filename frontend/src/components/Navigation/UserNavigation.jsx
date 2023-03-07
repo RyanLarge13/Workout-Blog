@@ -3,25 +3,26 @@ import { UserContext } from "../../context/userContext";
 import { ProfileContext } from "../../context/profileContext";
 import { googleLogout } from "@react-oauth/google";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { containers } from "../../styles/containers";
 import { elements, variants } from "../../styles/elements";
 import { navAni } from "../../variants/variants.js";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { BiLogOutCircle } from "react-icons/bi";
-import { blankUser } from "../../assets";
 
 const UserNavigation = () => {
   const { setUser } = useContext(UserContext);
   const { profile, setProfile } = useContext(ProfileContext);
   const [nav, setNav] = useState(false);
 
+  const navigate = useNavigate();
+
   const logout = async () => {
     localStorage.removeItem("authToken");
     await setUser(false);
     await setProfile(false);
-    await googleLogout();
-    window.location = "/";
+    googleLogout();
+    navigate("/");
   };
 
   return (
@@ -101,7 +102,6 @@ const UserNavigation = () => {
         <NavLink to={`/profile`} onClick={() => setNav(false)}>
           <img
             src={profile?.image}
-            // src={profile.image ? profile.image : blankUser}
             alt="user"
             className="w-[50px] h-[50px] rounded-full mb-2"
           />

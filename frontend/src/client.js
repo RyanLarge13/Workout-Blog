@@ -208,7 +208,7 @@ export const getAllFollowing = (id) => {
       postedBy->{
         _id, 
         name, 
-        image
+        image,
       } 
   	},
   }`);

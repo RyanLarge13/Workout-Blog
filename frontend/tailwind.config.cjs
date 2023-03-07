@@ -3,14 +3,13 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     screens: {
-      smallPhones: "640px",
-      normalPhones: "768px",
-      smallTablets: "1024px",
-      largeTablets: "1280px",
-      deskTop: "1536px",
+      xs: "600px",
+      sm: "720px",
+      md: "1024px",
+      lg: "1280px",
+      xl: "1536px",
     },
     extend: {},
   },
-  plugins: [
-  ],
+  plugins: [],
 };

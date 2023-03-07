@@ -46,14 +46,13 @@ const Blog = ({ following }) => {
         .catch((err) => console.log(err));
       profile.follow.map((user) =>
         getPostsByFollowing(user.userId)
-          .then((res) => {
-            setPosts((prev) => [...prev, res[0]]);
+          .then((postRes) => {
+            setPosts((prev) => [...prev, ...postRes]);
           })
           .catch((err) => console.log(err))
       );
     }
     if (!following) {
-      console.log("Not following");
       getPosts()
         .then((posts) => {
           setPosts(posts);
@@ -178,12 +177,12 @@ const Blog = ({ following }) => {
             />
           </div>
           {pickerCategories.length > 0 && (
-            <div className="my-5 py-5 px-2 flex flex-wrap max-w-full justify-center items-center">
+            <div className="my-5 py-5 px-2 flex flex-wrap max-w-full justify-center items-center md:mx-20">
               {pickerCategories.map((category, index) => (
                 <div
                   key={index}
                   onClick={() => filterPostsByCategory(category._id)}
-                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center min-w-max ${
+                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center min-w-max transition-all duration-200 hover:text-violet-400 cursor-pointer ${
                     pickedCategory === category._id
                       ? "bg-violet-400"
                       : "bg-white"
@@ -214,92 +213,94 @@ const Blog = ({ following }) => {
               ))}
             </div>
           )}
-          {posts.map((post, index) => (
-            <motion.div
-              initial={{ opacity: 0, y: -100 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                transition: { type: "spring", stiffness: 400 },
-              }}
-              key={index}
-              className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto max-w-[90%] relative"
-            >
-              <img
-                src={urlFor(post?.image?.asset?.url).width(300).url()}
-                alt="blog image"
-                className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
-              />
-              <h2 className="text-xl my-2">{post?.title}</h2>
-              <p className="text-center text-xs my-5">{post?.excerpt}</p>
-              <div className="flex justify-between align-center mt-5">
-                <div className="flex flex-col items-center justify-start">
-                  <NavLink
-                    to={`/posts/${post?._id}`}
-                    className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
-                  >
-                    View
-                  </NavLink>
-                  <p className="p-1 mt-2">
-                    {new Date(post?._createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-start">
-                  <img
-                    src={post?.postedBy?.image}
-                    alt="user"
-                    className="rounded-full w-[40px] h-[40px] shadow-md object-cover object-center"
-                  />
-                  <NavLink to={`/users/${post?.postedBy?._id}`}>
-                    {post?.postedBy?.name}
-                  </NavLink>
-                </div>
-              </div>
-              {post?.categories?.length > 0 && (
-                <div className="my-3 py-2 flex flex-wrap">
-                  {post?.categories?.map((category) => (
-                    <div
-                      onClick={() => filterCategories(category._id)}
-                      key={category._id}
-                      className="rounded-full px-3 py-1 m-1 shadow-md bg-violet-400"
+          <div className="md:grid md:grid-cols-3 sm:grid sm:grid-cols-2">
+            {posts.map((post, index) => (
+              <motion.div
+                initial={{ opacity: 0, y: -100 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { type: "spring", stiffness: 400 },
+                }}
+                key={index}
+                className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto max-w-[90%] relative"
+              >
+                <img
+                  src={urlFor(post?.image?.asset?.url).width(300).url()}
+                  alt="blog image"
+                  className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
+                />
+                <h2 className="text-xl my-2">{post?.title}</h2>
+                <p className="text-center text-xs my-5">{post?.excerpt}</p>
+                <div className="flex justify-between align-center mt-5">
+                  <div className="flex flex-col items-center justify-start">
+                    <NavLink
+                      to={`/posts/${post?._id}`}
+                      className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
                     >
-                      <p className="text-sm select-none">{category.title}</p>
-                    </div>
-                  ))}
+                      View
+                    </NavLink>
+                    <p className="p-1 mt-2">
+                      {new Date(post?._createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center justify-start">
+                    <img
+                      src={post?.postedBy?.image}
+                      alt="user"
+                      className="rounded-full w-[40px] h-[40px] shadow-md object-cover object-center"
+                    />
+                    <NavLink to={`/users/${post?.postedBy?._id}`}>
+                      {post?.postedBy?.name}
+                    </NavLink>
+                  </div>
                 </div>
-              )}
-              <div className="absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min">
-                <p className="text-black text-sm m-1">
-                  {post?.save
-                    ? parseInt(post?.save?.length).toLocaleString()
-                    : "0"}
-                </p>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: [0.2, 1.2, 0.7, 1.1, 1] }}
-                >
-                  {saved && saved[index] === true ? (
-                    <AiFillHeart
-                      onClick={() =>
-                        unlikePost(
-                          post?._id,
-                          post?.save?.filter(
-                            (item) => item?.postedBy?._id === profile._id
+                {post?.categories?.length > 0 && (
+                  <div className="my-3 py-2 flex flex-wrap">
+                    {post?.categories?.map((category) => (
+                      <div
+                        onClick={() => filterCategories(category._id)}
+                        key={category._id}
+                        className="rounded-full px-3 py-1 m-1 shadow-md bg-violet-400 hover:bg-white cursor-pointer transition-all duration-200"
+                      >
+                        <p className="text-sm select-none">{category.title}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min">
+                  <p className="text-black text-sm m-1">
+                    {post?.save
+                      ? parseInt(post?.save?.length).toLocaleString()
+                      : "0"}
+                  </p>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: [0.2, 1.2, 0.7, 1.1, 1] }}
+                  >
+                    {saved && saved[index] === true ? (
+                      <AiFillHeart
+                        onClick={() =>
+                          unlikePost(
+                            post?._id,
+                            post?.save?.filter(
+                              (item) => item?.postedBy?._id === profile._id
+                            )
                           )
-                        )
-                      }
-                      className="min-w-[7px] min-h-[7px]"
-                    />
-                  ) : (
-                    <AiOutlineHeart
-                      onClick={() => likePost(post?._id)}
-                      className="min-w-[7px] min-h-[7px]"
-                    />
-                  )}
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
+                        }
+                        className="min-w-[7px] min-h-[7px]"
+                      />
+                    ) : (
+                      <AiOutlineHeart
+                        onClick={() => likePost(post?._id)}
+                        className="min-w-[7px] min-h-[7px]"
+                      />
+                    )}
+                  </motion.button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </section>
       ) : (
         <section className="h-screen flex justify-center items-center">

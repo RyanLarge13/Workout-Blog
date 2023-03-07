@@ -10,7 +10,7 @@ import { BsArrowDownCircleFill } from "react-icons/bs";
 import UserNavigation from "./UserNavigation";
 
 const Nav = () => {
-  const { profile, setProfile } = useContext(ProfileContext);
+  const { profile } = useContext(ProfileContext);
   const [nav, setNav] = useState(false);
 
   return (

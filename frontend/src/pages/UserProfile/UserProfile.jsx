@@ -67,7 +67,7 @@ const UserProfile = () => {
     <section className="pt-20">
       <header className="flex justify-center items-center rounded-b-md shadow-md">
         <div className="absolute top-0 h-[200px] w-full bg-gradient-to-r from-blue-400 to-violet-500 rounded-md shadow-lg">
-          {userView.headerImage && (
+          {userView?.headerImage && (
             <img
               src={urlFor(userView.headerImage).url()}
               alt="header"
@@ -77,15 +77,15 @@ const UserProfile = () => {
         </div>
         <div className="w-full">
           <img
-            src={userView.image}
+            src={userView?.image}
             alt="user"
             className="w-[200px] h-[200px] rounded-full shadow-lg mx-auto isolate object-cover object-center"
           />
-          <p className="text-center mt-3 text-2xl">{userView.name}</p>
+          <p className="text-center mt-3 text-2xl">{userView?.name}</p>
           <div className="min-h-[100px]">
-            <p className="text-xs text-center mt-5 mx-4">{userView.bio}</p>
+            <p className="text-xs text-center mt-5 mx-4">{userView?.bio}</p>
           </div>
-          {userView._id !== profile._id && (
+          {userView?._id !== profile._id && (
             <div className="flex justify-around items-center py-3 mt-5">
               <button
                 className={`${elements.button} ${variants.mainBtnBg} flex flex-col items-center justify-center`}
@@ -125,7 +125,7 @@ const UserProfile = () => {
                 className="w-full max-h-[150px] rounded-md shadow-md object-cover object-center"
               />
               <NavLink to={`/posts/${post?._id}`}>
-                <h2 className="text-center m-3">{post.title}</h2>
+                <h2 className="text-center m-3">{post?.title}</h2>
               </NavLink>
             </div>
           ))}

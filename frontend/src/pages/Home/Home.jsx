@@ -1,6 +1,6 @@
 import { elements, variants } from "../../styles/elements";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { containers } from "../../styles/containers";
 import { dummyPosts } from "../../constants/dummyPosts";
 import { BsArrowUpRightSquareFill } from "react-icons/bs";
 import {
@@ -13,13 +13,15 @@ import {
 } from "../../assets";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <header className="bg-gradient-to-r from-fuchsia-500 to-pink-500 p-10 pt-[10%] rounded-b-lg overflow-x-hidden">
         <motion.h1
           initial={{ x: -500 }}
           animate={{ x: 0, transition: { delay: 0.5 } }}
-          className={`${elements.h1} text-start text-6xl mt-[75%] largeTablets:mt-10`}
+          className={`${elements.h1} text-start text-6xl mt-[75%] md:mt-10`}
         >
           Join Our Blog!
         </motion.h1>
@@ -27,18 +29,16 @@ const Home = () => {
           <img
             src={blogTemplates}
             alt="svg blog"
-            className="w-[100px] h-[100px] largeTablets:w-[400px] largeTablets:h-[400px]"
+            className="w-[100px] h-[100px] md:w-[400px] md:h-[400px]"
           />
-          <motion.a
+          <motion.button
             whileHover={{ scale: 1.1 }}
-            href="https://workout-blog.vercel.app/login"
+            onClick={() => navigate("/login")}
             className={`${variants.mainBtnBg} px-3 py-1 m-5 ml-10 bg-white rounded-md h-max relative shadow-md`}
           >
-            <button>
-              Create an Account{" "}
-              <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
-            </button>
-          </motion.a>
+            Create an Account{" "}
+            <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
+          </motion.button>
           <motion.img
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -49,7 +49,7 @@ const Home = () => {
         </div>
       </header>
       <section className="bg-gray-100 py-10">
-        <div className="flex flex-col justify-center items-center largeTablets:flex-row largeTablets:justify-around">
+        <div className="flex flex-col justify-center items-center md:flex-row md:justify-around">
           {dummyPosts.map((post, index) => (
             <motion.div
               initial={{ scale: 0.5 }}
@@ -94,13 +94,13 @@ const Home = () => {
       </section>
       <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 py-10 my-[-2px]">
         <div className="relative flex justify-center align-center">
-          <div className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden largeTablets:left-[30%]">
+          <div className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden md:left-[30%]">
             <img src={guy} alt="guy" />
           </div>
-          <div className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden largeTablets:left-[45%] largeTablets:top-[60%]">
+          <div className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden md:left-[45%] md:top-[60%]">
             <img src={darkWoman} alt="dark woman" />
           </div>
-          <div className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden largeTablets:top-[40%] largeTablets:right-[35%]">
+          <div className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden md:top-[40%] md:right-[35%]">
             <img src={woman} alt="woman" />
           </div>
           <img src={world} alt="world map" />
@@ -114,13 +114,13 @@ const Home = () => {
         >
           So Are We!!
         </motion.h1>
-        <motion.a
+        <motion.button
           whileHover={{ scale: 1.1 }}
-          href="https://workout-blog.vercel.app/login"
+          onClick={() => navigate("/login")}
           className={`${variants.mainBtnBg} px-4 py-2 rounded-md h-max relative shadow-md`}
         >
-          <button>Join Today!!</button>
-        </motion.a>
+          Join Today!!
+        </motion.button>
       </section>
     </>
   );

@@ -69,7 +69,7 @@ const FollowersFollowing = ({ userId }) => {
                   className="rounded-md shadow-md w-full my-3"
                 >
                   <NavLink
-                    to={`/users/${followee?._id}`}
+                    to={`/users/${followee?.userId}`}
                     className="flex justify-between items-center p-5"
                   >
                     <img
