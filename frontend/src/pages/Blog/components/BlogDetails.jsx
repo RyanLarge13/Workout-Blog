@@ -150,14 +150,14 @@ const BlogDetails = () => {
                       key={userPost._id}
                       onClick={() => setRefresh((prev) => !prev)}
                       to={`/posts/${userPost._id}`}
-                      className="p-2 my-2 w-[70%] bg-white rounded-md shadow-md"
+                      className="p-2 my-2 md:my-5 w-[70%] bg-white rounded-md shadow-md"
                     >
                       <img
                         src={urlFor(userPost.image?.asset?.url)
                           .width(300)
                           .url()}
                         alt={userPost.title}
-                        className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
+                        className="max-h-[150px] md:max-h-[300px] min-w-full object-cover object-center rounded-md shadow-md"
                       />
                     </NavLink>
                   ))}
@@ -171,12 +171,9 @@ const BlogDetails = () => {
               {categoryPosts.length > 0 ? (
                 <>
                   {categoryPosts.map((post) => (
-                    <>
+                    <div key={post?._id}>
                       {post._id !== postId && (
-                        <div
-                          key={post?._id}
-                          className="min-w-[70%] mx-[15%] rounded-md shadow-md p-3 relative"
-                        >
+                        <div className="min-w-[250px] min-h-[300px] mx-[15%] md:mx-[25%] rounded-md shadow-md p-3 relative">
                           <img
                             src={post?.image?.asset?.url}
                             alt="category post header"
@@ -195,7 +192,7 @@ const BlogDetails = () => {
                           </div>
                         </div>
                       )}
-                    </>
+                    </div>
                   ))}
                 </>
               ) : (

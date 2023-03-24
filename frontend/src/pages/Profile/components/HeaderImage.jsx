@@ -47,7 +47,7 @@ const HeaderImage = () => {
   };
 
   return (
-    <div className="p-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative">
+    <div className="p-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative md:min-h-[400px]">
       <label className="w-full min-h-[150px] bg-gray-200 flex justify-center items-center text-black">
         {imageLoad && <DotLoader />}
         {wrongImageType ? (
@@ -61,7 +61,7 @@ const HeaderImage = () => {
                   alt="header image"
                   className="absolute w-full h-full object-cover object-center"
                 />
-                <p className="text-sm isolate bg-white px-3 py-1 rounded-md shadow-md">
+                <p className="text-sm isolate bg-white px-3 py-1 rounded-md shadow-md cursor-pointer">
                   Add A Header Image
                 </p>
               </>

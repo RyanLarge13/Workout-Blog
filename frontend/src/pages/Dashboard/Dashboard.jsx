@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { motion } from "framer-motion";
 import { PickerContext } from "../../context/pickerContext";
 import { FaNewspaper } from "react-icons/fa";
 import { BsViewList } from "react-icons/bs";
@@ -29,51 +30,67 @@ const Dashboard = () => {
           <h2 className="text-2xl">Quick Actions</h2>
           <div className="flex flex-wrap justify-center align-center mt-5">
             <div className={`${containers.quickActionContainer}`}>
-              <button
-                className={`${elements.quickActions} bg-pink-400 ${
+              <motion.button
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className={`${
+                  elements.quickActions
+                } bg-pink-400 hover:outline duration-200 ${
                   picker === "newpost" && "outline"
                 }`}
               >
                 <NavLink onClick={() => setPicker("newpost")}>
                   <FaNewspaper />
                 </NavLink>
-              </button>
+              </motion.button>
               <p>New Blog!</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
-              <button
-                className={`${elements.quickActions} bg-blue-400 ${
+              <motion.button
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className={`${
+                  elements.quickActions
+                } bg-blue-400 hover:outline duration-200 ${
                   picker === "myposts" && "outline"
                 } `}
               >
                 <NavLink onClick={() => setPicker("myposts")}>
                   <BsViewList />
                 </NavLink>
-              </button>
+              </motion.button>
               <p>My Blogs</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
-              <button
-                className={`${elements.quickActions} bg-orange-400 ${
+              <motion.button
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className={`${
+                  elements.quickActions
+                } bg-orange-400 hover:outline duration-200 ${
                   picker === "blog" && "outline"
                 }`}
               >
                 <NavLink onClick={() => setPicker("blog")}>
                   <AiFillRead />
                 </NavLink>
-              </button>
+              </motion.button>
               <p>Read</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
-              <button
-                className={`${elements.quickActions} bg-orange-400 ${
+              <motion.button
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className={`${
+                  elements.quickActions
+                } bg-orange-400 hover:outline duration-200 ${
                   picker === "follow" && "outline"
                 }`}
               >
                 <NavLink onClick={() => setPicker("follow")}>
                   <GiShadowFollower />
                 </NavLink>
-              </button>
+              </motion.button>
               <p>Following</p>
             </div>
           </div>
@@ -81,12 +98,13 @@ const Dashboard = () => {
       </header>
       {picker !== "newpost" && (
         <div className="mt-10 flex flex-col items-center justify-center">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
             onClick={() => setPicker("newpost")}
             className={`${elements.button} ${variants.mainBtnBg} flex align-center justify-center`}
           >
             <AiFillPlusCircle />
-          </button>
+          </motion.button>
           <p>Create A New Post</p>
         </div>
       )}

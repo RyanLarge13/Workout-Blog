@@ -24,14 +24,14 @@ const Bio = ({ bioText, id, func }) => {
       <motion.div
         initial={{ y: 100 }}
         whileInView={{ y: 0 }}
-        className="mb-5 p-5 rounded-md bg-white w-[90%]"
+        className="mb-5 p-5 rounded-md bg-white w-[90%] md:w-[50%]"
       >
         <textarea
           type="text"
           value={bio}
           maxLength="200"
           onChange={(e) => setBio(e.target.value)}
-          className="w-full min-h-[300px] p-2 outline-none shadow-md rounded-md text-center"
+          className="w-full min-h-[300px] p-2 outline-none shadow-md rounded-md text-center md:p-5"
         ></textarea>
         <div className=" flex justify-around mt-5">
           <button

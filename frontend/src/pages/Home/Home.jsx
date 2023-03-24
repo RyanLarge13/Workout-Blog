@@ -29,14 +29,14 @@ const Home = () => {
           <img
             src={blogTemplates}
             alt="svg blog"
-            className="w-[100px] h-[100px] md:w-[400px] md:h-[400px]"
+            className="w-[100px] h-[100px] md:w-[200px] md:h-[200px]"
           />
           <motion.button
             whileHover={{ scale: 1.1 }}
             onClick={() => navigate("/login")}
             className={`${variants.mainBtnBg} px-3 py-1 m-5 ml-10 bg-white rounded-md h-max relative shadow-md`}
           >
-            Create an Account{" "}
+            Sign In{" "}
             <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
           </motion.button>
           <motion.img
@@ -44,7 +44,7 @@ const Home = () => {
             animate={{ opacity: 1 }}
             src={blogger}
             alt="blogger"
-            className="rounded-2xl absolute right-0 top-[5%] shadow-xl"
+            className="rounded-2xl absolute right-0 top-[5%] shadow-xl md:w-[700px] h-500px]"
           />
         </div>
       </header>
@@ -64,7 +64,7 @@ const Home = () => {
                 whileInView={{ scale: 1.1 }}
                 src={post.img}
                 alt="svg blog"
-                className="rounded-md shadow-md"
+                className="rounded-md shadow-md h-[200px] w-[300px] object-cover object-center"
               />
               <div className="px-2 mt-2">
                 <h3 className="text-xl py-2 underline">{post.title}</h3>
@@ -94,16 +94,34 @@ const Home = () => {
       </section>
       <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 py-10 my-[-2px]">
         <div className="relative flex justify-center align-center">
-          <div className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden md:left-[30%]">
+          <motion.div
+            initial={{ x: -200, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1, transition: { delay: 0.25 } }}
+            className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden sm:left-[25%] md:left-[30%]"
+          >
             <img src={guy} alt="guy" />
-          </div>
-          <div className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden md:left-[45%] md:top-[60%]">
+          </motion.div>
+          <motion.div
+            initial={{ x: -200, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1, transition: { delay: 0.35 } }}
+            className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden sm:left-[45%] sm:top=[75%] md:left-[45%] md:top-[60%]"
+          >
             <img src={darkWoman} alt="dark woman" />
-          </div>
-          <div className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden md:top-[40%] md:right-[35%]">
+          </motion.div>
+          <motion.div
+            initial={{ x: 200, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1, transition: { delay: 0.25 } }}
+            className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden sm:right-[25%] md:top-[40%] md:right-[35%]"
+          >
             <img src={woman} alt="woman" />
-          </div>
-          <img src={world} alt="world map" />
+          </motion.div>
+          <motion.img
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            src={world}
+            alt="world map"
+            className="rounded-md"
+          />
         </div>
       </section>
       <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 p-10 rounded-b-md">

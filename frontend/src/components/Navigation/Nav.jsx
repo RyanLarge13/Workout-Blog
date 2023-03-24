@@ -24,7 +24,7 @@ const Nav = () => {
           variants={navAni}
           className={`${containers.nav}`}
         >
-          <ul className="flex justify-center aling-center flex-col w-full list-none ml-0">
+          <ul className="flex justify-center items-center flex-col w-full list-none ml-0">
             <li>
               <NavLink
                 onClick={() => setNav(false)}
@@ -45,8 +45,8 @@ const Nav = () => {
               to="/login"
               className={({ isActive }) =>
                 isActive
-                  ? `${variants.navBtnActive}`
-                  : `${elements.navBtn} ${variants.mainBtnBg}`
+                  ? `${variants.navBtnActive} min-w-[50px]`
+                  : `${elements.navBtn} ${variants.mainBtnBg} min-w-[50px]`
               }
             >
               <BiLogInCircle />

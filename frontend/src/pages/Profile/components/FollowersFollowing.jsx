@@ -28,32 +28,40 @@ const FollowersFollowing = ({ userId }) => {
   }, [picker]);
 
   return (
-    <div className="py-5 px-3 mx-2 my-5 rounded-md shadow-lg bg-gradient-to-r from-blue-400 to-violet-500 relative">
-      <div className="flex">
-        <button
+    <div className="py-5 px-3 mx-2 my-5 rounded-md shadow-lg bg-gradient-to-r from-blue-400 to-violet-500 relative md:p-20">
+      <div className="flex justify-center items-center">
+        <motion.button
+          whileHover={{
+            scale: 1.05,
+            transition: { type: "spring", stiffness: 200 },
+          }}
           onClick={() =>
             setPicker((prev) => (prev === "followers" ? null : "followers"))
           }
-          className={`w-2/4 p-2 rounded-md shadow-md mx-1 ${
+          className={`w-2/4 md:w-1/4 p-2 rounded-md shadow-md mx-1 md:mx-3 hover:bg-violet-400 ${
             picker === "followers"
               ? "bg-violet-400 shadow-sm"
               : "bg-white shadow-md"
           }`}
         >
           Followers
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{
+            scale: 1.05,
+            transition: { type: "spring", stiffness: 200 },
+          }}
           onClick={() =>
             setPicker((prev) => (prev === "following" ? null : "following"))
           }
-          className={`w-2/4 p-2 rounded-md mx-1 ${
+          className={`w-2/4 md:w-1/4 p-2 rounded-md mx-1 md:mx-3 hover:bg-violet-400 ${
             picker === "following"
               ? "bg-violet-400 shadow-sm"
               : "bg-white shadow-md"
           }`}
         >
           Following
-        </button>
+        </motion.button>
       </div>
       {picker && (
         <motion.div

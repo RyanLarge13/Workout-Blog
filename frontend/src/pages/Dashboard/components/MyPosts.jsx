@@ -51,7 +51,7 @@ const MyPosts = () => {
                 urlFor(post?.image?.asset?.url).width(300).url()
               }
               alt="blog image"
-              className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
+              className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md md:max-h-[300px]"
             />
             <h2 className="text-xl my-2">{post.title}</h2>
             <div className="flex justify-between items-end pt-5">

@@ -199,12 +199,12 @@ const Blog = ({ following }) => {
                 <div
                   key={user.userId}
                   onClick={() => getUserPosts(user.userId)}
-                  className={`m-2 p-1`}
+                  className={`m-2 p-1 cursor-pointer`}
                 >
                   <img
                     src={user?.postedBy?.image}
                     alt="user"
-                    className={`rounded-full w-[50px] h-[50px] shadow-md mx-auto p-1 object-cover object-center ${
+                    className={`rounded-full w-[50px] h-[50px] shadow-md mx-auto p-1 object-cover object-center hover:bg-violet-400 duration-200 ${
                       followerId === user.userId && "bg-violet-400"
                     }`}
                   />

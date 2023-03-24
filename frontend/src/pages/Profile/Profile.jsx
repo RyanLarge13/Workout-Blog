@@ -125,12 +125,12 @@ const Profile = () => {
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative">
         <AiFillEdit
           onClick={() => setChangeBio(true)}
-          className="absolute top-4 right-4 text-2xl"
+          className="absolute top-4 right-4 text-2xl cursor-pointer"
         />
         <h1 className="text-2xl text-center w-full">{profile.name}</h1>
         <div className="relative my-5">
           <label>
-            <AiFillPlusCircle className="absolute top-2 right-2 text-2xl" />
+            <AiFillPlusCircle className="absolute top-2 right-2 text-2xl cursor-pointer" />
             <input
               type="file"
               name="uploadImage"
@@ -155,28 +155,32 @@ const Profile = () => {
           ) : (
             <div className="text-center mx-4">
               <p className="mb-2">{profile.email}</p>
-              <p className="text-xs mt-4">{profile.bio}</p>
+              <p className="text-xs mt-4 md:text-xl md:w-[50%] md:mx-auto md:mt-10">
+                {profile.bio}
+              </p>
             </div>
           )}
         </div>
       </div>
       <HeaderImage />
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 text-center text-sm">
-        <p>
+        <p className="md:text-xl">
           You have been a member since{" "}
           {new Date(profile._createdAt).toLocaleDateString()}
         </p>
-        <p>You have contributed {postsCount} posts to Workout Blog</p>
-        <div className="flex justify-around w-full">
-          <p className="flex justify-center items-center">
+        <p className="md:text-xl">
+          You have contributed {postsCount} posts to Workout Blog
+        </p>
+        <div className="flex justify-around w-full md:justify-center md:mt-5">
+          <p className="flex justify-center items-center md:mr-5 md:text-lg">
             {totalLikes} <AiFillHeart className="ml-1" />
           </p>
-          <p className="flex justify-center items-center">
+          <p className="flex justify-center items-center md:text-lg">
             {totalComments} <AiOutlineComment className="ml-1" />
           </p>
         </div>
       </div>
-      <FollowersFollowing  userId={profile._id} />
+      <FollowersFollowing userId={profile._id} />
       <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
         <h2 className="text-2xl">Change Your Username</h2>
         <label htmlFor="username" className="hidden">
