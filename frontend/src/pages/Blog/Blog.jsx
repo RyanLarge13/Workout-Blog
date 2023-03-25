@@ -35,8 +35,10 @@ const Blog = ({ following }) => {
   const [peopleIFollow, setPeopleIFollow] = useState([]);
   const [noPostsToShow, setNoPostsToShow] = useState(false);
   const [followerId, setFollowerId] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    setError(false);
     setPosts([]);
     if (following) {
       getAllFollowing(profile._id)
@@ -74,9 +76,20 @@ const Blog = ({ following }) => {
   }, [posts]);
 
   const queryTitle = (searchTerm) => {
+    setError(false);
     if (searchTerm !== "") {
       getSearchedPosts(searchTerm)
-        .then((posts) => setPosts(posts))
+        .then((posts) => {
+          setPosts(posts);
+          if (posts.length < 1) {
+            setTimeout(() => {
+              setError(true);
+              getPosts()
+                .then((res) => setPosts(res))
+                .catch((err) => console.log(err));
+            }, 5000);
+          }
+        })
         .catch((err) => console.log(err));
     } else {
       getPosts()
@@ -113,6 +126,7 @@ const Blog = ({ following }) => {
   };
 
   const filterPostsByCategory = (id) => {
+    setError(false);
     if (pickedCategory === id) {
       setPickedCategory("");
       return getPosts()
@@ -125,6 +139,7 @@ const Blog = ({ following }) => {
   };
 
   const filterCategories = (id) => {
+    setError(false);
     getPostsByCategory(id)
       .then((res) => {
         setPickedCategory(id);
@@ -149,6 +164,7 @@ const Blog = ({ following }) => {
   };
 
   const getUserPosts = (userId) => {
+    setError(false);
     setPosts([]);
     setPickedCategory("");
     setFollowerId((prev) => (prev === userId ? null : userId));
@@ -181,22 +197,24 @@ const Blog = ({ following }) => {
   };
 
   return (
-    <>
+    <section className="pt-20">
+      <div className="flex justify-center items-center">
+        <label htmlFor="search" className="hidden">
+          Search
+        </label>
+        <input
+          type="text"
+          name="search"
+          id="search"
+          placeholder={error ? "No Posts Matching Search" : "Search"}
+          className={`${elements.input} mx-0`}
+          onChange={(e) => {
+            queryTitle(e.target.value);
+          }}
+        />
+      </div>
       {posts.length > 0 ? (
-        <section className="pt-20">
-          <div className="flex justify-center items-center">
-            <label htmlFor="search" className="hidden">
-              Search
-            </label>
-            <input
-              type="text"
-              name="search"
-              id="search"
-              placeholder="Search"
-              className={`${elements.input} mx-0`}
-              onChange={(e) => queryTitle(e.target.value)}
-            />
-          </div>
+        <>
           {pickerCategories.length > 0 && (
             <div className="my-5 mx-auto py-5 px-2 flex flex-wrap max-w-full justify-center items-center md:w-[50%]">
               {pickerCategories.map((category, index) => (
@@ -322,13 +340,13 @@ const Blog = ({ following }) => {
               </motion.div>
             ))}
           </div>
-        </section>
+        </>
       ) : (
         <section className="h-screen flex justify-center items-center">
           {noPostsToShow ? <p>No Posts To Show</p> : <DotLoader />}
         </section>
       )}
-    </>
+    </section>
   );
 };
 
