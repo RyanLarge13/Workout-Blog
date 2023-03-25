@@ -82,7 +82,7 @@ const BlogDetails = () => {
                 {post?.postedBy?._id === profile._id && (
                   <AiFillEdit
                     onClick={() => editPost()}
-                    className="text-white text-2xl"
+                    className="text-white text-2xl cursor-pointer"
                   />
                 )}
               </div>
@@ -94,9 +94,11 @@ const BlogDetails = () => {
               <p className="my-5">
                 {new Date(post._createdAt).toLocaleDateString()}
               </p>
-              <p className="text-center text-white">{post.excerpt}</p>
+              <p className="text-center text-white md:text-2xl md:w-[50%] mx-auto md:py-5">
+                {post.excerpt}
+              </p>
             </header>
-            <div className="py-2 px-3 my-5 border-b max-w-full">
+            <div className="py-2 px-3 my-5 border-b max-w-full md:p-20">
               <div
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(post?.body),
@@ -104,9 +106,9 @@ const BlogDetails = () => {
               ></div>
             </div>
           </section>
-          <section className="my-5">
+          <section className="my-5 md:flex md:justify-center md:items-center md:flex-col md:my-20">
             {post.comments?.map((comment, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative lg:w-[50%]">
                 <div className="absolute border-b border-l rounded-md left-4 top-0 w-[25%] h-[90%] z-0"></div>
                 <div
                   key={index}
@@ -150,7 +152,7 @@ const BlogDetails = () => {
                       key={userPost._id}
                       onClick={() => setRefresh((prev) => !prev)}
                       to={`/posts/${userPost._id}`}
-                      className="p-2 my-2 md:my-5 w-[70%] bg-white rounded-md shadow-md"
+                      className="p-2 my-2 md:w-[25%] w-[70%] bg-white rounded-md shadow-md"
                     >
                       <img
                         src={urlFor(userPost.image?.asset?.url)
@@ -166,7 +168,9 @@ const BlogDetails = () => {
                 <p>No Post To Show</p>
               )}
             </div>
-            <h2 className="mb-5 mt-10 text-center">Related Posts</h2>
+            <h2 className="mb-5 mt-10 text-center md:text-2xl">
+              Related Posts
+            </h2>
             <div className="py-10 w-full flex overflow-x-auto">
               {categoryPosts.length > 0 ? (
                 <>

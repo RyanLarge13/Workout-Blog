@@ -184,7 +184,7 @@ const NewPost = () => {
     setImageAsset(null);
     setTitle("");
     setExcerpt("");
-    setAddCategory([])
+    setAddCategory([]);
     setContent("");
   };
 
@@ -260,11 +260,11 @@ const NewPost = () => {
         ></textarea>
       </div>
       {categories.length > 0 && (
-        <div className="p-2 my-5 flex justify-center items-center flex-wrap max-w-[95%]">
+        <div className="p-2 my-5 flex justify-center items-center flex-wrap max-w-[95%] mx-auto md:w-[50%]">
           {categories.map((category, index) => (
             <div
               key={index}
-              className={`max-w-max rounded-full shadow-md px-3 py-1 m-1 ${
+              className={`max-w-max rounded-full shadow-md px-3 py-1 m-1 cursor-pointer ${
                 addCatagory.includes(category._id)
                   ? "bg-violet-400"
                   : "bg-white"

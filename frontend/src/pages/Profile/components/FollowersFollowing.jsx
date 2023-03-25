@@ -67,7 +67,7 @@ const FollowersFollowing = ({ userId }) => {
         <motion.div
           initial={{ y: 1000 }}
           animate={{ y: 0 }}
-          className="fixed bg-white z-1 bottom-0 left-0 w-full min-h-[40%] rounded-md shadow-inner p-5 overflow-y-auto"
+          className="fixed bg-white z-1 bottom-0 left-0 w-full min-h-[40%] max-h-[40%] rounded-md shadow-inner p-5 overflow-y-auto"
         >
           {following?.length > 0 && (
             <div className="mx-5">

@@ -118,7 +118,7 @@ const Profile = () => {
   };
 
   return (
-    <section className="pt-20">
+    <section className="pt-20 md:px-10 lg:px-20">
       {changeBio && (
         <Bio bioText={profile.bio} id={profile._id} func={setChangeBio} />
       )}

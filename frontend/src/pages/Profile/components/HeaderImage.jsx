@@ -59,7 +59,7 @@ const HeaderImage = () => {
                 <img
                   src={urlFor(currentImage).url()}
                   alt="header image"
-                  className="absolute w-full h-full object-cover object-center"
+                  className="absolute w-full h-full object-cover object-center rounded-md"
                 />
                 <p className="text-sm isolate bg-white px-3 py-1 rounded-md shadow-md cursor-pointer">
                   Add A Header Image

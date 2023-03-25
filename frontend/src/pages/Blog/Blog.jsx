@@ -177,12 +177,12 @@ const Blog = ({ following }) => {
             />
           </div>
           {pickerCategories.length > 0 && (
-            <div className="my-5 py-5 px-2 flex flex-wrap max-w-full justify-center items-center md:mx-20">
+            <div className="my-5 mx-auto py-5 px-2 flex flex-wrap max-w-full justify-center items-center md:w-[50%]">
               {pickerCategories.map((category, index) => (
                 <div
                   key={index}
                   onClick={() => filterPostsByCategory(category._id)}
-                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center min-w-max transition-all duration-200 hover:text-violet-400 cursor-pointer ${
+                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center min-w-max transition-all duration-200 hover:text-pink-400 cursor-pointer ${
                     pickedCategory === category._id
                       ? "bg-violet-400"
                       : "bg-white"
@@ -213,7 +213,7 @@ const Blog = ({ following }) => {
               ))}
             </div>
           )}
-          <div className="md:grid md:grid-cols-3 sm:grid sm:grid-cols-2">
+          <div className="md:grid md:grid-cols-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {posts.map((post, index) => (
               <motion.div
                 initial={{ opacity: 0, y: -100 }}

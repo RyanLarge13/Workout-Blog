@@ -40,39 +40,41 @@ const MyPosts = () => {
     <section className="flex flex-col items-center justify-center">
       {posts.length > 0 && <h1 className="text-2xl text-center">Your Posts</h1>}
       {posts.length > 0 ? (
-        posts.map((post, index) => (
-          <div
-            key={index}
-            className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
-          >
-            <img
-              src={
-                post?.image?.asset?.url &&
-                urlFor(post?.image?.asset?.url).width(300).url()
-              }
-              alt="blog image"
-              className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md md:max-h-[300px]"
-            />
-            <h2 className="text-xl my-2">{post.title}</h2>
-            <div className="flex justify-between items-end pt-5">
-              <button
-                className={`py-1 px-2 h-max rounded-md bg-gradient-to-tr from-red-400 to-red-500`}
-                onClick={() => {
-                  setPostId(post?._id);
-                  setConfrim(true);
-                }}
-              >
-                Delete
-              </button>
-              <NavLink
-                to={`/posts/${post._id}`}
-                className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
-              >
-                View
-              </NavLink>
+        <div className="grid gap-5 content-center justify-items-center lg:grid md:grid-cols-2 lg:grid-cols-4">
+          {posts.map((post, index) => (
+            <div
+              key={index}
+              className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
+            >
+              <img
+                src={
+                  post?.image?.asset?.url &&
+                  urlFor(post?.image?.asset?.url).width(300).height(200).url()
+                }
+                alt="blog image"
+                className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md md:max-h-[300px]"
+              />
+              <h2 className="text-xl my-2">{post.title}</h2>
+              <div className="flex justify-between items-end pt-5">
+                <button
+                  className={`py-1 px-2 h-max rounded-md bg-gradient-to-tr from-red-400 to-red-500`}
+                  onClick={() => {
+                    setPostId(post?._id);
+                    setConfrim(true);
+                  }}
+                >
+                  Delete
+                </button>
+                <NavLink
+                  to={`/posts/${post._id}`}
+                  className={`${elements.button} ${variants.mainBtnBg} text-center mx-0 my-0`}
+                >
+                  View
+                </NavLink>
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       ) : (
         <h1 className="text-2xl text-center">
           You have no posts! <br /> Create one!

@@ -19,7 +19,7 @@ const NewComment = ({ postId, userId }) => {
   };
 
   return (
-    <form className="p-5 my-5 shadow-lg rounded-md flex flex-col items-center justify-center">
+    <form className="p-5 my-5 shadow-lg rounded-md flex flex-col items-center justify-center w-full">
       <label className="hidden">Comment</label>
       <input
         type="text"

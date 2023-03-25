@@ -19,9 +19,9 @@ const UserNavigation = () => {
 
   const logout = async () => {
     localStorage.removeItem("authToken");
+    googleLogout();
     await setUser(false);
     await setProfile(false);
-    googleLogout();
     navigate("/");
   };
 
