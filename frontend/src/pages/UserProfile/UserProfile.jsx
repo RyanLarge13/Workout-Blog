@@ -83,7 +83,9 @@ const UserProfile = () => {
           />
           <p className="text-center mt-3 text-2xl">{userView?.name}</p>
           <div className="min-h-[100px]">
-            <p className="text-xs text-center mt-5 mx-4">{userView?.bio}</p>
+            <p className="text-xs text-center mt-5 mx-4 md:text-lg xl:text-xl xl:w-[50%] xl:mx-auto">
+              {userView?.bio}
+            </p>
           </div>
           {userView?._id !== profile._id && (
             <div className="flex justify-around items-center py-3 mt-5">
@@ -112,12 +114,12 @@ const UserProfile = () => {
           )}
         </div>
       </header>
-      <div className="my-5 py-5">
+      <div className="py-5 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {userPosts &&
           userPosts.map((post) => (
             <div
               key={post?._id}
-              className="max-w-full my-5 mx-5 p-2 rounded-md shadow-md"
+              className="max-w-full m-5 p-2 rounded-md shadow-md"
             >
               <img
                 src={urlFor(post?.image?.asset?.url).url()}

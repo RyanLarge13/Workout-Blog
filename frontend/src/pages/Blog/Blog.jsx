@@ -151,18 +151,39 @@ const Blog = ({ following }) => {
   const getUserPosts = (userId) => {
     setPosts([]);
     setPickedCategory("");
-    setFollowerId(userId);
-    getPersonalPosts(userId)
-      .then((res) => {
-        setPosts(res);
-      })
-      .catch((err) => console.log(err));
+    setFollowerId((prev) => (prev === userId ? null : userId));
+    followerId === userId
+      ? profile.follow.map((user) =>
+          getPostsByFollowing(user.userId)
+            .then((postRes) => {
+              setPosts((prev) => [...prev, ...postRes]);
+            })
+            .catch((err) => console.log(err))
+        )
+      : getPersonalPosts(userId)
+          .then((res) => {
+            setPosts(res);
+            if (res.length < 1) {
+              setTimeout(() => {
+                setNoPostsToShow(true);
+                setFollowerId(null);
+                profile.follow.map((user) =>
+                  getPostsByFollowing(user.userId)
+                    .then((postRes) => {
+                      setPosts((prev) => [...prev, ...postRes]);
+                    })
+                    .catch((err) => console.log(err))
+                );
+              }, 500);
+            }
+          })
+          .catch((err) => console.log(err));
   };
 
   return (
     <>
       {posts.length > 0 ? (
-        <section className="py-10">
+        <section className="pt-20">
           <div className="flex justify-center items-center">
             <label htmlFor="search" className="hidden">
               Search
@@ -213,7 +234,7 @@ const Blog = ({ following }) => {
               ))}
             </div>
           )}
-          <div className="md:grid md:grid-cols-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+          <div className="sm:grid sm:grid-cols-2 md:grid md:grid-cols-3 lg:grid-cols-4">
             {posts.map((post, index) => (
               <motion.div
                 initial={{ opacity: 0, y: -100 }}
@@ -304,11 +325,7 @@ const Blog = ({ following }) => {
         </section>
       ) : (
         <section className="h-screen flex justify-center items-center">
-          {noPostsToShow ? (
-            <p>No Posts To Show From This Category</p>
-          ) : (
-            <DotLoader />
-          )}
+          {noPostsToShow ? <p>No Posts To Show</p> : <DotLoader />}
         </section>
       )}
     </>

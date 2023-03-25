@@ -152,14 +152,14 @@ const BlogDetails = () => {
                       key={userPost._id}
                       onClick={() => setRefresh((prev) => !prev)}
                       to={`/posts/${userPost._id}`}
-                      className="p-2 my-2 md:w-[25%] w-[70%] bg-white rounded-md shadow-md"
+                      className="p-2 my-2 w-[70%] sm:w-[50%] md:w-[30%] xl:w-[25%] bg-white rounded-md shadow-md"
                     >
                       <img
                         src={urlFor(userPost.image?.asset?.url)
                           .width(300)
                           .url()}
                         alt={userPost.title}
-                        className="max-h-[150px] md:max-h-[300px] min-w-full object-cover object-center rounded-md shadow-md"
+                        className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md"
                       />
                     </NavLink>
                   ))}
@@ -171,20 +171,28 @@ const BlogDetails = () => {
             <h2 className="mb-5 mt-10 text-center md:text-2xl">
               Related Posts
             </h2>
-            <div className="py-10 w-full flex overflow-x-auto">
+            <div className="my-10 mx-auto p-3 w-3/4 flex justify-start items-center gap-5 overflow-auto">
               {categoryPosts.length > 0 ? (
                 <>
                   {categoryPosts.map((post) => (
                     <div key={post?._id}>
                       {post._id !== postId && (
-                        <div className="min-w-[250px] min-h-[300px] mx-[15%] md:mx-[25%] rounded-md shadow-md p-3 relative">
-                          <img
-                            src={post?.image?.asset?.url}
-                            alt="category post header"
-                            className="rounded-md shadow-md object-cover object-center max-h-[150px] min-h-[150px] w-full"
-                          />
-                          <p className="text-center m-3">{post?.title}</p>
-                          <div className="flex justify-between items-center">
+                        <div
+                          onClick={() => {
+                            setRefresh((prev) => !prev);
+                            navigate(`/posts/${post?._id}`);
+                          }}
+                          className="min-w-[250px] min-h-[300px] max-w-[25%] rounded-md shadow-md px-3 p-3 flex flex-col justify-between items-center relative"
+                        >
+                          <div>
+                            <img
+                              src={post?.image?.asset?.url}
+                              alt="category post header"
+                              className="rounded-md shadow-md object-cover object-center max-h-[150px] min-h-[150px] w-full"
+                            />
+                            <p className="text-center m-3">{post?.title}</p>
+                          </div>
+                          <div className="flex justify-between items-center mt-10 w-full">
                             <img
                               src={post?.postedBy?.image}
                               alt="user"

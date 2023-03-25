@@ -1,4 +1,7 @@
+import { useState, useContext } from "react";
 import { elements, variants } from "../../styles/elements";
+import { ProfileContext } from "../../context/profileContext";
+import { PickerContext } from "../../context/pickerContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { dummyPosts } from "../../constants/dummyPosts";
@@ -13,7 +16,15 @@ import {
 } from "../../assets";
 
 const Home = () => {
+  const { profile } = useContext(ProfileContext);
+  const { setPicker } = useContext(PickerContext);
+
   const navigate = useNavigate();
+
+  const createANewPost = () => {
+    setPicker("newpost");
+    navigate("/dashboard");
+  };
 
   return (
     <>
@@ -23,7 +34,7 @@ const Home = () => {
           animate={{ x: 0, transition: { delay: 0.5 } }}
           className={`${elements.h1} text-start text-6xl mt-[75%] md:mt-10`}
         >
-          Join Our Blog!
+          {profile ? "Welcome Back!" : "Join Our Blog!"}
         </motion.h1>
         <div className="flex">
           <img
@@ -36,7 +47,7 @@ const Home = () => {
             onClick={() => navigate("/login")}
             className={`${variants.mainBtnBg} px-3 py-1 m-5 ml-10 bg-white rounded-md h-max relative shadow-md`}
           >
-            Sign In{" "}
+            {profile ? "Start Reading " : "Sign In "}
             <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
           </motion.button>
           <motion.img
@@ -84,16 +95,38 @@ const Home = () => {
           whileInView={{ x: 0 }}
           className={`${elements.h1} text-start text-6xl`}
         >
-          Are You a Gym Enthusiast?
+          {profile ? `Hello ${profile.name}` : "Are You a Gym Enthusiast?"}
         </motion.h1>
-        <p>
-          You are not alone!! And so many of us want to share with the world the{" "}
-          <strong>Knowledge</strong>, <strong>Experience</strong> &{" "}
-          <strong>Skill</strong> we've all gained.
-        </p>
+        <>
+          {profile ? (
+            <>
+              <p>
+                New Posts from your followers have arrived... checkout what they
+                have been writing about!!
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                onClick={() => {
+                  setPicker("follow");
+                  navigate("/dashboard");
+                }}
+                className={`${variants.mainBtnBg} px-4 py-2 rounded-md h-max relative shadow-md mt-5`}
+              >
+                Dashboard
+                <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
+              </motion.button>
+            </>
+          ) : (
+            <p>
+              You are not alone!! And so many of us want to share with the world
+              the<strong>Knowledge</strong>, <strong>Experience</strong> &
+              <strong>Skill</strong> we've all gained.
+            </p>
+          )}
+        </>
       </section>
       <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 py-10 my-[-2px]">
-        <div className="relative flex justify-center align-center">
+        <div className="relative flex justify-center align-center overflow-hidden">
           <motion.div
             initial={{ x: -200, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1, transition: { delay: 0.25 } }}
@@ -130,14 +163,15 @@ const Home = () => {
           whileInView={{ x: 0 }}
           className={`${elements.h1} text-start text-6xl`}
         >
-          So Are We!!
+          {profile ? "Write Something New" : "So Are We!!"}
         </motion.h1>
         <motion.button
           whileHover={{ scale: 1.1 }}
-          onClick={() => navigate("/login")}
+          onClick={() => (profile ? createANewPost() : navigate("/login"))}
           className={`${variants.mainBtnBg} px-4 py-2 rounded-md h-max relative shadow-md`}
         >
-          Join Today!!
+          {profile ? "Create!! " : "Join Today!! "}{" "}
+          <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
         </motion.button>
       </section>
     </>
