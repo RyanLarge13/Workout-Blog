@@ -13,9 +13,23 @@ import { BiLogOutCircle } from "react-icons/bi";
 const UserNavigation = () => {
   const { setUser } = useContext(UserContext);
   const { profile, setProfile } = useContext(ProfileContext);
+
+  const [settings, setSettings] = useState(localStorage.getItem("settings"));
   const [nav, setNav] = useState(false);
+  const [bg, setBg] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setSettings(localStorage.getItem("settings"));
+    if (settings) {
+      const parsedSettings = JSON.parse(settings);
+      if (parsedSettings.selectedColor) {
+        const string = parsedSettings.selectedColor;
+        setBg(string);
+      }
+    }
+  }, [nav]);
 
   const logout = async () => {
     localStorage.removeItem("authToken");
@@ -30,6 +44,11 @@ const UserNavigation = () => {
       initial="hidden"
       animate={nav ? "show" : "hidden"}
       variants={navAni}
+      style={{
+        backgroundImage: `linear-gradient(to right, ${
+          bg.split("-")[1]
+        }, violet)`,
+      }}
       className={`${containers.nav}`}
     >
       <ul className="flex justify-center items-center flex-col w-full list-none ml-0">

@@ -8,6 +8,7 @@ import guy from "./guy.png";
 import darkWoman from "./darkWoman.jpg";
 import woman from "./woman.jpg";
 import blankUser from "./blankuser.png";
+import appIcon from "./faviconIcon.svg";
 
 export {
   demoPost,
@@ -20,4 +21,5 @@ export {
   darkWoman,
   woman,
   blankUser,
+  appIcon,
 };

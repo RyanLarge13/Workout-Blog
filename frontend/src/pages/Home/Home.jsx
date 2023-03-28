@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { elements, variants } from "../../styles/elements";
 import { ProfileContext } from "../../context/profileContext";
 import { PickerContext } from "../../context/pickerContext";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { dummyPosts } from "../../constants/dummyPosts";
 import { BsArrowUpRightSquareFill } from "react-icons/bs";
+import { FaGooglePlay } from "react-icons/fa";
 import {
   blogTemplates,
   blogger,
@@ -13,6 +14,7 @@ import {
   guy,
   darkWoman,
   woman,
+  appIcon,
 } from "../../assets";
 
 const Home = () => {
@@ -174,6 +176,15 @@ const Home = () => {
           <BsArrowUpRightSquareFill className="rounded-full absolute top-[-5px] right-[-5px] bg-white text-black" />
         </motion.button>
       </section>
+      <div className="flex flex-col justify-center items-center text-white text-xl bg-[#222] py-10 mt-[-10px] rounded-t-md w-full">
+        <img
+          src={appIcon}
+          alt="workout blog icon"
+          className="scale-75 mb-[-10%]"
+        />
+        <p>find us on</p>
+        <FaGooglePlay className="text-4xl mt-5" />
+      </div>
     </>
   );
 };

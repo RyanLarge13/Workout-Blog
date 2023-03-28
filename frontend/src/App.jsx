@@ -33,6 +33,11 @@ const App = () => {
   const [picker, setPicker] = useState("blog");
   const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [showSettings, setShowSettings] = useState(false);
+  const [background, setBackground] = useState(false);
+
+  useEffect(() => {
+    checkSettings();
+  }, [showSettings]);
 
   useEffect(() => {
     if (token) {
@@ -121,86 +126,99 @@ const App = () => {
       .catch((err) => console.log(err));
   };
 
+  const checkSettings = () => {
+    const settings = localStorage.getItem("settings");
+    if (settings) {
+      const parsedSettings = JSON.parse(settings);
+      setBackground(parsedSettings.darkMode);
+    }
+  };
+
   return (
-    <Router>
-      <UserContext.Provider value={{ user, setUser }}>
-        <ProfileContext.Provider value={{ profile, setProfile }}>
-          <newBlogContext.Provider value={{ content, setContent }}>
-            <PickerContext.Provider value={{ picker, setPicker }}>
-              <Nav />
-              {loading ? (
-                <section className="h-screen flex justify-center items-center">
-                  <DotLoader color="#f4f" />
-                </section>
-              ) : (
-                <>
-                  {token && (
-                    <>
-                      <motion.div
-                      whileTap={{scale: 0.9}}
-                        onClick={() => setShowSettings((prev) => !prev)}
-                        className={`${variants.mainBtnBg} p-3 fixed bottom-5 left-5 z-40 rounded-full shadow-md`}
-                      >
-                        <FaCogs />
-                      </motion.div>
-                      <Settings show={showSettings} setShow={setShowSettings} />
-                      show={showSettings} ={setShowSettings} />
-                    </>
-                  )}
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route
-                      path="/login"
-                      element={
-                        token ? <Navigate to="/dashboard" /> : <LoginSignup />
-                      }
-                    />
-                    <Route
-                      path="/profile"
-                      element={
-                        token ? <Profile /> : <Navigate to="/login" replace />
-                      }
-                    />
-                    <Route
-                      path="/dashboard"
-                      element={
-                        token ? <Dashboard /> : <Navigate to="/login" replace />
-                      }
-                    />
-                    <Route
-                      path="/blogs"
-                      element={
-                        token ? <Blog /> : <Navigate to="/login" replace />
-                      }
-                    />
-                    <Route
-                      path="/posts/:postId"
-                      element={
-                        token ? (
-                          <BlogDetails />
-                        ) : (
-                          <Navigate to="/login" replace />
-                        )
-                      }
-                    />
-                    <Route
-                      path="/users/:userId"
-                      element={
-                        token ? (
-                          <UserProfile />
-                        ) : (
-                          <Navigate to="/login" replace />
-                        )
-                      }
-                    />
-                  </Routes>
-                </>
-              )}
-            </PickerContext.Provider>
-          </newBlogContext.Provider>
-        </ProfileContext.Provider>
-      </UserContext.Provider>
-    </Router>
+    <main className={`${background ? "bg-[#301818]" : "bg-white"}`}>
+      <Router>
+        <UserContext.Provider value={{ user, setUser }}>
+          <ProfileContext.Provider value={{ profile, setProfile }}>
+            <newBlogContext.Provider value={{ content, setContent }}>
+              <PickerContext.Provider value={{ picker, setPicker }}>
+                <Nav />
+                {loading ? (
+                  <section className="h-screen flex justify-center items-center">
+                    <DotLoader color="#f4f" />
+                  </section>
+                ) : (
+                  <>
+                    {token && (
+                      <>
+                        <motion.div
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => setShowSettings((prev) => !prev)}
+                          className={`${variants.mainBtnBg} p-3 fixed bottom-5 left-5 z-40 rounded-full shadow-md`}
+                        >
+                          <FaCogs />
+                        </motion.div>
+                        <Settings show={showSettings} />
+                      </>
+                    )}
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route
+                        path="/login"
+                        element={
+                          token ? <Navigate to="/dashboard" /> : <LoginSignup />
+                        }
+                      />
+                      <Route
+                        path="/profile"
+                        element={
+                          token ? <Profile /> : <Navigate to="/login" replace />
+                        }
+                      />
+                      <Route
+                        path="/dashboard"
+                        element={
+                          token ? (
+                            <Dashboard />
+                          ) : (
+                            <Navigate to="/login" replace />
+                          )
+                        }
+                      />
+                      <Route
+                        path="/blogs"
+                        element={
+                          token ? <Blog /> : <Navigate to="/login" replace />
+                        }
+                      />
+                      <Route
+                        path="/posts/:postId"
+                        element={
+                          token ? (
+                            <BlogDetails />
+                          ) : (
+                            <Navigate to="/login" replace />
+                          )
+                        }
+                      />
+                      <Route
+                        path="/users/:userId"
+                        element={
+                          token ? (
+                            <UserProfile />
+                          ) : (
+                            <Navigate to="/login" replace />
+                          )
+                        }
+                      />
+                    </Routes>
+                  </>
+                )}
+              </PickerContext.Provider>
+            </newBlogContext.Provider>
+          </ProfileContext.Provider>
+        </UserContext.Provider>
+      </Router>
+    </main>
   );
 };
 

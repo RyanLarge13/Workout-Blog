@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
@@ -11,6 +11,7 @@ import UserNavigation from "./UserNavigation";
 
 const Nav = () => {
   const { profile } = useContext(ProfileContext);
+
   const [nav, setNav] = useState(false);
 
   return (
@@ -22,7 +23,7 @@ const Nav = () => {
           initial="hidden"
           animate={nav ? "show" : "hidden"}
           variants={navAni}
-          className={`${containers.nav}`}
+          className={`${containers.nav} bg-gradient-to-r from-violet-500 to-blue-500`}
         >
           <ul className="flex justify-center items-center flex-col w-full list-none ml-0">
             <li>

@@ -1,15 +1,38 @@
-import { useState, useEffect, useContext } from "react";
-import { ProfileContext } from "../context/profileContext.js";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import colors from "../constants/colorPicker";
 
-const Settings = ({ show, setShow }) => {
-  const { profile } = useContext(ProfileContext);
-
-  const [settings, setSettings] = useState(
-    localStorage.getItem("settings") ? localstorage.getItem("settings") : {}
-  );
+const Settings = ({ show }) => {
+  const [rendered, setRendered] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    setRendered(true);
+    const storage = localStorage.getItem("settings");
+    if (storage) {
+      const parsedSettings = JSON.parse(storage);
+      setSelectedColor(parsedSettings.selectedColor);
+      setDarkMode(parsedSettings.darkMode);
+    }
+    if (!storage) {
+      const newSettings = {
+        darkMode,
+        selectedColor,
+      };
+      localStorage.setItem("settings", JSON.stringify(newSettings));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (rendered) {
+      const newSettings = {
+        darkMode,
+        selectedColor,
+      };
+      localStorage.setItem("settings", JSON.stringify(newSettings));
+    }
+  }, [darkMode, selectedColor]);
 
   return (
     <motion.section
@@ -26,17 +49,32 @@ const Settings = ({ show, setShow }) => {
       className="fixed inset-0 bg-white z-30 pt-10"
     >
       <div className="my-10 flex flex-wrap justify-center items-center gap-2 p-2">
-        {colors.map((color) => (
+        {colors.map((color, index) => (
           <div
-            className={`${color.color} w-[50px] h-[50px] rounded-full shadow-md`}
+            key={index}
+            onClick={() => setSelectedColor(color.color)}
+            className={`${
+              color.color === selectedColor && "outline outline-gray-300"
+            } ${
+              color.color
+            } w-[50px] h-[50px] rounded-full shadow-md duration-200`}
           ></div>
         ))}
       </div>
       <div>
-        <div className="flex justify-between items-center mx-5 px-5">
+        <div className="flex justify-between items-center mx-5 gap-5 px-5">
           <p>Dark Mode</p>
-          <div className="w-[50px] h-[25px] rounded-full shadow-md relative bg-white">
-            <div className="absolute left-0 top-0 bottom-0 right-[50%] rounded-full bg-red-300"></div>
+          <div
+            onClick={() => setDarkMode((prev) => !prev)}
+            className="w-[50px] h-[25px] rounded-full shadow-md relative bg-white"
+          >
+            <div
+              className={`rounded-full top-0 bottom-0 absolute duration-200 ${
+                darkMode
+                  ? "right-0 left-[50%] bg-green-300"
+                  : "left-0 right-[50%] bg-red-300"
+              }`}
+            ></div>
           </div>
         </div>
       </div>
