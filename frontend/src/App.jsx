@@ -11,7 +11,11 @@ import { newBlogContext } from "./context/newBlogContext";
 import { PickerContext } from "./context/pickerContext";
 import { createUser } from "./client";
 import { DotLoader } from "react-spinners";
+import { FaCogs } from "react-icons/fa";
+import { variants } from "./styles/elements.js";
+import { motion } from "framer-motion";
 import Nav from "./components/Navigation/Nav";
+import Settings from "./components/Settings";
 import Axios from "axios";
 import LoginSignup from "./pages/LoginSignup/LoginSignup";
 import Home from "./pages/Home/Home";
@@ -28,6 +32,7 @@ const App = () => {
   const [content, setContent] = useState("");
   const [picker, setPicker] = useState("blog");
   const [token, setToken] = useState(localStorage.getItem("authToken"));
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -128,45 +133,68 @@ const App = () => {
                   <DotLoader color="#f4f" />
                 </section>
               ) : (
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route
-                    path="/login"
-                    element={
-                      token ? <Navigate to="/dashboard" /> : <LoginSignup />
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      token ? <Profile /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                      token ? <Dashboard /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/blogs"
-                    element={
-                      token ? <Blog /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/posts/:postId"
-                    element={
-                      token ? <BlogDetails /> : <Navigate to="/login" replace />
-                    }
-                  />
-                  <Route
-                    path="/users/:userId"
-                    element={
-                      token ? <UserProfile /> : <Navigate to="/login" replace />
-                    }
-                  />
-                </Routes>
+                <>
+                  {token && (
+                    <>
+                      <motion.div
+                      whileTap={{scale: 0.9}}
+                        onClick={() => setShowSettings((prev) => !prev)}
+                        className={`${variants.mainBtnBg} p-3 fixed bottom-5 left-5 z-40 rounded-full shadow-md`}
+                      >
+                        <FaCogs />
+                      </motion.div>
+                      <Settings show={showSettings} setShow={setShowSettings} />
+                      show={showSettings} ={setShowSettings} />
+                    </>
+                  )}
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route
+                      path="/login"
+                      element={
+                        token ? <Navigate to="/dashboard" /> : <LoginSignup />
+                      }
+                    />
+                    <Route
+                      path="/profile"
+                      element={
+                        token ? <Profile /> : <Navigate to="/login" replace />
+                      }
+                    />
+                    <Route
+                      path="/dashboard"
+                      element={
+                        token ? <Dashboard /> : <Navigate to="/login" replace />
+                      }
+                    />
+                    <Route
+                      path="/blogs"
+                      element={
+                        token ? <Blog /> : <Navigate to="/login" replace />
+                      }
+                    />
+                    <Route
+                      path="/posts/:postId"
+                      element={
+                        token ? (
+                          <BlogDetails />
+                        ) : (
+                          <Navigate to="/login" replace />
+                        )
+                      }
+                    />
+                    <Route
+                      path="/users/:userId"
+                      element={
+                        token ? (
+                          <UserProfile />
+                        ) : (
+                          <Navigate to="/login" replace />
+                        )
+                      }
+                    />
+                  </Routes>
+                </>
               )}
             </PickerContext.Provider>
           </newBlogContext.Provider>

@@ -14,6 +14,7 @@ import {
   unsavePost,
 } from "../../client.js";
 import { motion } from "framer-motion";
+import { ImSearch } from "react-icons/im";
 import { DotLoader } from "react-spinners";
 import { NavLink } from "react-router-dom";
 import imageUrlBuilder from "@sanity/image-url";
@@ -36,6 +37,7 @@ const Blog = ({ following }) => {
   const [noPostsToShow, setNoPostsToShow] = useState(false);
   const [followerId, setFollowerId] = useState("");
   const [error, setError] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     setError(false);
@@ -197,8 +199,27 @@ const Blog = ({ following }) => {
   };
 
   return (
-    <section className="pt-20">
-      <div className="flex justify-center items-center">
+    <section className="pt-10">
+      <motion.div
+        onClick={() => setShowSearch((prev) => !prev)}
+        whileTap={{ scale: 0.9 }}
+        className={`${variants.mainBtnBg} fixed bottom-5 right-5 p-3 rounded-md shadow-md z-40 md:hidden`}
+      >
+        <ImSearch />
+      </motion.div>
+      <motion.div
+        initial={{ y: -500, opacity: 0 }}
+        animate={
+          !showSearch
+            ? { y: -500, opacity: 0 }
+            : {
+                y: 0,
+                opacity: 1,
+                transition: { duration: 0.5, type: "spring", stiffness: 200 },
+              }
+        }
+        className={`fixed top-0 md:relative flex justify-center items-centerr w-full pt-20 pb-10 z-40`}
+      >
         <label htmlFor="search" className="hidden">
           Search
         </label>
@@ -207,38 +228,40 @@ const Blog = ({ following }) => {
           name="search"
           id="search"
           placeholder={error ? "No Posts Matching Search" : "Search"}
-          className={`${elements.input} mx-0`}
+          className={`${elements.input}`}
           onChange={(e) => {
             queryTitle(e.target.value);
           }}
         />
+      </motion.div>
+      <div>
+        {pickerCategories.length > 0 && (
+          <div className="my-5 mx-auto py-5 px-2 flex flex-wrap justify-center items-center gap-2 md:w-[50%]">
+            {pickerCategories.map((category, index) => (
+              <motion.div
+                whileTap={{ scale: 0.9 }}
+                key={index}
+                onClick={() => filterPostsByCategory(category._id)}
+                className={`px-3 py-1 rounded-full shadow-md min-w-max transition-all duration-200 cursor-pointer hover:shadow-pink-200 text-center whitespace-nowrap ${
+                  pickedCategory === category._id ? "bg-violet-300" : "bg-white"
+                }`}
+              >
+                <p className="text-xs break-keep">{category.title}</p>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
       {posts.length > 0 ? (
         <>
-          {pickerCategories.length > 0 && (
-            <div className="my-5 mx-auto py-5 px-2 flex flex-wrap max-w-full justify-center items-center md:w-[50%]">
-              {pickerCategories.map((category, index) => (
-                <div
-                  key={index}
-                  onClick={() => filterPostsByCategory(category._id)}
-                  className={`px-3 py-1 m-1 rounded-full shadow-md text-center min-w-max transition-all duration-200 hover:text-pink-400 cursor-pointer ${
-                    pickedCategory === category._id
-                      ? "bg-violet-400"
-                      : "bg-white"
-                  }`}
-                >
-                  <p className="text-xs">{category.title}</p>
-                </div>
-              ))}
-            </div>
-          )}
           {following && peopleIFollow.length > 0 && (
-            <div className="m-5 max-w-full flex flex-wrap justify-center items-center">
+            <div className="m-5 flex flex-wrap justify-center items-center">
               {peopleIFollow.map((user) => (
-                <div
+                <motion.div
+                  whileTap={{ scale: 0.9 }}
                   key={user.userId}
                   onClick={() => getUserPosts(user.userId)}
-                  className={`m-2 p-1 cursor-pointer`}
+                  className={`m-2 px-2 cursor-pointer whitespace-nowrap`}
                 >
                   <img
                     src={user?.postedBy?.image}
@@ -248,7 +271,7 @@ const Blog = ({ following }) => {
                     }`}
                   />
                   <p className="text-center">{user?.postedBy?.name}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}

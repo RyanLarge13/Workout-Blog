@@ -14,11 +14,27 @@ import { AiFillEdit } from "react-icons/ai";
 import DOMPurify from "dompurify";
 import imageUrlBuilder from "@sanity/image-url";
 import NewComment from "./NewComment";
+import { elements, variants } from "../../../styles/elements.js";
+import { motion } from "framer-motion";
 
 const builder = imageUrlBuilder(client);
 function urlFor(source) {
   return builder.image(source);
 }
+
+const formatter = new Intl.RelativeTimeFormat(undefined, {
+  numeric: "auto",
+});
+
+const DIVISIONS = [
+  { amount: 60, name: "seconds" },
+  { amount: 60, name: "minutes" },
+  { amount: 24, name: "hours" },
+  { amount: 7, name: "days" },
+  { amount: 4.34524, name: "weeks" },
+  { amount: 12, name: "months" },
+  { amount: Number.POSITIVE_INFINITY, name: "years" },
+];
 
 const BlogDetails = () => {
   const { profile } = useContext(ProfileContext);
@@ -71,6 +87,17 @@ const BlogDetails = () => {
     navigate("/dashboard");
   };
 
+  const formatTime = (date) => {
+    let duration = (date - new Date()) / 1000;
+    for (let i = 0; i < DIVISIONS.length; i++) {
+      const division = DIVISIONS[i];
+      if (Math.abs(duration) < division.amount) {
+        return formatter.format(Math.round(duration), division.name);
+      }
+      duration /= division.amount;
+    }
+  };
+
   return (
     <section>
       {post ? (
@@ -80,10 +107,13 @@ const BlogDetails = () => {
               <div className="flex justify-between items-center">
                 <h1 className="text-4xl text-white mb-5 mt-3">{post.title}</h1>
                 {post?.postedBy?._id === profile._id && (
-                  <AiFillEdit
+                  <motion.div
+                    whileTap={{ scale: 0.9 }}
+                    className={`${variants.mainBtnBg} p-3 fixed bottom-5 right-5 z-40 rounded-full shadow-md text-2xl cursor-pointer`}
                     onClick={() => editPost()}
-                    className="text-white text-2xl cursor-pointer"
-                  />
+                  >
+                    <AiFillEdit />
+                  </motion.div>
                 )}
               </div>
               <img
@@ -91,12 +121,23 @@ const BlogDetails = () => {
                 alt="post header"
                 className="rounded-lg w-screen shadow-md"
               />
-              <p className="my-5">
-                {new Date(post._createdAt).toLocaleDateString()}
-              </p>
+              <div className="text-white text-xs mt-2 mb-10">
+                <p className="text-sm">
+                  {new Date(post._createdAt).toLocaleDateString()}
+                </p>
+                <p>{formatTime(new Date(post._createdAt))}</p>
+                <p>last updated {formatTime(new Date(post.publishedAt))}</p>
+              </div>
               <p className="text-center text-white md:text-2xl md:w-[50%] mx-auto md:py-5">
                 {post.excerpt}
               </p>
+              <div className="my-5 px-2 flex flex-wrap justify-center items-center gap-2">
+                {post.categories.map((cat) => (
+                  <div className="py-1 px-3 rounded-full shadow-md bg-white text-center">
+                    <p>{cat.title}</p>
+                  </div>
+                ))}
+              </div>
             </header>
             <div className="py-2 px-3 my-5 border-b max-w-full md:p-20">
               <div
@@ -118,7 +159,11 @@ const BlogDetails = () => {
                     to={`/users/${comment?.postedBy?._id}`}
                     className="rounded-full w-[50px] h-[50px] shadow-md overflow-hidden"
                   >
-                    <img src={comment?.postedBy?.image} alt="user comment" />
+                    <img
+                      src={comment?.postedBy?.image}
+                      alt="user comment"
+                      className="object-cover object-center"
+                    />
                   </NavLink>
                   <p className="max-w-[75%] min-w-[75%]">{comment?.comment}</p>
                 </div>
@@ -133,13 +178,14 @@ const BlogDetails = () => {
             <div className="flex flex-col items-center justify-start p-5 mx-2 rounded-md shadow-md relative bg-gradient-to-tr from-purple-400 to-violet-500">
               <div className="absolute top-[-50px]">
                 <img
+                  onClick={() => navigate(`/users/${post.postedBy._id}`)}
                   src={post?.postedBy?.image}
                   alt="user"
                   className="rounded-full w-[100px] h-[100px] shadow-md object-cover object-center"
                 />
                 <p className="text-center">{post?.postedBy?.name}</p>
               </div>
-              <div className="mt-[100px] text-center mb-[200px]">
+              <div className="my-[100px] text-center">
                 <p>View More Posts by</p>
                 <p>{post?.postedBy?.name}</p>
               </div>
@@ -168,7 +214,7 @@ const BlogDetails = () => {
                 <p>No Post To Show</p>
               )}
             </div>
-            <h2 className="mb-5 mt-10 text-center md:text-2xl">
+            <h2 className="my-5 text-center md:text-2xl">
               Related Posts
             </h2>
             <div className="my-10 mx-auto p-3 w-3/4 flex justify-start items-center gap-5 overflow-auto">

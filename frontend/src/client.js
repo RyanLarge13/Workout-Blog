@@ -180,7 +180,9 @@ export const getPersonalPosts = async (id) => {
           image
         },
       },
-      _createdAt
+      comments[] ->, 
+      _createdAt, 
+      publishedAt,
     }[0...20]`
   );
   return myPosts;

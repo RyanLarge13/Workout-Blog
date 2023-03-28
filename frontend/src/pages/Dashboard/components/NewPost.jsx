@@ -13,6 +13,7 @@ import {
 } from "../../../client.js";
 import { elements, variants } from "../../../styles/elements.js";
 import { v4 as uuidv4 } from "uuid";
+import { motion } from "framer-motion";
 import DOMPurify from "dompurify";
 import JoditEditor from "jodit-react";
 
@@ -262,17 +263,18 @@ const NewPost = () => {
       {categories.length > 0 && (
         <div className="p-2 my-5 flex justify-center items-center flex-wrap max-w-[95%] mx-auto md:w-[50%]">
           {categories.map((category, index) => (
-            <div
+            <motion.div
+              whileTap={{ scale: 0.9 }}
               key={index}
-              className={`max-w-max rounded-full shadow-md px-3 py-1 m-1 cursor-pointer ${
+              className={`max-w-max rounded-full shadow-md px-3 py-1 m-1 cursor-pointer hover:shadow-pink-200 whitespace-nowrap text-center ${
                 addCatagory.includes(category._id)
-                  ? "bg-violet-400"
+                  ? "bg-violet-300"
                   : "bg-white"
               }`}
               onClick={() => addCategoryToList(category._id)}
             >
               <p className="text-xs break-keep">{category.title}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}

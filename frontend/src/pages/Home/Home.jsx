@@ -128,21 +128,21 @@ const Home = () => {
       <section className="bg-gradient-to-r from-fuchsia-500 to-pink-500 py-10 my-[-2px]">
         <div className="relative flex justify-center align-center overflow-hidden">
           <motion.div
-            initial={{ x: -200, opacity: 0 }}
+            initial={{ x: -50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1, transition: { delay: 0.25 } }}
             className="top-10 left-5 absolute w-10 h-10 rounded-full outline outline-pink-500 overflow-hidden sm:left-[25%] md:left-[30%]"
           >
             <img src={guy} alt="guy" />
           </motion.div>
           <motion.div
-            initial={{ x: -200, opacity: 0 }}
+            initial={{ x: -50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1, transition: { delay: 0.35 } }}
             className="top-40 left-40 absolute w-10 h-10 rounded-full outline outline-yellow-500 overflow-hidden sm:left-[45%] sm:top=[75%] md:left-[45%] md:top-[60%]"
           >
             <img src={darkWoman} alt="dark woman" />
           </motion.div>
           <motion.div
-            initial={{ x: 200, opacity: 0 }}
+            initial={{ x: 50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1, transition: { delay: 0.25 } }}
             className="top-20 right-5 absolute w-10 h-10 rounded-full outline outline-blue-500 overflow-hidden sm:right-[25%] md:top-[40%] md:right-[35%]"
           >

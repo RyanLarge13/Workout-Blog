@@ -4,6 +4,8 @@ import { getPersonalPosts, deleteMyPost } from "../../../client.js";
 import { NavLink } from "react-router-dom";
 import imageUrlBuilder from "@sanity/image-url";
 import { elements, variants } from "../../../styles/elements.js";
+import { AiOutlineComment } from "react-icons/ai";
+import { RiHeartsFill } from "react-icons/ri";
 import { ProfileContext } from "../../../context/profileContext.js";
 import Conformation from "../../../components/Conformation";
 
@@ -11,6 +13,20 @@ const builder = imageUrlBuilder(client);
 function urlFor(source) {
   return builder.image(source);
 }
+
+const formatter = new Intl.RelativeTimeFormat(undefined, {
+  numeric: "auto",
+});
+
+const DIVISIONS = [
+  { amount: 60, name: "seconds" },
+  { amount: 60, name: "minutes" },
+  { amount: 24, name: "hours" },
+  { amount: 7, name: "days" },
+  { amount: 4.34524, name: "weeks" },
+  { amount: 12, name: "months" },
+  { amount: Number.POSITIVE_INFINITY, name: "years" },
+];
 
 const MyPosts = () => {
   const { profile } = useContext(ProfileContext);
@@ -36,28 +52,56 @@ const MyPosts = () => {
       .catch((err) => console.log(err));
   };
 
+  const formatTime = (date) => {
+    let duration = (date - new Date()) / 1000;
+    for (let i = 0; i < DIVISIONS.length; i++) {
+      const division = DIVISIONS[i];
+      if (Math.abs(duration) < division.amount) {
+        return formatter.format(Math.round(duration), division.name);
+      }
+      duration /= division.amount;
+    }
+  };
+
   return (
     <section className="flex flex-col items-center justify-center">
-      {posts.length > 0 && <h1 className="text-2xl text-center">Your Posts</h1>}
+      {posts.length > 0 && (
+        <h1 className="mt-10 text-2xl text-center whitespace-nowrap">
+          Your Posts
+        </h1>
+      )}
       {posts.length > 0 ? (
-        <div className="grid gap-5 content-center justify-items-center lg:grid md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 content-center justify-items-center md:grid-cols-2 lg:grid-cols-4">
           {posts.map((post, index) => (
-            <div
-              key={index}
-              className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto w-max relative"
-            >
+            <div key={index} className="rounded-lg shadow-lg p-5 my-5 mx-auto">
               <img
                 src={
                   post?.image?.asset?.url &&
-                  urlFor(post?.image?.asset?.url).width(300).height(200).url()
+                  urlFor(post?.image?.asset?.url).width(300).url()
                 }
-                alt="blog image"
-                className="max-h-[150px] min-w-full object-cover object-center rounded-md shadow-md md:max-h-[300px]"
+                alt="blog"
+                className="max-h-[150px] min-w-[300px] max-w-[300px] object-cover object-center rounded-md shadow-md md:max-h-[300px]"
               />
               <h2 className="text-xl my-2">{post.title}</h2>
-              <div className="flex justify-between items-end pt-5">
+              <p className="text-xs">
+                published {formatTime(new Date(post._createdAt))}
+              </p>
+              <p className="text-xs">
+                last updated {formatTime(new Date(post.publishedAt))}
+              </p>
+              <div className="flex justify-between items-center my-3">
+                <div className="flex justify-center items-center">
+                  <RiHeartsFill className="mr-2" />
+                  <p>{post.save.length}</p>
+                </div>
+                <div className="flex justify-center items-center">
+                  <AiOutlineComment className="mr-2" />
+                  <p>{post?.comments?.length ? post?.comments?.length : 0}</p>
+                </div>
+              </div>
+              <div className="flex justify-between items-end pt-3">
                 <button
-                  className={`py-1 px-2 h-max rounded-md bg-gradient-to-tr from-red-400 to-red-500`}
+                  className={`py-1 px-2 h-max rounded-md ${variants.dangerBtn}`}
                   onClick={() => {
                     setPostId(post?._id);
                     setConfrim(true);
@@ -76,7 +120,7 @@ const MyPosts = () => {
           ))}
         </div>
       ) : (
-        <h1 className="text-2xl text-center">
+        <h1 className=" mt-10 text-2xl text-center">
           You have no posts! <br /> Create one!
         </h1>
       )}

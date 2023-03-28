@@ -12,6 +12,7 @@ export const elements = {
 
 export const variants = {
   mainBtnBg: "bg-gradient-to-r from-red-500 to-yellow-400 text-white",
+  dangerBtn: "bg-gradient-to-r from-red-500 to-red-400", 
   navBtnActive:
     "mx-1 my-2 py-1 px-3 rounded-md bg-gradient-to-r from-fuchsia-500 to-pink-500 shadow-lg flex justify-center align-center text-white w-full min-w-[300px] max-w-[300px]",
 };

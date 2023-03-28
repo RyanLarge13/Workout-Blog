@@ -9,6 +9,7 @@ import {
   client,
 } from "../../client";
 import { elements, variants } from "../../styles/elements";
+import { DotLoader } from "react-spinners";
 import { AiTwotoneMessage } from "react-icons/ai";
 import { RiUserFollowLine, RiUserFollowFill } from "react-icons/ri";
 import imageUrlBuilder from "@sanity/image-url";
@@ -16,6 +17,7 @@ import imageUrlBuilder from "@sanity/image-url";
 const UserProfile = () => {
   const { profile } = useContext(ProfileContext);
 
+  const [loading, setLoading] = useState(false);
   const [userView, setUserView] = useState({});
   const [userPosts, setUserPosts] = useState([]);
   const [following, setFollowing] = useState({});
@@ -48,6 +50,7 @@ const UserProfile = () => {
   }, [userView]);
 
   const newFollow = () => {
+    setLoading(true);
     followUser(profile._id, userView._id)
       .then((res) => {
         window.location.reload();
@@ -56,6 +59,7 @@ const UserProfile = () => {
   };
 
   const unfollow = () => {
+    setLoading(true);
     unfollowUser(following[0]._key, profile._id)
       .then((res) => {
         window.location.reload();
@@ -94,13 +98,25 @@ const UserProfile = () => {
               >
                 {following?.length > 0 ? (
                   <>
-                    <RiUserFollowFill onClick={() => unfollow()} />
-                    <p>Following</p>
+                    {loading ? (
+                      <DotLoader className="text-xs" />
+                    ) : (
+                      <>
+                        <RiUserFollowFill onClick={() => unfollow()} />
+                        <p>Following</p>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>
-                    <RiUserFollowLine onClick={() => newFollow()} />
-                    <p>Follow</p>
+                    {loading ? (
+                      <DotLoader className="text-xs" />
+                    ) : (
+                      <>
+                        <RiUserFollowLine onClick={() => newFollow()} />
+                        <p>Follow</p>
+                      </>
+                    )}
                   </>
                 )}
               </button>

@@ -25,13 +25,13 @@ const Dashboard = () => {
 
   return (
     <section>
-      <header className="bg-gradient-to-tr from-violet-500 to-purple-500 py-10 rounded-b-2xl text-white shadow-md">
+      <header className="bg-gradient-to-tr from-violet-500 to-purple-500 pb-10 pt-5 rounded-b-2xl text-white shadow-md">
         <div className="mt-10 flex flex-col items-center justify-center">
-          <h2 className="text-2xl">Quick Actions</h2>
           <div className="flex flex-wrap justify-center align-center mt-5">
             <div className={`${containers.quickActionContainer}`}>
               <motion.button
-                initial={{ y: -100, opacity: 0 }}
+                onClick={() => setPicker("newpost")}
+                initial={{ y: -10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 className={`${
                   elements.quickActions
@@ -39,57 +39,52 @@ const Dashboard = () => {
                   picker === "newpost" && "outline"
                 }`}
               >
-                <NavLink onClick={() => setPicker("newpost")}>
-                  <FaNewspaper />
-                </NavLink>
+                <FaNewspaper />
               </motion.button>
               <p>New Blog!</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
               <motion.button
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                onClick={() => setPicker("myposts")}
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
                 className={`${
                   elements.quickActions
                 } bg-blue-400 hover:outline duration-200 ${
                   picker === "myposts" && "outline"
                 } `}
               >
-                <NavLink onClick={() => setPicker("myposts")}>
-                  <BsViewList />
-                </NavLink>
+                <BsViewList />
               </motion.button>
               <p>My Blogs</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
               <motion.button
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                onClick={() => setPicker("blog")}
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, transition: { delay: 0.4 } }}
                 className={`${
                   elements.quickActions
                 } bg-orange-400 hover:outline duration-200 ${
                   picker === "blog" && "outline"
                 }`}
               >
-                <NavLink onClick={() => setPicker("blog")}>
-                  <AiFillRead />
-                </NavLink>
+                <AiFillRead />
               </motion.button>
               <p>Read</p>
             </div>
             <div className={`${containers.quickActionContainer}`}>
               <motion.button
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                onClick={() => setPicker("follow")}
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, transition: { delay: 0.75 } }}
                 className={`${
                   elements.quickActions
                 } bg-orange-400 hover:outline duration-200 ${
                   picker === "follow" && "outline"
                 }`}
               >
-                <NavLink onClick={() => setPicker("follow")}>
-                  <GiShadowFollower />
-                </NavLink>
+                <GiShadowFollower />
               </motion.button>
               <p>Following</p>
             </div>
@@ -97,7 +92,7 @@ const Dashboard = () => {
         </div>
       </header>
       {picker !== "newpost" && (
-        <div className="mt-10 flex flex-col items-center justify-center">
+        <div className="mt-10 flex items-center justify-center">
           <motion.button
             whileHover={{ scale: 1.1 }}
             onClick={() => setPicker("newpost")}
@@ -105,10 +100,9 @@ const Dashboard = () => {
           >
             <AiFillPlusCircle />
           </motion.button>
-          <p>Create A New Post</p>
         </div>
       )}
-      <div className="py-10">{component}</div>
+      <div className="pb-10">{component}</div>
     </section>
   );
 };
