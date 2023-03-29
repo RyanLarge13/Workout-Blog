@@ -4,6 +4,7 @@ import { useParams, NavLink } from "react-router-dom";
 import {
   getUserInfo,
   getPersonalPosts,
+  updateFollowers,
   followUser,
   unfollowUser,
   client,
@@ -20,7 +21,8 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(false);
   const [userView, setUserView] = useState({});
   const [userPosts, setUserPosts] = useState([]);
-  const [following, setFollowing] = useState({});
+  const [following, setFollowing] = useState([]);
+  const [profileData, setProfileData] = useState(profile.follow);
 
   const { userId } = useParams();
 
@@ -43,17 +45,20 @@ const UserProfile = () => {
   }, []);
 
   useEffect(() => {
-    const filter = profile.follow?.filter(
+    const filter = profileData.filter(
       (follower) => follower.userId === userView._id
     );
     setFollowing(filter);
-  }, [userView]);
+    setLoading(false);
+  }, [profileData]);
 
   const newFollow = () => {
     setLoading(true);
     followUser(profile._id, userView._id)
       .then((res) => {
-        window.location.reload();
+        updateFollowers(profile._id)
+          .then((res) => setProfileData(res))
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
@@ -62,7 +67,9 @@ const UserProfile = () => {
     setLoading(true);
     unfollowUser(following[0]._key, profile._id)
       .then((res) => {
-        window.location.reload();
+        updateFollowers(profile._id)
+          .then((res) => setProfileData(res))
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };

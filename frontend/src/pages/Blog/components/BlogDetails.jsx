@@ -155,7 +155,7 @@ const BlogDetails = () => {
               <div>
                 <h1 className="text-4xl text-white mb-5 mt-3">{post.title}</h1>
                 <div
-                  onClick={() => navigate(`/users${post.postedBy._id}`)}
+                  onClick={() => navigate(`/users/${post.postedBy._id}`)}
                   className=" text-white mb-5"
                 >
                   <img

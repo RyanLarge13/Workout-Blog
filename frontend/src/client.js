@@ -22,6 +22,13 @@ export const getUserInfo = async (id) => {
   return userDetails;
 };
 
+export const updateFollowers = (id) => {
+  const newData = client.fetch(
+    `*[_type == 'user' && _id match '${id}']{follow[] {userId}}`
+  );
+  return newData;
+};
+
 export const getPosts = async () => {
   const posts = await client.fetch(
     `*[_type == "post"] | order(_createdAt desc){
