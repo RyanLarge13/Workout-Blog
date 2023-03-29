@@ -14,9 +14,14 @@ export default {
       type: "string",
     },
     {
-    	name: "createdAt", 
-    	title: "CreatedAt", 
-    	type: "datetime"
-    }
+      name: "createdAt",
+      title: "CreatedAt",
+      type: "datetime",
+    },
+    {
+      name: "publishedAt",
+      title: "PublishedAt",
+      type: "datetime",
+    },
   ],
 };

@@ -3,7 +3,7 @@ import { addComment } from "../../../client.js";
 import { BounceLoader } from "react-spinners";
 import { elements, variants } from "../../../styles/elements.js";
 
-const NewComment = ({ postId, userId }) => {
+const NewComment = ({ postId, userId, callRefresh }) => {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -13,7 +13,8 @@ const NewComment = ({ postId, userId }) => {
     addComment(postId, userId, commentText)
       .then((res) => {
         setLoading(false);
-        window.location.reload();
+        setCommentText("");
+        callRefresh();
       })
       .catch((err) => console.log(err));
   };
@@ -24,6 +25,7 @@ const NewComment = ({ postId, userId }) => {
       <input
         type="text"
         placeholder="New Comment"
+        value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         className={`${elements.input}`}
       />

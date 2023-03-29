@@ -209,7 +209,7 @@ const Profile = () => {
           </p>
         </div>
       </div>
-      <FollowersFollowing userId={profile._id}  newGradient={newGradient} />
+      <FollowersFollowing userId={profile._id} newGradient={newGradient} />
       <div
         style={
           newGradient

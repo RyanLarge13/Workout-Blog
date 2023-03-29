@@ -38,6 +38,7 @@ const MyPosts = () => {
   const [confirm, setConfrim] = useState(false);
   const [showCommentsAndLikes, setShowCommentsAndLikes] = useState(false);
   const [postInteractions, setPostInteractions] = useState(null);
+  const [dataType, setDataType] = useState(null);
 
   useEffect(() => {
     const settings = localStorage.getItem("settings");
@@ -92,6 +93,7 @@ const MyPosts = () => {
         <CommentsAndLikes
           data={postInteractions}
           open={setShowCommentsAndLikes}
+          dataType={dataType}
         />
       )}
       {posts.length > 0 && (
@@ -107,9 +109,9 @@ const MyPosts = () => {
         <div
           className={`grid gap-5 content-center justify-items-center md:grid-cols-2 lg:grid-cols-4`}
         >
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <div
-              key={index}
+              key={post._id}
               className={`${
                 darkMode ? "bg-gray-300" : "bg-white"
               } rounded-lg shadow-lg p-5 my-5 mx-auto`}
@@ -131,24 +133,48 @@ const MyPosts = () => {
               </p>
               <div className="flex justify-between items-center my-3">
                 <div
-                  onClick={() =>
-                    showInteractions(post.save ? post.save : null)
-                  }
+                  onClick={() => {
+                    setDataType("likes");
+                    showInteractions(
+                      post.save
+                        ? post.save.filter(
+                            (save) => save.postedBy._id !== profile._id
+                          )
+                        : null
+                    );
+                  }}
                   className="flex justify-center items-center"
                 >
                   <RiHeartsFill className="mr-2" />
-                  <p>{post?.save?.length ? post.save.length : 0}</p>
+                  <p>
+                    {post?.save?.length
+                      ? post.save.filter(
+                          (save) => save.postedBy._id !== profile._id
+                        ).length
+                      : 0}
+                  </p>
                 </div>
                 <div
-                  onClick={() =>
+                  onClick={() => {
+                    setDataType("comments");
                     showInteractions(
-                      post.comments ? post.comments : null
-                    )
-                  }
+                      post?.comments
+                        ? post.comments.filter(
+                            (comment) => comment.postedBy._id !== profile._id
+                          )
+                        : null
+                    );
+                  }}
                   className="flex justify-center items-center"
                 >
                   <AiOutlineComment className="mr-2" />
-                  <p>{post?.comments?.length ? post?.comments?.length : 0}</p>
+                  <p>
+                    {post?.comments?.length
+                      ? post.comments.filter(
+                          (comment) => comment.postedBy._id !== profile._id
+                        ).length
+                      : 0}
+                  </p>
                 </div>
               </div>
               <div className="flex justify-between items-end pt-3">
@@ -167,11 +193,6 @@ const MyPosts = () => {
                 >
                   View
                 </NavLink>
-              </div>
-              <div>
-                {post.save &&
-                  post.save.length > 0 &&
-                  post.save.map((save) => <p>{save.postedBy.name}</p>)}
               </div>
             </div>
           ))}

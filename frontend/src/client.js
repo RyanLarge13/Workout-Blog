@@ -180,7 +180,8 @@ export const getPersonalPosts = async (id) => {
           image
         },
       },
-      comments[] -> {
+      comments[] {
+        comment,
         _key,
         postedBy -> {
         	_id, 
@@ -291,6 +292,7 @@ export const singlePost = async (postId) => {
         },
       },
       comments[] {
+        _key,
         comment, 
       	postedBy -> {
           _id,
@@ -298,6 +300,7 @@ export const singlePost = async (postId) => {
           image
         },
         createdAt,
+        publishedAt,
       } | order(createdAt asc), 
       _createdAt,
       publishedAt,
@@ -396,6 +399,7 @@ export const addComment = (postId, userId, comment) => {
         _key: uuidv4(),
         comment,
         createdAt: new Date(),
+        publishedAt: new Date(),
         postedBy: {
           _type: "postedBy",
           _ref: userId,
@@ -404,6 +408,30 @@ export const addComment = (postId, userId, comment) => {
     ])
     .commit();
   return addedComment;
+};
+
+export const updateComment = async (text, comment, postId, userId) => {
+  const { _key, createdAt } = comment;
+  const newComment = {
+    _key,
+    postedBy: { _ref: userId, _type: "postedBy" },
+    createdAt,
+    publishedAt: new Date(),
+    comment: text,
+  };
+  const updatedComment = client
+    .patch(postId)
+    .insert("replace", `comments[_key == "${comment._key}"]`, [
+      { ...newComment },
+    ])
+    .commit();
+  return updatedComment;
+};
+
+export const deleteMyComment = (commentKey, postId) => {
+  const query = [`comments[_key == "${commentKey}"]`];
+  const deletedComment = client.patch(postId).unset(query).commit();
+  return deletedComment;
 };
 
 export const deleteMyPost = async (id) => {

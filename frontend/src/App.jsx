@@ -135,7 +135,7 @@ const App = () => {
   };
 
   return (
-    <main className={`${background ? "bg-[#281838]" : "bg-white"}`}>
+    <main className={`${background ? "bg-[#2e2d2d]" : "bg-white"}`}>
       <Router>
         <UserContext.Provider value={{ user, setUser }}>
           <ProfileContext.Provider value={{ profile, setProfile }}>

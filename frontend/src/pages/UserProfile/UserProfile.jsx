@@ -99,7 +99,7 @@ const UserProfile = () => {
                 {following?.length > 0 ? (
                   <>
                     {loading ? (
-                      <DotLoader className="text-xs" />
+                      <DotLoader size={35} />
                     ) : (
                       <>
                         <RiUserFollowFill onClick={() => unfollow()} />
@@ -110,7 +110,7 @@ const UserProfile = () => {
                 ) : (
                   <>
                     {loading ? (
-                      <DotLoader className="text-xs" />
+                      <DotLoader size={35} />
                     ) : (
                       <>
                         <RiUserFollowLine onClick={() => newFollow()} />

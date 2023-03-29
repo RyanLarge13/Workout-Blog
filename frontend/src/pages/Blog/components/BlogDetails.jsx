@@ -8,9 +8,16 @@ import {
   getPersonalPosts,
   getPostsByCategory,
   client,
+  updateComment,
+  deleteMyComment,
 } from "../../../client";
 import { DotLoader } from "react-spinners";
-import { AiFillEdit } from "react-icons/ai";
+import {
+  AiFillEdit,
+  AiOutlineComment,
+  AiFillCloseCircle,
+} from "react-icons/ai";
+import { RiHeartsFill } from "react-icons/ri";
 import DOMPurify from "dompurify";
 import imageUrlBuilder from "@sanity/image-url";
 import NewComment from "./NewComment";
@@ -40,19 +47,24 @@ const BlogDetails = () => {
   const { profile } = useContext(ProfileContext);
   const { setContent } = useContext(newBlogContext);
   const { setPicker } = useContext(PickerContext);
+  const { postId } = useParams();
 
   const [post, setPost] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [categoryPosts, setCategoryPosts] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const { postId } = useParams();
+  const [editComment, setEditComment] = useState(false);
+  const [editCommentText, setEditCommentText] = useState("");
+  const [editLoad, setEditLoad] = useState(false);
+  const [deleteLoad, setDeleteLoad] = useState(false);
+  const [deleteKey, setDeleteKey] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     singlePost(postId)
       .then((post) => {
         setPost(post[0]);
-        window.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
   }, [refresh]);
@@ -98,14 +110,65 @@ const BlogDetails = () => {
     }
   };
 
+  const editMyComment = (comment) => {
+    if (comment) {
+      setEditLoad(true);
+      updateComment(editCommentText, comment, post._id, profile._id)
+        .then((res) => {
+          singlePost(postId)
+            .then((post) => {
+              setPost(post[0]);
+              setEditComment(false);
+              setEditLoad(false);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const deleteComment = (key) => {
+    setDeleteLoad(true);
+    if (key) {
+      deleteMyComment(key, postId)
+        .then((res) => {
+          callRefresh();
+          setDeleteKey(null);
+          setDeleteLoad(false);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const callRefresh = () => {
+    singlePost(postId).then((post) => {
+      setPost(post[0]);
+    });
+  };
+
   return (
     <section>
       {post ? (
         <>
           <section>
             <header className="p-5 pt-20 relative flex flex-col justify-center align-center bg-gradient-to-tr from-violet-500 to-purple-500 shadow-md rounded-md">
-              <div className="flex justify-between items-center">
+              <div>
                 <h1 className="text-4xl text-white mb-5 mt-3">{post.title}</h1>
+                <div
+                  onClick={() => navigate(`/users${post.postedBy._id}`)}
+                  className=" text-white mb-5"
+                >
+                  <img
+                    src={post.postedBy.image}
+                    alt="user"
+                    className="w-[25px] h-[25px] rounded-full shadow-md"
+                  />
+                  <p>
+                    {post.postedBy.name === profile.name
+                      ? "You"
+                      : post.postedBy.name}
+                  </p>
+                </div>
                 {post?.postedBy?._id === profile._id && (
                   <motion.div
                     whileTap={{ scale: 0.9 }}
@@ -121,19 +184,40 @@ const BlogDetails = () => {
                 alt="post header"
                 className="rounded-lg w-screen shadow-md"
               />
-              <div className="text-white text-xs mt-2 mb-10">
-                <p className="text-sm">
-                  {new Date(post._createdAt).toLocaleDateString()}
-                </p>
-                <p>{formatTime(new Date(post._createdAt))}</p>
-                <p>last updated {formatTime(new Date(post.publishedAt))}</p>
+              <div className="flex justify-between items-start pt-2 mb-5">
+                <div className="text-white text-xs mb-5">
+                  <p className="text-sm">
+                    {new Date(post._createdAt).toLocaleDateString()}
+                  </p>
+                  <p>{formatTime(new Date(post._createdAt))}</p>
+                  <p>last updated {formatTime(new Date(post.publishedAt))}</p>
+                </div>
+                <div>
+                  <div className="flex justify-center items-center text-white">
+                    <RiHeartsFill />
+                    <p className="ml-3">
+                      {post.save ? post.save.length.toLocaleString() : 0}
+                    </p>
+                  </div>
+                  <div className="flex justify-center items-center text-white">
+                    <AiOutlineComment />
+                    <p className="ml-3">
+                      {post.comments
+                        ? post.comments.length.toLocaleString()
+                        : 0}
+                    </p>
+                  </div>
+                </div>
               </div>
               <p className="text-center text-white md:text-2xl md:w-[50%] mx-auto md:py-5">
                 {post.excerpt}
               </p>
               <div className="my-5 px-2 flex flex-wrap justify-center items-center gap-2">
                 {post.categories.map((cat) => (
-                  <div className="py-1 px-3 rounded-full shadow-md bg-white text-center">
+                  <div
+                    key={cat.title}
+                    className="py-1 px-3 rounded-full shadow-md bg-white text-center"
+                  >
                     <p>{cat.title}</p>
                   </div>
                 ))}
@@ -155,6 +239,40 @@ const BlogDetails = () => {
                   key={index}
                   className="flex justify-around items-center py-2 px-5 m-2 rounded-md shadow-md bg-white isolate"
                 >
+                  {comment?.postedBy?._id === profile._id && (
+                    <>
+                      <div
+                        onClick={() => {
+                          setEditCommentText(comment?.comment);
+                          setEditComment((prev) =>
+                            prev === comment._key ? false : comment._key
+                          );
+                        }}
+                        className="absolute top-0 right-1 rounded-md bg-gradient-to-r from-green-300 to-green-500 p-1 shadow-md text-white"
+                      >
+                        <AiFillEdit />
+                      </div>
+                      {deleteLoad ? (
+                        <div className="absolute top-0 left-1 rounded-md bg-gradient-to-r from-red-300 to-red-500 p-1 shadow-md text-white">
+                          {deleteKey === comment._key ? (
+                            <DotLoader size={15} />
+                          ) : (
+                            <AiFillCloseCircle size={15} />
+                          )}
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => {
+                            setDeleteKey(comment._key);
+                            deleteComment(comment._key);
+                          }}
+                          className="absolute top-0 left-1 rounded-md bg-gradient-to-r from-red-300 to-red-500 p-1 shadow-md text-white"
+                        >
+                          <AiFillCloseCircle size={15} />
+                        </div>
+                      )}
+                    </>
+                  )}
                   <NavLink
                     to={`/users/${comment?.postedBy?._id}`}
                     className="rounded-full w-[50px] h-[50px] shadow-md overflow-hidden"
@@ -165,14 +283,45 @@ const BlogDetails = () => {
                       className="object-cover object-center"
                     />
                   </NavLink>
-                  <p className="max-w-[75%] min-w-[75%]">{comment?.comment}</p>
+                  <div className="max-w-[75%] min-w-[75%]">
+                    {editComment === comment._key ? (
+                      <motion.div
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="flex justify-between items-center"
+                      >
+                        <input
+                          onChange={(e) => setEditCommentText(e.target.value)}
+                          value={editCommentText}
+                          className={`${elements.input}`}
+                        />
+                        {editLoad ? (
+                          <DotLoader className="ml-2" size={35} />
+                        ) : (
+                          <button
+                            onClick={() => editMyComment(comment)}
+                            type="button"
+                            className={`${variants.mainBtnBg} ml-2 px-3 rounded-md shadow-md`}
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </motion.div>
+                    ) : (
+                      <p>{comment?.comment}</p>
+                    )}
+                  </div>
                 </div>
                 <div className="py-1 px-2 mx-2 ml-10 rounded-md shadow-md bg-white isolate">
                   <p>{new Date(comment?.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>
             ))}
-            <NewComment postId={postId} userId={profile._id} />
+            <NewComment
+              postId={postId}
+              userId={profile._id}
+              callRefresh={callRefresh}
+            />
           </section>
           <section className="my-10 mt-[100px] p-2">
             <div className="flex flex-col items-center justify-start p-5 mx-2 rounded-md shadow-md relative bg-gradient-to-tr from-purple-400 to-violet-500">
@@ -214,9 +363,7 @@ const BlogDetails = () => {
                 <p>No Post To Show</p>
               )}
             </div>
-            <h2 className="my-5 text-center md:text-2xl">
-              Related Posts
-            </h2>
+            <h2 className="my-5 text-center md:text-2xl">Related Posts</h2>
             <div className="my-10 mx-auto p-3 w-3/4 flex justify-start items-center gap-5 overflow-auto">
               {categoryPosts.length > 0 ? (
                 <>
