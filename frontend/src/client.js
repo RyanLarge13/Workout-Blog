@@ -180,7 +180,14 @@ export const getPersonalPosts = async (id) => {
           image
         },
       },
-      comments[] ->, 
+      comments[] -> {
+        _key,
+        postedBy -> {
+        	_id, 
+        	name, 
+        	image
+        }, 
+      }, 
       _createdAt, 
       publishedAt,
     }[0...20]`

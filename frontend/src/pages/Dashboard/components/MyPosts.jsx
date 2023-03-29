@@ -8,6 +8,7 @@ import { AiOutlineComment } from "react-icons/ai";
 import { RiHeartsFill } from "react-icons/ri";
 import { ProfileContext } from "../../../context/profileContext.js";
 import Conformation from "../../../components/Conformation";
+import CommentsAndLikes from "./CommentsAndLikes";
 
 const builder = imageUrlBuilder(client);
 function urlFor(source) {
@@ -30,9 +31,23 @@ const DIVISIONS = [
 
 const MyPosts = () => {
   const { profile } = useContext(ProfileContext);
+
+  const [darkMode, setDarkMode] = useState(false);
   const [posts, setPosts] = useState([]);
   const [postId, setPostId] = useState(null);
   const [confirm, setConfrim] = useState(false);
+  const [showCommentsAndLikes, setShowCommentsAndLikes] = useState(false);
+  const [postInteractions, setPostInteractions] = useState(null);
+
+  useEffect(() => {
+    const settings = localStorage.getItem("settings");
+    if (settings) {
+      const parsedSettings = JSON.parse(settings);
+      if (parsedSettings.darkMode) {
+        setDarkMode(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     getPersonalPosts(profile._id)
@@ -53,6 +68,9 @@ const MyPosts = () => {
   };
 
   const formatTime = (date) => {
+    if (date === null || date === undefined) {
+      return "Try Refreshing Again";
+    }
     let duration = (date - new Date()) / 1000;
     for (let i = 0; i < DIVISIONS.length; i++) {
       const division = DIVISIONS[i];
@@ -63,17 +81,39 @@ const MyPosts = () => {
     }
   };
 
+  const showInteractions = (interactions) => {
+    setPostInteractions(interactions);
+    setShowCommentsAndLikes(true);
+  };
+
   return (
     <section className="flex flex-col items-center justify-center">
+      {showCommentsAndLikes && (
+        <CommentsAndLikes
+          data={postInteractions}
+          open={setShowCommentsAndLikes}
+        />
+      )}
       {posts.length > 0 && (
-        <h1 className="mt-10 text-2xl text-center whitespace-nowrap">
+        <h1
+          className={`${
+            darkMode ? "text-white" : "text-black"
+          } mt-10 text-2xl text-center whitespace-nowrap`}
+        >
           Your Posts
         </h1>
       )}
       {posts.length > 0 ? (
-        <div className="grid gap-5 content-center justify-items-center md:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={`grid gap-5 content-center justify-items-center md:grid-cols-2 lg:grid-cols-4`}
+        >
           {posts.map((post, index) => (
-            <div key={index} className="rounded-lg shadow-lg p-5 my-5 mx-auto">
+            <div
+              key={index}
+              className={`${
+                darkMode ? "bg-gray-300" : "bg-white"
+              } rounded-lg shadow-lg p-5 my-5 mx-auto`}
+            >
               <img
                 src={
                   post?.image?.asset?.url &&
@@ -84,17 +124,29 @@ const MyPosts = () => {
               />
               <h2 className="text-xl my-2">{post.title}</h2>
               <p className="text-xs">
-                published {formatTime(new Date(post._createdAt))}
+                published {formatTime(new Date(post?._createdAt))}
               </p>
               <p className="text-xs">
-                last updated {formatTime(new Date(post.publishedAt))}
+                last updated {formatTime(new Date(post?.publishedAt))}
               </p>
               <div className="flex justify-between items-center my-3">
-                <div className="flex justify-center items-center">
+                <div
+                  onClick={() =>
+                    showInteractions(post.save ? post.save : null)
+                  }
+                  className="flex justify-center items-center"
+                >
                   <RiHeartsFill className="mr-2" />
-                  <p>{post.save.length}</p>
+                  <p>{post?.save?.length ? post.save.length : 0}</p>
                 </div>
-                <div className="flex justify-center items-center">
+                <div
+                  onClick={() =>
+                    showInteractions(
+                      post.comments ? post.comments : null
+                    )
+                  }
+                  className="flex justify-center items-center"
+                >
                   <AiOutlineComment className="mr-2" />
                   <p>{post?.comments?.length ? post?.comments?.length : 0}</p>
                 </div>
@@ -115,6 +167,11 @@ const MyPosts = () => {
                 >
                   View
                 </NavLink>
+              </div>
+              <div>
+                {post.save &&
+                  post.save.length > 0 &&
+                  post.save.map((save) => <p>{save.postedBy.name}</p>)}
               </div>
             </div>
           ))}

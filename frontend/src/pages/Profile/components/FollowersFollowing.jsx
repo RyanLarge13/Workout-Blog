@@ -3,7 +3,7 @@ import { getAllFollowing, getAllFollowers } from "../../../client.js";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 
-const FollowersFollowing = ({ userId }) => {
+const FollowersFollowing = ({ userId, newGradient }) => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [picker, setPicker] = useState(null);
@@ -28,7 +28,15 @@ const FollowersFollowing = ({ userId }) => {
   }, [picker]);
 
   return (
-    <div className="py-5 px-3 mx-2 my-5 rounded-md shadow-lg bg-gradient-to-r from-blue-400 to-violet-500 relative md:p-20">
+    <div
+style={
+          newGradient
+            ? {
+                backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
+              }
+            : { backgroundColor: "white" }
+        }
+    className="py-5 px-3 mx-2 my-5 rounded-md shadow-lg bg-gradient-to-r from-blue-400 to-violet-500 relative md:p-20">
       <div className="flex justify-center items-center">
         <motion.button
           whileHover={{

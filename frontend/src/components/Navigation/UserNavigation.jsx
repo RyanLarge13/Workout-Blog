@@ -46,7 +46,7 @@ const UserNavigation = () => {
       variants={navAni}
       style={{
         backgroundImage: `linear-gradient(to right, ${
-          bg.split("-")[1]
+          bg ? bg.split("-")[1] : "blue"
         }, violet)`,
       }}
       className={`${containers.nav}`}

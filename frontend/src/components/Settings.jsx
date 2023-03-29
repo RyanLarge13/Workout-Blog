@@ -46,7 +46,9 @@ const Settings = ({ show }) => {
             }
           : { y: -5000, opacity: 0, transition: { duration: 0.75 } }
       }
-      className="fixed inset-0 bg-white z-30 pt-10"
+      className={`fixed inset-0 z-30 pt-10 ${
+        darkMode ? "bg-[#281838] text-white" : "bg-white"
+      }`}
     >
       <div className="my-10 flex flex-wrap justify-center items-center gap-2 p-2">
         {colors.map((color, index) => (

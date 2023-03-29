@@ -25,6 +25,7 @@ const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
   const { setUser } = useContext(UserContext);
 
+  const [newGradient, setNewGradient] = useState(false);
   const [picker, setPicker] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
@@ -35,6 +36,16 @@ const Profile = () => {
   const [totalLikes, setTotalLikes] = useState(0);
   const [totalComments, setTotalComments] = useState(0);
   const [changeBio, setChangeBio] = useState(false);
+
+  useEffect(() => {
+    const settings = localStorage.getItem("settings");
+    if (settings) {
+      const parsedSettings = JSON.parse(settings);
+      if (parsedSettings.selectedColor) {
+        setNewGradient(parsedSettings.selectedColor.split("-")[1]);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setProfileImage(profile.image);
@@ -118,11 +129,20 @@ const Profile = () => {
   };
 
   return (
-    <section className="pt-20 md:px-10 lg:px-20">
+    <section className="pt-20 pb-5 md:px-10 lg:px-20">
       {changeBio && (
         <Bio bioText={profile.bio} id={profile._id} func={setChangeBio} />
       )}
-      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative">
+      <div
+        style={
+          newGradient
+            ? {
+                backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
+              }
+            : { backgroundColor: "white" }
+        }
+        className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative"
+      >
         <AiFillEdit
           onClick={() => setChangeBio(true)}
           className="absolute top-4 right-4 text-2xl cursor-pointer"
@@ -163,7 +183,16 @@ const Profile = () => {
         </div>
       </div>
       <HeaderImage />
-      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 text-center text-sm">
+      <div
+        style={
+          newGradient
+            ? {
+                backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
+              }
+            : { backgroundColor: "white" }
+        }
+        className={`py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 text-center text-sm`}
+      >
         <p className="md:text-xl">
           You have been a member since{" "}
           {new Date(profile._createdAt).toLocaleDateString()}
@@ -180,8 +209,17 @@ const Profile = () => {
           </p>
         </div>
       </div>
-      <FollowersFollowing userId={profile._id} />
-      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
+      <FollowersFollowing userId={profile._id}  newGradient={newGradient} />
+      <div
+        style={
+          newGradient
+            ? {
+                backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
+              }
+            : { backgroundColor: "white" }
+        }
+        className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500"
+      >
         <h2 className="text-2xl">Change Your Username</h2>
         <label htmlFor="username" className="hidden">
           Username
@@ -203,7 +241,16 @@ const Profile = () => {
           Submit
         </button>
       </div>
-      <div className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500">
+      <div
+        style={
+          newGradient
+            ? {
+                backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
+              }
+            : { backgroundColor: "white" }
+        }
+        className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500"
+      >
         <h2 className="text-2xl">Delete Your Account</h2>
         <button
           onClick={() => {

@@ -29,6 +29,7 @@ function urlFor(source) {
 const Blog = ({ following }) => {
   const { profile } = useContext(ProfileContext);
 
+  const [darkMode, setDarkMode] = useState(false);
   const [posts, setPosts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [pickerCategories, setPickerCategories] = useState([]);
@@ -76,6 +77,16 @@ const Blog = ({ following }) => {
     );
     setSaved(isSaved);
   }, [posts]);
+
+  useEffect(() => {
+    const settings = localStorage.getItem("settings");
+    if (settings) {
+      const parsedSettings = JSON.parse(settings);
+      if (parsedSettings.darkMode) {
+        setDarkMode(true);
+      }
+    }
+  }, []);
 
   const queryTitle = (searchTerm) => {
     setError(false);
@@ -198,6 +209,18 @@ const Blog = ({ following }) => {
           .catch((err) => console.log(err));
   };
 
+  const isNew = (date) => {
+    const dt = new Date();
+    const diff = Math.abs(dt.getTime() - date.getTime());
+    const diffInSeconds = Math.ceil(diff / 1000);
+
+    if (diffInSeconds < 172800) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <section className="pt-10">
       <motion.div
@@ -270,7 +293,9 @@ const Blog = ({ following }) => {
                       followerId === user.userId && "bg-violet-400"
                     }`}
                   />
-                  <p className="text-center">{user?.postedBy?.name}</p>
+                  <p className={`${darkMode && "text-white"} text-center`}>
+                    {user?.postedBy?.name}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -285,8 +310,15 @@ const Blog = ({ following }) => {
                   transition: { type: "spring", stiffness: 400 },
                 }}
                 key={index}
-                className="rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto max-w-[90%] relative"
+                className={`rounded-lg shadow-lg p-5 my-5 min-w-[90%] mx-auto max-w-[90%] ${
+                  darkMode ? "bg-gray-300" : "bg-white"
+                } relative`}
               >
+                {isNew(new Date(post._createdAt)) && (
+                  <div>
+                    <p className="text-red-300">NEW!!</p>
+                  </div>
+                )}
                 <img
                   src={urlFor(post?.image?.asset?.url).width(300).url()}
                   alt="blog image"
@@ -323,14 +355,18 @@ const Blog = ({ following }) => {
                       <div
                         onClick={() => filterCategories(category._id)}
                         key={category._id}
-                        className="rounded-full px-3 py-1 m-1 shadow-md bg-violet-400 hover:bg-white cursor-pointer transition-all duration-200"
+                        className={`rounded-full px-3 py-1 m-1 shadow-md bg-violet-400 hover:bg-white cursor-pointer transition-all duration-200`}
                       >
                         <p className="text-sm select-none">{category.title}</p>
                       </div>
                     ))}
                   </div>
                 )}
-                <div className="absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min">
+                <div
+                  className={`absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min ${
+                    darkMode && "bg-white rounded-md shadow-md"
+                  }`}
+                >
                   <p className="text-black text-sm m-1">
                     {post?.save
                       ? parseInt(post?.save?.length).toLocaleString()
