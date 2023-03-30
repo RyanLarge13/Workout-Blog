@@ -39,6 +39,16 @@ const Blog = ({ following }) => {
   const [followerId, setFollowerId] = useState("");
   const [error, setError] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(null);
+
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+    const event = window.addEventListener("resize", () => {
+      setScreenWidth(window.innerWidth);
+    });
+
+    return window.removeEventListener("resize", event);
+  }, []);
 
   useEffect(() => {
     setError(false);
@@ -233,7 +243,7 @@ const Blog = ({ following }) => {
       <motion.div
         initial={{ y: -500, opacity: 0 }}
         animate={
-          !showSearch
+          !showSearch && screenWidth < 1024
             ? { y: -500, opacity: 0 }
             : {
                 y: 0,
@@ -241,7 +251,7 @@ const Blog = ({ following }) => {
                 transition: { duration: 0.5, type: "spring", stiffness: 200 },
               }
         }
-        className={`fixed top-0 md:relative flex justify-center items-centerr w-full pt-20 pb-10 z-40`}
+        className={`fixed top-0 md:relative flex justify-center items-center w-full pt-20 pb-10 z-40`}
       >
         <label htmlFor="search" className="hidden">
           Search

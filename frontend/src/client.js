@@ -261,9 +261,9 @@ export const followUser = (userId, followId) => {
   return follow;
 };
 
-export const unfollowUser = (key, userId) => {
-  const unfollowQuery = [`follow[_key == "${key}"]`];
-  const unfollow = client.patch(userId).unset(unfollowQuery).commit();
+export const unfollowUser = (theirKey, yourKey) => {
+  const unfollowQuery = [`follow[userId == "${theirKey}"]`];
+  const unfollow = client.patch(yourKey).unset(unfollowQuery).commit();
   return unfollow;
 };
 

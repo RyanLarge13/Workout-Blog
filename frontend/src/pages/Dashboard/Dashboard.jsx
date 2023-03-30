@@ -7,7 +7,6 @@ import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
 import { GiShadowFollower } from "react-icons/gi";
 import { elements, variants } from "../../styles/elements.js";
 import { containers } from "../../styles/containers.js";
-import { NavLink } from "react-router-dom";
 import MyPosts from "./components/MyPosts";
 import NewPost from "./components/NewPost";
 import Blog from "../Blog/Blog";
