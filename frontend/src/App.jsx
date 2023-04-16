@@ -40,6 +40,11 @@ const App = () => {
   }, [showSettings]);
 
   useEffect(() => {
+    if (!token) {
+      setUser(false);
+      setProfile(false);
+      setToken(null)
+    }
     if (token) {
       setLoading(true);
       Axios.get(
