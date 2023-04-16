@@ -9,7 +9,7 @@ import { navAni } from "../../variants/variants.js";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import UserNavigation from "./UserNavigation";
 
-const Nav = () => {
+const Nav = ({setToken}) => {
   const { profile } = useContext(ProfileContext);
 
   const [nav, setNav] = useState(false);
@@ -17,7 +17,7 @@ const Nav = () => {
   return (
     <>
       {profile ? (
-        <UserNavigation />
+        <UserNavigation setToken={setToken} />
       ) : (
         <motion.nav
           initial="hidden"

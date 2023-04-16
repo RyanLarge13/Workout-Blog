@@ -43,7 +43,7 @@ const App = () => {
     if (!token) {
       setUser(false);
       setProfile(false);
-      setToken(null)
+      setToken(null);
     }
     if (token) {
       setLoading(true);
@@ -146,7 +146,7 @@ const App = () => {
           <ProfileContext.Provider value={{ profile, setProfile }}>
             <newBlogContext.Provider value={{ content, setContent }}>
               <PickerContext.Provider value={{ picker, setPicker }}>
-                <Nav />
+                <Nav setToken={setToken} />
                 {loading ? (
                   <section className="h-screen flex justify-center items-center">
                     <DotLoader color="#f4f" />

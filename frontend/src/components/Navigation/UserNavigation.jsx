@@ -10,7 +10,7 @@ import { navAni } from "../../variants/variants.js";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { BiLogOutCircle } from "react-icons/bi";
 
-const UserNavigation = () => {
+const UserNavigation = ({setToken}) => {
   const { setUser } = useContext(UserContext);
   const { profile, setProfile } = useContext(ProfileContext);
 
@@ -31,6 +31,7 @@ const UserNavigation = () => {
 
   const logout = () => {
     localStorage.removeItem("authToken");
+    setToken(null)
     googleLogout();
     setUser(false);
     setProfile(false);
