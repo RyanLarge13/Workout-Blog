@@ -180,7 +180,7 @@ const Home = () => {
         <img
           src={appIcon}
           alt="workout blog icon"
-          className="scale-75 mb-[-10%]"
+          className="scale-75 mb-[-10%] lg:scale-50"
         />
         <p>find us on</p>
         <FaGooglePlay className="text-4xl mt-5" />

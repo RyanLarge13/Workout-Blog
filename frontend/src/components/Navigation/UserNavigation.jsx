@@ -3,7 +3,7 @@ import { UserContext } from "../../context/userContext";
 import { ProfileContext } from "../../context/profileContext";
 import { googleLogout } from "@react-oauth/google";
 import { motion } from "framer-motion";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import { containers } from "../../styles/containers";
 import { elements, variants } from "../../styles/elements";
 import { navAni } from "../../variants/variants.js";
@@ -18,8 +18,6 @@ const UserNavigation = () => {
   const [nav, setNav] = useState(false);
   const [bg, setBg] = useState(false);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     setSettings(localStorage.getItem("settings"));
     if (settings) {
@@ -31,12 +29,12 @@ const UserNavigation = () => {
     }
   }, [nav]);
 
-  const logout = async () => {
+  const logout = () => {
     localStorage.removeItem("authToken");
     googleLogout();
-    await setUser(false);
-    await setProfile(false);
-    navigate("/");
+    setUser(false);
+    setProfile(false);
+    window.location = "/"
   };
 
   return (
