@@ -1,41 +1,40 @@
 import { useState, useContext, useEffect } from "react";
+import { SettingsContext } from "../../context/settingsContext.js";
 import { UserContext } from "../../context/userContext";
 import { ProfileContext } from "../../context/profileContext";
 import { googleLogout } from "@react-oauth/google";
 import { motion } from "framer-motion";
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { containers } from "../../styles/containers";
 import { elements, variants } from "../../styles/elements";
 import { navAni } from "../../variants/variants.js";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { BiLogOutCircle } from "react-icons/bi";
 
-const UserNavigation = ({setToken}) => {
+const UserNavigation = ({ setToken }) => {
   const { setUser } = useContext(UserContext);
   const { profile, setProfile } = useContext(ProfileContext);
+  const { settings } = useContext(SettingsContext);
 
-  const [settings, setSettings] = useState(localStorage.getItem("settings"));
   const [nav, setNav] = useState(false);
   const [bg, setBg] = useState(false);
 
   useEffect(() => {
-    setSettings(localStorage.getItem("settings"));
     if (settings) {
-      const parsedSettings = JSON.parse(settings);
-      if (parsedSettings.selectedColor) {
-        const string = parsedSettings.selectedColor;
+      if (settings.selectedColor) {
+        const string = settings.selectedColor;
         setBg(string);
       }
     }
-  }, [nav]);
+  }, [settings]);
 
   const logout = () => {
     localStorage.removeItem("authToken");
-    setToken(null)
+    setToken(null);
     googleLogout();
     setUser(false);
     setProfile(false);
-    window.location = "/"
+    window.location = "/";
   };
 
   return (
@@ -45,7 +44,7 @@ const UserNavigation = ({setToken}) => {
       variants={navAni}
       style={{
         backgroundImage: `linear-gradient(to right, ${
-          bg ? bg.split("-")[1] : "blue"
+          bg ? bg : "#00ffff"
         }, violet)`,
       }}
       className={`${containers.nav}`}

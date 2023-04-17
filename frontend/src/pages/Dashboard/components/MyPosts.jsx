@@ -7,6 +7,7 @@ import { elements, variants } from "../../../styles/elements.js";
 import { AiOutlineComment } from "react-icons/ai";
 import { RiHeartsFill } from "react-icons/ri";
 import { ProfileContext } from "../../../context/profileContext.js";
+import { SettingsContext } from "../../../context/settingsContext.js";
 import Conformation from "../../../components/Conformation";
 import CommentsAndLikes from "./CommentsAndLikes";
 
@@ -31,6 +32,7 @@ const DIVISIONS = [
 
 const MyPosts = () => {
   const { profile } = useContext(ProfileContext);
+  const { settings } = useContext(SettingsContext);
 
   const [darkMode, setDarkMode] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -41,14 +43,10 @@ const MyPosts = () => {
   const [dataType, setDataType] = useState(null);
 
   useEffect(() => {
-    const settings = localStorage.getItem("settings");
     if (settings) {
-      const parsedSettings = JSON.parse(settings);
-      if (parsedSettings.darkMode) {
-        setDarkMode(true);
-      }
+      setDarkMode(settings.darkMode);
     }
-  }, []);
+  }, [settings]);
 
   useEffect(() => {
     getPersonalPosts(profile._id)

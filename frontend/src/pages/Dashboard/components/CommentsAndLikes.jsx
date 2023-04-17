@@ -29,25 +29,31 @@ const CommentsAndLikes = ({ data, open, dataType }) => {
       className="fixed inset-0 bg-white pt-20 px-5 overflow-y-auto"
     >
       <h2>{dataType}</h2>
-      <p>{data.length}</p>
+      <p>{data?.length}</p>
       {data ? (
         data.map((interaction, index) => (
           <div key={index}>
             {interaction?.postedBy?._id !== profile._id && (
               <div
                 onClick={() => navigate(`/users/${interaction.postedBy._id}`)}
-                className={`flex justify-between ${
-                  dataType === "comments" ? "items-start" : "items-center"
-                } py-3 px-5 rounded-md shadow-md my-5`}
+                className={`py-3 px-5 rounded-md shadow-md my-5`}
               >
-                <img
-                  src={interaction.postedBy.image}
-                  alt="user"
-                  className="rounded-full w-[50px] h-[50px] shadow-md"
-                />
-                <p className={dataType === "comments" ? "ml-3 mr-5" : ""}>
-                  {interaction.postedBy.name}
-                </p>
+                <div
+                  className={`flex justify-between items-center ${
+                    dataType === "comments"
+                      ? "shadow-md mb-3 p-2 rounded-md"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src={interaction.postedBy.image}
+                    alt="user"
+                    className="rounded-full w-[50px] h-[50px] shadow-md"
+                  />
+                  <p className={dataType === "comments" ? "ml-3 mr-5" : ""}>
+                    {interaction.postedBy.name}
+                  </p>
+                </div>
                 {dataType === "comments" && <p>{interaction.comment}</p>}
               </div>
             )}

@@ -1,25 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SettingsContext } from "../context/settingsContext.js";
 import { motion } from "framer-motion";
 import colors from "../constants/colorPicker";
 
 const Settings = ({ show }) => {
+  const { settings, setSettings } = useContext(SettingsContext);
   const [rendered, setRendered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     setRendered(true);
-    const storage = localStorage.getItem("settings");
-    if (storage) {
-      const parsedSettings = JSON.parse(storage);
-      setSelectedColor(parsedSettings.selectedColor);
-      setDarkMode(parsedSettings.darkMode);
+    if (settings) {
+      setSelectedColor(settings.selectedColor);
+      setDarkMode(settings.darkMode);
     }
-    if (!storage) {
+    if (!settings) {
       const newSettings = {
         darkMode,
         selectedColor,
       };
+      setSettings(newSettings);
       localStorage.setItem("settings", JSON.stringify(newSettings));
     }
   }, []);
@@ -30,37 +31,42 @@ const Settings = ({ show }) => {
         darkMode,
         selectedColor,
       };
+      setSettings(newSettings);
       localStorage.setItem("settings", JSON.stringify(newSettings));
     }
   }, [darkMode, selectedColor]);
 
   return (
     <motion.section
-      initial={{ y: -5000, opacity: 0 }}
+      initial={{ y: "-100%", opacity: 0 }}
       animate={
         show
           ? {
               y: 0,
               opacity: 1,
-              transition: { duration: 0.1, type: "spring", stiffness: 50 },
             }
-          : { y: -5000, opacity: 0, transition: { duration: 0.75 } }
+          : {
+              y: "-100%",
+              opacity: 0,
+            }
       }
       className={`fixed inset-0 z-30 pt-10 ${
         darkMode ? "bg-[#281838] text-white" : "bg-white"
       }`}
     >
-      <div className="my-10 flex flex-wrap justify-center items-center gap-2 p-2">
+      <div className="my-10 flex flex-wrap justify-center items-center gap-3 p-2">
         {colors.map((color, index) => (
-          <div
+          <motion.div
             key={index}
-            onClick={() => setSelectedColor(color.color)}
-            className={`${
-              color.color === selectedColor && "outline outline-gray-300"
-            } ${
-              color.color
-            } w-[50px] h-[50px] rounded-full shadow-md duration-200`}
-          ></div>
+            animate={color.color === selectedColor ? { scale: 1.25 } : {scale: 1}}
+            onClick={() =>
+              setSelectedColor((prev) =>
+                prev === color.color ? "#00ffff" : color.color
+              )
+            }
+            style={{ backgroundColor: color.color }}
+            className={"w-[35px] h-[35px] rounded-full shadow-md duration-200"}
+          ></motion.div>
         ))}
       </div>
       <div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
+import { SettingsContext } from "../../context/settingsContext.js";
 import { UserContext } from "../../context/userContext";
 import {
   client,
@@ -23,6 +24,7 @@ import FollowersFollowing from "./components/FollowersFollowing";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(ProfileContext);
+  const { settings } = useContext(SettingsContext);
   const { setUser } = useContext(UserContext);
 
   const [newGradient, setNewGradient] = useState(false);
@@ -38,14 +40,12 @@ const Profile = () => {
   const [changeBio, setChangeBio] = useState(false);
 
   useEffect(() => {
-    const settings = localStorage.getItem("settings");
     if (settings) {
-      const parsedSettings = JSON.parse(settings);
-      if (parsedSettings.selectedColor) {
-        setNewGradient(parsedSettings.selectedColor.split("-")[1]);
+      if (settings.selectedColor) {
+        setNewGradient(settings.selectedColor);
       }
     }
-  }, []);
+  }, [settings]);
 
   useEffect(() => {
     setProfileImage(profile.image);
@@ -139,7 +139,7 @@ const Profile = () => {
             ? {
                 backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
               }
-            : { backgroundColor: "white" }
+            : { backgroundColor: "#00ffff" }
         }
         className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 relative"
       >
@@ -189,7 +189,7 @@ const Profile = () => {
             ? {
                 backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
               }
-            : { backgroundColor: "white" }
+            : { backgroundColor: "#00ffff" }
         }
         className={`py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500 text-center text-sm`}
       >
@@ -216,7 +216,7 @@ const Profile = () => {
             ? {
                 backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
               }
-            : { backgroundColor: "white" }
+            : { backgroundColor: "#00ffff" }
         }
         className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500"
       >
@@ -247,7 +247,7 @@ const Profile = () => {
             ? {
                 backgroundImage: `linear-gradient(to top right, violet, ${newGradient})`,
               }
-            : { backgroundColor: "white" }
+            : { backgroundColor: "#00ffff" }
         }
         className="py-5 mx-2 my-5 flex flex-col items-center justify-center rounded-md shadow-lg text-white bg-gradient-to-r from-blue-400 to-violet-500"
       >

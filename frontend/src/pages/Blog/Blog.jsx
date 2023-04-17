@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext";
+import { SettingsContext } from "../../context/settingsContext";
 import {
   getPosts,
   getPersonalPosts,
@@ -28,6 +29,7 @@ function urlFor(source) {
 
 const Blog = ({ following }) => {
   const { profile } = useContext(ProfileContext);
+  const { settings } = useContext(SettingsContext);
 
   const [darkMode, setDarkMode] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -47,25 +49,33 @@ const Blog = ({ following }) => {
       setScreenWidth(window.innerWidth);
     });
 
-    return window.removeEventListener("resize", event);
+    return () => window.removeEventListener("resize", event);
   }, []);
 
   useEffect(() => {
     setError(false);
     setPosts([]);
     if (following) {
-      getAllFollowing(profile._id)
-        .then((res) => {
-          setPeopleIFollow(res[0].follow);
-        })
-        .catch((err) => console.log(err));
-      profile.follow.map((user) =>
-        getPostsByFollowing(user.userId)
-          .then((postRes) => {
-            setPosts((prev) => [...prev, ...postRes]);
+      if (followerId) {
+        getPersonalPosts(followerId)
+          .then((res) => {
+            setPosts(res);
           })
-          .catch((err) => console.log(err))
-      );
+          .catch((err) => console.log(err));
+      } else {
+        getAllFollowing(profile._id)
+          .then((res) => {
+            setPeopleIFollow(res[0].follow);
+          })
+          .catch((err) => console.log(err));
+        profile.follow.map((user) =>
+          getPostsByFollowing(user.userId)
+            .then((postRes) => {
+              setPosts((prev) => [...prev, ...postRes]);
+            })
+            .catch((err) => console.log(err))
+        );
+      }
     }
     if (!following) {
       getPosts()
@@ -89,14 +99,10 @@ const Blog = ({ following }) => {
   }, [posts]);
 
   useEffect(() => {
-    const settings = localStorage.getItem("settings");
     if (settings) {
-      const parsedSettings = JSON.parse(settings);
-      if (parsedSettings.darkMode) {
-        setDarkMode(true);
-      }
+      setDarkMode(settings.darkMode);
     }
-  }, []);
+  }, [settings]);
 
   const queryTitle = (searchTerm) => {
     setError(false);
@@ -374,7 +380,7 @@ const Blog = ({ following }) => {
                 )}
                 <div
                   className={`absolute top-[-10px] right-[-10px] text-2xl text-red-400 cursor-pointer flex items-center justify-center w-min h-min ${
-                    darkMode && "bg-white rounded-md shadow-md"
+                    darkMode ? "bg-white rounded-md shadow-md" : ""
                   }`}
                 >
                   <p className="text-black text-sm m-1">

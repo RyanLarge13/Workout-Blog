@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { PickerContext } from "../../context/pickerContext";
+import { SettingsContext } from "../../context/settingsContext";
 import { FaNewspaper } from "react-icons/fa";
 import { BsViewList } from "react-icons/bs";
 import { AiFillRead, AiFillPlusCircle } from "react-icons/ai";
@@ -14,6 +15,7 @@ import Blog from "../Blog/Blog";
 const Dashboard = () => {
   const [component, setComponent] = useState(<MyPosts />);
   const { picker, setPicker } = useContext(PickerContext);
+  const { settings } = useContext(SettingsContext);
 
   useEffect(() => {
     if (picker === "myposts") return setComponent(<MyPosts />);
@@ -24,7 +26,7 @@ const Dashboard = () => {
 
   return (
     <section>
-      <header className="bg-gradient-to-tr from-violet-500 to-purple-500 pb-10 pt-5 rounded-b-2xl text-white shadow-md">
+      <header style={settings.selectedColor && {backgroundImage: `linear-gradient(45deg, ${settings.selectedColor}, violet)`}} className="bg-gradient-to-tr from-violet-500 to-purple-500 pb-10 pt-5 rounded-b-2xl text-white shadow-md">
         <div className="mt-10 flex flex-col items-center justify-center">
           <div className="flex flex-wrap justify-center align-center mt-5">
             <div className={`${containers.quickActionContainer}`}>
