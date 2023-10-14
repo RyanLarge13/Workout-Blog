@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { ProfileContext } from "../../context/profileContext.js";
+import { SettingsContext } from "../../context/settingsContext.js";
 import { useParams, NavLink } from "react-router-dom";
 import {
   getUserInfo,
@@ -17,6 +18,7 @@ import imageUrlBuilder from "@sanity/image-url";
 
 const UserProfile = () => {
   const { profile } = useContext(ProfileContext);
+  const { settings } = useContext(SettingsContext);
 
   const [loading, setLoading] = useState(false);
   const [userView, setUserView] = useState(null);
@@ -99,7 +101,7 @@ const UserProfile = () => {
                 />
               )}
             </div>
-            <div className="w-full">
+            <div className={`w-full ${settings.darkMode ? "text-white" : "text-black"}`}>
               <img
                 src={userView?.image}
                 alt="user"
@@ -140,12 +142,6 @@ const UserProfile = () => {
                       </>
                     )}
                   </button>
-                  <button
-                    className={`${elements.button} ${variants.mainBtnBg} flex flex-col items-center justify-center`}
-                  >
-                    <AiTwotoneMessage />
-                    <p>Message</p>
-                  </button>
                 </div>
               )}
             </div>
@@ -155,7 +151,9 @@ const UserProfile = () => {
               userPosts.map((post) => (
                 <div
                   key={post?._id}
-                  className="max-w-full m-5 p-2 rounded-md shadow-md"
+                  className={`${
+                    settings.darkMode ? "bg-slate-200" : "bg-white"
+                  } max-w-full m-5 p-2 rounded-md shadow-md`}
                 >
                   <img
                     src={urlFor(post?.image?.asset?.url).url()}
