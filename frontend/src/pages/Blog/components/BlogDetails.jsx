@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { ProfileContext } from "../../../context/profileContext.js";
 import { newBlogContext } from "../../../context/newBlogContext.js";
 import { PickerContext } from "../../../context/pickerContext.js";
+import { SettingsContext } from "../../../context/settingsContext.js";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
 import {
   singlePost,
@@ -47,6 +48,7 @@ const BlogDetails = () => {
   const { profile } = useContext(ProfileContext);
   const { setContent } = useContext(newBlogContext);
   const { setPicker } = useContext(PickerContext);
+  const { settings } = useContext(SettingsContext);
   const { postId } = useParams();
 
   const [post, setPost] = useState(null);
@@ -65,6 +67,7 @@ const BlogDetails = () => {
     singlePost(postId)
       .then((post) => {
         setPost(post[0]);
+        window.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
   }, [refresh]);
@@ -228,10 +231,11 @@ const BlogDetails = () => {
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(post?.body),
                 }}
+                className={`${settings.darkMode ? "text-white" : "text-black"}`}
               ></div>
             </div>
           </section>
-          <section className="my-5 md:flex md:justify-center md:items-center md:flex-col md:my-20">
+          <section className="my-20 md:flex md:justify-center md:items-center md:flex-col md:my-20">
             {post.comments?.map((comment, index) => (
               <div key={index} className="relative lg:w-[50%]">
                 <div className="absolute border-b border-l rounded-md left-4 top-0 w-[25%] h-[90%] z-0"></div>
@@ -323,7 +327,7 @@ const BlogDetails = () => {
               callRefresh={callRefresh}
             />
           </section>
-          <section className="my-10 mt-[100px] p-2">
+          <section className="mt-20 mt-[100px] py-10">
             <div className="flex flex-col items-center justify-start p-5 mx-2 rounded-md shadow-md relative bg-gradient-to-tr from-purple-400 to-violet-500">
               <div className="absolute top-[-50px]">
                 <img
@@ -363,8 +367,14 @@ const BlogDetails = () => {
                 <p>No Post To Show</p>
               )}
             </div>
-            <h2 className="my-5 text-center md:text-2xl">Related Posts</h2>
-            <div className="my-10 mx-auto p-3 w-3/4 flex justify-start items-center gap-5 overflow-auto">
+            <h2
+              className={`${
+                settings.darkMode ? "text-white" : "text-black"
+              } my-5 text-center md:text-2xl`}
+            >
+              Related Posts
+            </h2>
+            <div className="my-10 flex gap-5 overflow-auto scrollbar-hide">
               {categoryPosts.length > 0 ? (
                 <>
                   {categoryPosts.map((post) => (
@@ -375,17 +385,19 @@ const BlogDetails = () => {
                             setRefresh((prev) => !prev);
                             navigate(`/posts/${post?._id}`);
                           }}
-                          className="min-w-[250px] min-h-[300px] max-w-[25%] rounded-md shadow-md px-3 p-3 flex flex-col justify-between items-center relative"
+                          className={`min-w-[250px] h-full max-w-[25%] rounded-md shadow-md px-3 p-3 flex flex-col justify-between items-center relative ${
+                            settings.darkMode ? "bg-slate-200" : "bg-white"
+                          }`}
                         >
-                          <div>
+                          <div className="flex flex-col justify-center items-center">
                             <img
                               src={post?.image?.asset?.url}
                               alt="category post header"
-                              className="rounded-md shadow-md object-cover object-center max-h-[150px] min-h-[150px] w-full"
+                              className="rounded-md shadow-md object-cover object-center max-h-[150px] min-h-[150px]"
                             />
                             <p className="text-center m-3">{post?.title}</p>
                           </div>
-                          <div className="flex justify-between items-center mt-10 w-full">
+                          <div className="flex justify-between items-center w-full">
                             <img
                               src={post?.postedBy?.image}
                               alt="user"

@@ -112,7 +112,7 @@ const MyPosts = () => {
               key={post._id}
               className={`${
                 darkMode ? "bg-gray-300" : "bg-white"
-              } rounded-lg shadow-lg p-5 my-5 mx-auto`}
+              } rounded-lg shadow-lg p-5 my-5 mx-auto w-[340px]`}
             >
               <img
                 src={

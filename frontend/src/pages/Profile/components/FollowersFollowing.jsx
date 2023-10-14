@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getAllFollowing, getAllFollowers } from "../../../client.js";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import { SettingsContext } from "../../../context/settingsContext.js";
 
 const FollowersFollowing = ({ userId, newGradient }) => {
+  const { settings } = useContext(SettingsContext);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [picker, setPicker] = useState(null);
@@ -30,7 +32,7 @@ const FollowersFollowing = ({ userId, newGradient }) => {
 
   const checkToClose = (e) => {
     const end = e.clientY;
-    if (end - start > window.innerHeight / 1.25) {
+    if (end - start > window.innerHeight / 4) {
       setPicker(null);
       setFollowers([]);
       setFollowing([]);
@@ -91,7 +93,9 @@ const FollowersFollowing = ({ userId, newGradient }) => {
           dragConstraints={{ top: 0 }}
           onDragStart={(e) => setStart(e.clientY)}
           onDragEnd={(e) => checkToClose(e)}
-          className="fixed bg-white z-40 inset-0 rounded-md shadow-inner p-5 pt-20 overflow-y-auto"
+          className={`fixed ${
+            settings.darkMode ? "bg-[#222]" : "bg-white"
+          } z-40 inset-0 rounded-md shadow-inner p-5 pt-20 overflow-y-auto`}
         >
           <p>
             {picker === "followers"
@@ -107,7 +111,7 @@ const FollowersFollowing = ({ userId, newGradient }) => {
                 {following?.map((followee) => (
                   <div
                     key={followee?.userId}
-                    className="rounded-md shadow-md w-full my-3"
+                    className="rounded-md shadow-md w-full my-3 bg-white"
                   >
                     <NavLink
                       to={`/users/${followee?.userId}`}
@@ -132,7 +136,7 @@ const FollowersFollowing = ({ userId, newGradient }) => {
                 {followers?.map((follower) => (
                   <div
                     key={follower?._id}
-                    className="rounded-md shadow-md w-full my-3"
+                    className="rounded-md shadow-md w-full my-3 bg-white"
                   >
                     <NavLink
                       to={`/users/${follower._id}`}
