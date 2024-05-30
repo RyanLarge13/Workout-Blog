@@ -215,7 +215,7 @@ const BlogDetails = () => {
               <p className="text-center text-white md:text-2xl md:w-[50%] mx-auto md:py-5">
                 {post.excerpt}
               </p>
-              <div className="my-5 px-2 flex flex-wrap justify-center items-center gap-2">
+              <div className="my-5 px-2 md:px-60 flex flex-wrap justify-center items-center gap-2">
                 {post.categories.map((cat) => (
                   <div
                     key={cat.title}
@@ -226,7 +226,7 @@ const BlogDetails = () => {
                 ))}
               </div>
             </header>
-            <div className="py-2 px-3 my-5 border-b max-w-full md:p-20">
+            <div className="py-2 md:px-80 px-3 my-5 border-b max-w-full md:p-20">
               <div
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(post?.body),
@@ -343,7 +343,7 @@ const BlogDetails = () => {
                 <p>{post?.postedBy?.name}</p>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center translate-y-[-100px]">
+            <div className="flex flex-col md:flex-row md:flex-wrap gap-3 items-center justify-center translate-y-[-100px]">
               {userPosts.length > 0 ? (
                 <>
                   {userPosts.map((userPost) => (
